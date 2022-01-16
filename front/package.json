@@ -11,6 +11,7 @@
     "axios": "^0.24.0",
     "axios-case-converter": "^0.9.0",
     "dotenv": "^10.0.0",
+    "env-cmd": "^10.1.0",
     "postcss": "^8.4.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -22,6 +23,7 @@
   "scripts": {
     "start": "PORT=8080 react-scripts start",
     "build": "react-scripts build",
+    "build:production": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

@@ -10,7 +10,6 @@ require 'capistrano/rbenv'
 require 'capistrano/dotenv'
 set :rbenv_type, :user
 set :rbenv_ruby, '3.1.0'
-set :env_file, ".env_#{stage}"
 
 # Load the SCM plugin appropriate to your project:
 #
