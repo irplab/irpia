@@ -8,7 +8,7 @@ class HomeController < ActionController::Base
       end
       redirect_to uri
     else
-      render file: "public/index.html"
+      render file: Rails.root.join("public", "index.html")
     end
   end
 
