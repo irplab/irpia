@@ -7,12 +7,14 @@ import {HeaderLink} from "./features/notice/HeaderLink";
 
 const Navigation = () => {
     return (
-        <nav className="flex items-center justify-between flex-wrap bg-cyan-800 p-6 fixed w-full z-10 top-0">
-            <div className="flex flex-col items-start flex-shrink-0 text-white mr-6">
-                <a className="text-white no-underline text-lime-300 hover:text-white hover:no-underline" href="/">
-                    <span className="text-2xl pl-2 font-bold"><i className="em em-grinning"></i> IRPIA</span>
-                </a>
-                <p className='pl-2'>Indexation de ressources pédagogiques intelligente et assistée</p>
+        <nav className="flex flex-col justify-between flex-wrap bg-white fixed w-full z-10 top-0">
+            <div className="container mx-auto bg-white">
+                <div className="flex flex-col items-start flex-shrink-0 text-pink-600 mr-6 p-6">
+                    <a className="no-underline hover:text-black  hover:no-underline" href="/">
+                        <span className="text-2xl pl-2 font-bold"><i className="em em-grinning"></i> IRPIA</span>
+                    </a>
+                    <p className='pl-2'>Indexation de ressources pédagogiques intelligente et assistée</p>
+                </div>
             </div>
 
             <div className="block lg:hidden">
@@ -25,13 +27,15 @@ const Navigation = () => {
                 </button>
             </div>
 
-            <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block pt-6 lg:pt-0"
+            <div className="bg-black w-full flex-grow lg:flex items-center p-4"
                  id="nav-content">
-                <ul className="list-reset lg:flex justify-end flex-1 items-center">
-                    <HeaderLink path='' label='Accueil'/>
-                    <HeaderLink path='form' label='Formulaire'/>
-                    <HeaderLink path='about' label='À propos'/>
-                </ul>
+                <div className="container mx-auto">
+                    <ul className="list-reset lg:flex flex-1 items-center">
+                        <HeaderLink path='' label='Accueil'/>
+                        <HeaderLink path='form' label='Formulaire'/>
+                        <HeaderLink path='about' label='À propos'/>
+                    </ul>
+                </div>
             </div>
         </nav>
     );

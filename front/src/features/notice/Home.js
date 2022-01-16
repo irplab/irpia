@@ -10,7 +10,7 @@ export function Home() {
                     de
                     ressources pédagogiques
                     offrant à l'utilisateur des fonctionnalités d'assistance intelligentes telles que :
-                    <ul className='ml-9 hover:divide-gray-100 divide-y-2 divide-white'>
+                    <ul className='ml-9 hover:divide-gray-100 divide-y-2 divide-white pt-5'>
                         <li className='flex items-center pb-3 pt-3 cursor-pointer hover:bg-gray-200 cursor-pointer hover:bg-lime-200'>
                             <DocumentTextIcon className='w-9 h-9 mr-5 fill-cyan-800'/>
                             Classification automatique basée sur le contenu
