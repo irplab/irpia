@@ -2,13 +2,22 @@
 lock "~> 3.16.0"
 
 set :application, "irpia"
-set :repo_url, "git@example.com:me/my_repo.git"
+set :repo_url, "git@github.com:irplab/irpia.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-# set :deploy_to, "/var/www/my_app_name"
+set :deploy_to, "/home/#{fetch :application}/api"
+
+set :branch, :main
+
+set :repo_tree, :back
+
+Rake::Task['deploy:assets:precompile'].clear_actions
+Rake::Task['deploy:assets:backup_manifest'].clear_actions
+Rake::Task['deploy:cleanup_assets'].clear_actions
+Rake::Task['deploy:migrate'].clear_actions
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -24,7 +33,7 @@ set :repo_url, "git@example.com:me/my_repo.git"
 # append :linked_files, "config/database.yml"
 
 # Default value for linked_dirs is []
-# append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public/system', 'public/uploads'
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
