@@ -1,29 +1,51 @@
 import React from 'react';
+import {CogIcon, DocumentSearchIcon, DocumentTextIcon, PhotographIcon} from "@heroicons/react/solid";
 
 export function Home() {
 
     return (
         <div className="container mx-auto flex flex-col md:flex-row items-center my-12 md:my-24">
             <div className="flex flex-col w-full lg:w-1/2 justify-center items-start pt-12 pb-24 px-6">
-                <p className="uppercase tracking-loose">Witty Tagline</p>
-                <h1 className="my-4">My Super App</h1>
-                <p className="leading-normal mb-4">Enter your super app's description here... The key is to find the
-                    right
-                    length. Don't want it to be too long, but then don't want it to be too short so that it looks weird
-                    between the title and button below.</p>
-                <button
-                    className="bg-transparent hover:bg-black text-black hover:text-white rounded shadow hover:shadow-lg py-2 px-4 border border-black hover:border-transparent">Super
-                    Button
-                </button>
+                <p className="leading-normal mb-4 lg:mt-24 sm:mt-24">IRPI est un prototype de formulaire de saisie de métadonnées
+                    de
+                    ressources pédagogiques
+                    offrant à l'utilisateur des fonctionnalités d'assistance intelligentes telles que :
+                    <ul className='ml-9 hover:divide-gray-100 divide-y-2 divide-white'>
+                        <li className='flex items-center pb-3 pt-3 cursor-pointer hover:bg-gray-200 cursor-pointer hover:bg-lime-200'>
+                            <DocumentTextIcon className='w-9 h-9 mr-5 fill-cyan-800'/>
+                            Classification automatique basée sur le contenu
+                        </li>
+                        <li className='flex items-center pb-3 pt-3 cursor-pointer hover:bg-gray-200'>
+                            <CogIcon className='w-9 h-9 mr-5 fill-cyan-800'/>
+                            Extraction automatique de métadonnées
+                        </li>
+                        <li className='flex items-center pb-3 pt-3 cursor-pointer hover:bg-gray-200'>
+                            <DocumentSearchIcon className='w-9 h-9 mr-5 fill-cyan-800'/>
+                            Recherche automatisée dans les nomenclatures et programmes
+                        </li>
+                        <li className='flex items-center pb-3 pt-3 cursor-pointer hover:bg-gray-200'>
+                            <PhotographIcon className='w-9 h-9 mr-5 fill-cyan-800'/>
+                            Suggestion de miniatures
+                        </li>
+                    </ul></p>
+                <div className='flex flex-row justify-end w-full'>
+                    <a href='/form'>
+                        <button
+                            className="bg-transparent hover:bg-black text-black hover:text-white rounded shadow hover:shadow-lg py-2 px-4 border border-black hover:border-transparent">
+                            Décrire une ressource
+                        </button>
+                    </a>
+                </div>
             </div>
-            <div className="w-full lg:w-1/2 lg:py-6 text-center">
+            <div className="w-full sm:w-2/3 sm:ml-10 lg:w-1/3 lg:py-6 text-center lg:pl-16">
                 <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                     width="504.000000pt" height="180.000000pt" viewBox="0 0 168.000000 60.000000"
+                     viewBox="0 0 168.000000 60.000000"
+                     className='object-cover'
                      preserveAspectRatio="xMidYMid meet">
 
                     <g transform="translate(0.000000,60.000000) scale(0.100000,-0.100000)"
                        fill="#000000" stroke="none">
-                        <path d="M885 572 c-198 -13 -361 -26 -363 -27 -3 -3 27 -473 31 -488 1 -5 22
+                        <path className='fill-pink-600' d="M885 572 c-198 -13 -361 -26 -363 -27 -3 -3 27 -473 31 -488 1 -5 22
 21 46 57 24 36 48 66 55 66 6 -1 161 9 345 22 l334 22 -7 106 c-4 58 -9 142
 -13 188 l-6 82 -31 -1 c-17 -1 -193 -13 -391 -27z m44 -67 c39 -20 54 -63 49
 -136 -4 -52 -9 -66 -32 -86 -78 -67 -161 15 -142 140 8 49 23 73 57 86 33 13
@@ -33,7 +55,7 @@ export function Home() {
 l-1 72 -16 -47 c-12 -38 -20 -48 -38 -48 -17 0 -23 8 -29 37 -9 49 -25 25 -25
 -39 0 -41 -3 -48 -20 -48 -18 0 -20 7 -20 83 0 124 8 157 36 157 20 0 26 -9
 42 -62z"/>
-                        <path d="M866 455 c-11 -30 -6 -121 8 -140 12 -16 16 -17 29 -6 20 16 30 86
+                        <path className='fill-pink-600' d="M866 455 c-11 -30 -6 -121 8 -140 12 -16 16 -17 29 -6 20 16 30 86
 19 126 -9 34 -45 47 -56 20z"/>
                         <path d="M27 492 c-35 -39 -18 -86 43 -117 34 -17 47 -50 29 -71 -10 -12 -23
 -14 -57 -9 -56 8 -54 -15 2 -29 31 -7 43 -5 64 11 51 38 41 90 -23 127 -47 28

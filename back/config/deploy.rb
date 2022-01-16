@@ -48,7 +48,7 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bund
 # set :ssh_options, verify_host_key: :secure
 #
 set :env_file, ".env.production"
-set :optional_env_vars, %w(
+set :ignored_env_vars, %w(
 BUNDLE_GEMFILE
 REDIS_URL
 RAILS_MAX_THREADS

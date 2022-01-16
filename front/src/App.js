@@ -7,11 +7,12 @@ import {HeaderLink} from "./features/notice/HeaderLink";
 
 const Navigation = () => {
     return (
-        <nav className="flex items-center justify-between flex-wrap bg-gray-800 p-6 fixed w-full z-10 top-0">
-            <div className="flex items-center flex-shrink-0 text-white mr-6">
-                <a className="text-white no-underline hover:text-white hover:no-underline" href="/">
-                    <span className="text-2xl pl-2"><i className="em em-grinning"></i> IRPIA</span>
+        <nav className="flex items-center justify-between flex-wrap bg-cyan-800 p-6 fixed w-full z-10 top-0">
+            <div className="flex flex-col items-start flex-shrink-0 text-white mr-6">
+                <a className="text-white no-underline text-lime-300 hover:text-white hover:no-underline" href="/">
+                    <span className="text-2xl pl-2 font-bold"><i className="em em-grinning"></i> IRPIA</span>
                 </a>
+                <p className='pl-2'>Indexation de ressources pédagogiques intelligente et assistée</p>
             </div>
 
             <div className="block lg:hidden">
@@ -27,7 +28,7 @@ const Navigation = () => {
             <div className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block pt-6 lg:pt-0"
                  id="nav-content">
                 <ul className="list-reset lg:flex justify-end flex-1 items-center">
-                    <HeaderLink path='home' label='Accueil'/>
+                    <HeaderLink path='' label='Accueil'/>
                     <HeaderLink path='form' label='Formulaire'/>
                     <HeaderLink path='about' label='À propos'/>
                 </ul>
@@ -42,7 +43,7 @@ function App() {
         <>
             <div className="container shadow-lg mx-auto bg-white mt-24 md:mt-18">
                 <Routes>
-                    <Route path="home" element={<Home/>}/>
+                    <Route path="" element={<Home/>}/>
                     <Route path="form" element={<Notice/>}/>
                 </Routes>
             </div>
