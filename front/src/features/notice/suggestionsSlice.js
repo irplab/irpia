@@ -1,16 +1,23 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {fetchSuggestions} from './noticeAPI';
+import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolkit';
+import {createSuggestion, fetchSuggestion} from './noticeAPI';
 
-const initialState = {
-    suggestions: {},
-    status: 'idle',
-};
-export const assist = createAsyncThunk(
-    'suggestions/fetchSuggestions',
+
+export const initSuggestion = createAsyncThunk(
+    'suggestions/createSuggestion',
     async (notice, {rejectWithValue}) => {
         try {
-            console.log(process.env)
-            const response = await fetchSuggestions(notice);
+            const response = await createSuggestion(notice);
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data);
+        }
+    },
+);
+export const pollSuggestionById = createAsyncThunk(
+    'suggestions/fetchSuggestion',
+    async ({suggestionId, suggestionTimeStamp}, {rejectWithValue}) => {
+        try {
+            const response = await fetchSuggestion(suggestionId, suggestionTimeStamp);
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data);
@@ -18,19 +25,27 @@ export const assist = createAsyncThunk(
     },
 );
 
+export const suggestionsAdapter = createEntityAdapter();
+
 
 export const suggestionsSlice = createSlice({
-    name: 'notice',
-    initialState,
+    name: 'suggestions',
+    initialState: suggestionsAdapter.getInitialState({ pending: false, meta: {}, error: null }),
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(assist.pending, (state) => {
+            .addCase(initSuggestion.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(assist.fulfilled, (state, action) => {
+            .addCase(initSuggestion.fulfilled, (state, action) => {
                 state.status = 'idle';
-                state.suggestions = action.payload.suggestions;
+                suggestionsAdapter.setOne(state, action.payload);
+            }).addCase(pollSuggestionById.pending, (state) => {
+            state.status = 'loading';
+        })
+            .addCase(pollSuggestionById.fulfilled, (state, action) => {
+                state.status = 'idle';
+                suggestionsAdapter.setOne(state, action.payload);
             });
     },
 });

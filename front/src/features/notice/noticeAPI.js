@@ -1,5 +1,7 @@
 import {apiV1} from "../../api/api";
 
-const fetchSuggestions = (notice) => apiV1.post(`/suggestions`, {notice: notice});
+const createSuggestion = (notice) => apiV1.post(`/suggestions`, {notice: notice});
 
-export {fetchSuggestions};
+const fetchSuggestion = (id, timestamp) => apiV1.get(`/suggestions/${id}`, {params: {timestamp}});
+
+export {createSuggestion, fetchSuggestion};

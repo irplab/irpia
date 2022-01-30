@@ -34,3 +34,5 @@
 
 .idea
 /.env.production
+/config/deploy/production.rb
+/etc/voc/Scolomfr-v7-0/

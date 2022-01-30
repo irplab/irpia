@@ -10,7 +10,7 @@ set :repo_url, "git@github.com:irplab/irpia.git"
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/home/#{fetch :application}/api"
 
-set :branch, :main
+set :branch, :'request-workflow'
 
 set :repo_tree, :back
 
