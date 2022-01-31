@@ -4,6 +4,10 @@ require 'ohm/timestamps'
 class SuggestionsThread < Ohm::Model
   include Ohm::Timestamps
 
+  attribute :key
+
+  index :key
+
   attribute :job_id
 
   index :job_id

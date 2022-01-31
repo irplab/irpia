@@ -7,27 +7,37 @@ import {
 import styles from './Notice.module.css';
 import {unwrapResult} from "@reduxjs/toolkit";
 import {fetchVocabularyById, selectVocabularies} from "./vocabulariesSlice";
+import {SuggestionComponent} from "./SuggestionComponent";
 
 export function Notice() {
     const suggestions = useSelector(selectSuggestions);
     const vocabularies = useSelector(selectVocabularies);
     const dispatch = useDispatch();
     const [notice, setNotice] = useState({title: ''});
+    const [submittedNotice, setSubmittedNotice] = useState({title: ''});
     const [suggestionId, setSuggestionId] = useState(undefined);
     const [pollingFlag, setPollingFlag] = useState(false);
 
+
+    const handleSubmittedNoticeChange = (field) => {
+        setSubmittedNotice({...submittedNotice, ...field});
+    };
+
+    const debouncedChangeHandler = useMemo(() => debounce(handleSubmittedNoticeChange, 300), []);
+
     const handleUserInputChange = (field) => {
         setNotice({...notice, ...field});
+        debouncedChangeHandler(field)
     };
 
     const currentSuggestion = useMemo(() => suggestions.entities[suggestionId], [suggestions, suggestionId])
 
-    useEffect(() => dispatch(initSuggestion(notice)).then(unwrapResult).then((data) => {
+    useEffect(() => dispatch(initSuggestion(submittedNotice)).then(unwrapResult).then((data) => {
         setSuggestionId(data.id)
         data.status === "running" && setPollingFlag(!pollingFlag)
     }).catch((error) => {
         console.log(error)
-    }), [notice, dispatch])
+    }), [submittedNotice, dispatch])
 
     useEffect(() => {
         console.log("redux -sugg");
@@ -61,8 +71,6 @@ export function Notice() {
         });
     }, [dispatch, pollingFlag])
 
-    const debouncedChangeHandler = useMemo(() => debounce(handleUserInputChange, 300), []);
-
     const statusText = useMemo(() => {
         const running = currentSuggestion?.status === 'running'
         let text = 'À l\'arrêt'
@@ -95,8 +103,11 @@ export function Notice() {
                     <input
                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                         id="grid-title" type="text"
-                        onChange={(e) => debouncedChangeHandler({title: e.target.value})}/>
+                        value={notice.title}
+                        onChange={(e) => handleUserInputChange({title: e.target.value})}/>
                     <p className="text-xs italic">Please fill out this field.</p>
+                    {currentSuggestion && <SuggestionComponent suggestions={currentSuggestion.suggestions?.title}
+                                                               acceptCallback={(value) => handleUserInputChange({title: value})}/>}
                 </div>
             </div>
             <div className="flex flex-wrap -mx-3 mb-6">
@@ -123,23 +134,23 @@ export function Notice() {
                         <select
                             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             onChange={(e) => debouncedChangeHandler({educationalResourceType: e.target.value})}
-                        id="grid-state">
-                        {Object.entries(getVocabularyTerms(10)).map((entry) => (
-                            <option value={entry[0]}>{entry[1]}</option>
-                        ))}
+                            id="grid-state">
+                            {Object.entries(getVocabularyTerms(10)).map((entry) => (
+                                <option value={entry[0]}>{entry[1]}</option>
+                            ))}
 
-                    </select>
-                    <div
-                        className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                        <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 20 20">
-                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                        </svg>
+                        </select>
+                        <div
+                            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>
-    </div>
-</form>
-</div>)
-    ;
+        </form>
+    </div>)
+        ;
 }

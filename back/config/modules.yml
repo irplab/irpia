@@ -1,14 +1,25 @@
 default: &default
-  dummy_1:
-    type: 'cli'
-    args:
-      - 'dummy/main.py'
-    exec: 'python3'
-  dummy_2:
-    type: 'cli'
-    args:
-      - 'dummy/main2.py'
-    exec: 'python3'
+  modules:
+    dummy_1:
+      type: 'cli'
+      args:
+        - 'dummy/main.py'
+      exec: 'python3'
+    dummy_2:
+      type: 'cli'
+      args:
+        - 'dummy/main2.py'
+      exec: 'python3'
+  rules:
+    title:
+      - - dummy_1
+        - dummy_2
+      - - dummy_3
+    description:
+      - - dummy_2
+    educational_resource_type:
+      - - dummy_3
+      - - dummy_1
 
 
 development:
