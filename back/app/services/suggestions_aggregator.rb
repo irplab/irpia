@@ -24,7 +24,7 @@ class SuggestionsAggregator
 
   def thread_result_for_field(field, thread)
     json = JSON.parse(thread.result || '{}')
-    json[field.to_s]&.compact
+    json[field.to_s]&.compact || []
   rescue StandardError => e
     # it's not json, probably an error message
     Rails.logger.error(e.message)
