@@ -1,10 +1,12 @@
 import axios from 'axios';
 import applyConverters from 'axios-case-converter';
 
+const httpClient = () => axios.create({
+    baseURL: `${process.env.REACT_APP_IRPIA_API_URL}/api/v1`
+});
+
 const apiV1 = applyConverters(
-    axios.create({
-        baseURL: `${process.env.REACT_APP_IRPIA_API_URL}/api/v1`
-    }),
+    httpClient(),
 );
 
-export {apiV1};
+export {apiV1, httpClient};
