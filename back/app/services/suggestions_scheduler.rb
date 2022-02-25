@@ -12,7 +12,7 @@ class SuggestionsScheduler
                 when 'cli'
                   CommandLineModuleJob
                 end
-    job_id = job_class.perform_async(config, data)
+    job_id = job_class.perform_async(config, data.to_h)
     SuggestionsThread.create(key:, job_id: job_id, status: Sidekiq::Status::status(job_id), suggestion: suggestion)
   end
 

@@ -4,10 +4,11 @@ class CommandLineModuleJob
   require 'open3'
 
   def perform(config, data)
-    command = "cd #{Rails.application.config.batch_modules_dir}; #{config["exec"] } #{config["args"]&.join(' ')}"
+    params = data.map {|k,v|  "--#{k} \"#{v}\""}
+    command = "cd #{Rails.application.config.batch_modules_dir}#{config['dir']}; #{config['exec']} #{config['args']&.join(' ')} #{params&.join(' ')}"
     stdout, stderr, status = Open3.capture3("bash -c #{Shellwords.escape(command)}")
     thread = SuggestionsThread.find({ job_id: @jid }).first
-    if stderr.blank?
+    if stdout.present?
       thread.status = 'complete'
       thread.result = stdout
       thread.save

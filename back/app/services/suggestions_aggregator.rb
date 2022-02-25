@@ -1,7 +1,9 @@
 class SuggestionsAggregator
 
   def aggregate(from:)
-    Rails.application.config.modules.rules.each_with_object({}) { |pair, suggestions| suggestions[pair[0]] = aggregate_field(field: pair[0], rule: pair[1], threads: from) }
+    Rails.application.config.modules.rules.each_with_object({}) do |pair, suggestions|
+      suggestions[pair[0]] = aggregate_field(field: pair[0], rule: pair[1], threads: from)
+    end
   end
 
   private

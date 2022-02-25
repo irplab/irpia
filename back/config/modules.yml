@@ -2,14 +2,22 @@ default: &default
   modules:
     dummy_1:
       type: 'cli'
+      dir: 'dummy'
       args:
-        - 'dummy/main.py'
-      exec: 'python3'
+        - 'main.py'
+      exec: 'bin/python'
     dummy_2:
       type: 'cli'
+      dir: 'dummy'
       args:
-        - 'dummy/main2.py'
-      exec: 'python3'
+        - 'main2.py'
+      exec: 'bin/python'
+    domain-predict:
+      type: 'cli'
+      dir: 'domain-predict'
+      args:
+        - 'domain-predict-title.py'
+      exec: 'bin/python'
   rules:
     title:
       - - dummy_1
@@ -20,7 +28,8 @@ default: &default
     educational_resource_type:
       - - dummy_3
       - - dummy_1
-
+    domain:
+      - - domain-predict
 
 development:
   <<: *default
