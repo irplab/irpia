@@ -23,5 +23,15 @@ module Back
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.modules = config_for(:modules)
+
+    config.batch_modules_dir = "~/irpia_scripts/"
+
+    # Use cookies
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
+
+    require "ohm"
+    Ohm.redis = Redic.new("redis://127.0.0.1:6379")
   end
 end
