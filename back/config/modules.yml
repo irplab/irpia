@@ -1,17 +1,17 @@
 default: &default
   modules:
-    dummy_1:
-      type: 'cli'
-      dir: 'dummy'
-      args:
-        - 'main.py'
-      exec: 'bin/python'
-    dummy_2:
-      type: 'cli'
-      dir: 'dummy'
-      args:
-        - 'main2.py'
-      exec: 'bin/python'
+#    dummy_1:
+#      type: 'cli'
+#      dir: 'dummy'
+#      args:
+#        - 'main.py'
+#      exec: 'bin/python'
+#    dummy_2:
+#      type: 'cli'
+#      dir: 'dummy'
+#      args:
+#        - 'main2.py'
+#      exec: 'bin/python'
     domain-predict:
       type: 'cli'
       dir: 'domain-predict'
