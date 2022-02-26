@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useReducer, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import debounce from 'lodash.debounce';
 import {
@@ -18,6 +18,23 @@ export function Notice() {
     const [suggestionId, setSuggestionId] = useState(undefined);
     const [pollingFlag, setPollingFlag] = useState(false);
 
+    const initiallyExcludedValues = {};
+
+    function excludedValuesReducer(state, action) {
+        if (action.field && action.value) {
+            let newState = {...state};
+            newState[action.field] = newState[action.field] || []
+            if (newState[action.field].indexOf(action.value) === -1) {
+                newState[action.field].push(action.value)
+            }
+            return newState
+        } else {
+            throw new Error("Domaine obligatoire");
+        }
+    }
+
+    const [excludedValues, dispatchExcludedValues] = useReducer(excludedValuesReducer, initiallyExcludedValues);
+
 
     const handleSubmittedNoticeChange = (field) => {
         setSubmittedNotice({...submittedNotice, ...field});
@@ -29,6 +46,10 @@ export function Notice() {
         setNotice({...notice, ...field});
         debouncedChangeHandler(field)
     };
+
+    const isValueExcluded = useCallback((field, value) => {
+        return excludedValues[field] && excludedValues[field].indexOf(value) >= 0;
+    }, [excludedValues]);
 
     const currentSuggestion = useMemo(() => suggestions.entities[suggestionId], [suggestions, suggestionId])
 
@@ -107,8 +128,9 @@ export function Notice() {
                         value={notice.title}
                         onChange={(e) => handleUserInputChange({title: e.target.value})}/>
                     <p className="text-xs italic">Please fill out this field.</p>
-                    {currentSuggestion && <SuggestionComponent suggestions={currentSuggestion.suggestions?.title}
-                                                               acceptCallback={(value) => handleUserInputChange({title: value})}/>}
+                    {currentSuggestion && <SuggestionComponent
+                        field='title' suggestions={currentSuggestion.suggestions?.title}
+                        acceptCallback={(value) => handleUserInputChange({title: value})}/>}
                 </div>
             </div>
             <div className="flex flex-wrap -mx-3 mb-6">
@@ -124,8 +146,10 @@ export function Notice() {
                         value={notice.description}
                         onChange={(e) => debouncedChangeHandler({description: e.target.value})}/>
                     <p className="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
-                    {currentSuggestion && <SuggestionComponent suggestions={currentSuggestion.suggestions?.description}
-                                                               acceptCallback={(value) => handleUserInputChange({description: value})}/>}
+                    {currentSuggestion && <SuggestionComponent
+                        field='description'
+                        suggestions={currentSuggestion.suggestions?.description}
+                        acceptCallback={(value) => handleUserInputChange({description: value})}/>}
                 </div>
             </div>
             <div className="flex flex-wrap -mx-3 mb-2">
@@ -181,9 +205,12 @@ export function Notice() {
                         </div>
                     </div>
                     {currentSuggestion && currentSuggestion.suggestions?.domain && <SuggestionComponent
-                        suggestions={currentSuggestion.suggestions?.domain?.filter((x) => x !== notice.domain)}
+                        field='domain'
+                        suggestions={currentSuggestion.suggestions?.domain?.filter((x) => x !== notice.domain && !isValueExcluded('domain', x))}
                         titleProvider={id => getVocabularyTerms('15GTPX')[id]}
-                        acceptCallback={(value) => handleUserInputChange({domain: value})}/>}
+                        rejectCallback={(value) => dispatchExcludedValues({field: 'domain', value: value})}
+                        acceptCallback={(value) => handleUserInputChange({domain: value})}
+                    />}
                 </div>
 
             </div>
