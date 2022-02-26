@@ -6,7 +6,7 @@ export function Home() {
     return (
         <div className="container mx-auto flex flex-col md:flex-row items-center my-12 md:my-24">
             <div className="flex flex-col w-full lg:w-1/2 justify-center items-start pt-12 pb-24 px-6">
-                <p className="leading-normal mb-4 lg:mt-24 sm:mt-24">IRPI est un prototype de formulaire de saisie de métadonnées
+                <div className="leading-normal mb-4 lg:mt-24 sm:mt-24">IRPI est un prototype de formulaire de saisie de métadonnées
                     de
                     ressources pédagogiques
                     offrant à l'utilisateur des fonctionnalités d'assistance intelligentes telles que :
@@ -27,7 +27,7 @@ export function Home() {
                             <PhotographIcon className='w-9 h-9 mr-5 fill-cyan-800'/>
                             Suggestion de miniatures
                         </li>
-                    </ul></p>
+                    </ul></div>
                 <div className='flex flex-row justify-end w-full'>
                     <a href='/form'>
                         <button

@@ -61,16 +61,6 @@ export function Notice() {
     }), [submittedNotice, dispatch])
 
     useEffect(() => {
-        console.log("redux -sugg");
-        console.log(suggestions);
-    }, [suggestions])
-
-    useEffect(() => {
-        console.log("redux - vocab");
-        console.log(vocabularies);
-    }, [vocabularies])
-
-    useEffect(() => {
         dispatch(fetchVocabularyById('10'))
         dispatch(fetchVocabularyById('15GTPX'))
     }, [])
@@ -89,7 +79,7 @@ export function Notice() {
             if (data.id !== suggestionId) return;
             data.status === "running" && setPollingFlag(!pollingFlag)
         }).catch((error) => {
-            // console.log(error)
+            console.log(error)
         });
     }, [dispatch, pollingFlag])
 
@@ -163,10 +153,13 @@ export function Notice() {
                     <div className="relative">
                         <select
                             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            onChange={(e) => debouncedChangeHandler({educationalResourceType: e.target.value})}
+                            onChange={(e) => handleUserInputChange({educationalResourceType: e.target.value})}
+                            value={notice.educationalResourceType}
                             id="grid-state">
+                            <option>Choisissez un type de ressource</option>
                             {Object.entries(getVocabularyTerms(10)).map((entry) => (
-                                <option value={entry[0]}>{entry[1]}</option>
+                                <option key={`option-educational-resource-type-${entry[0]}`}
+                                        value={entry[0]}>{entry[1]}</option>
                             ))}
 
                         </select>
@@ -189,12 +182,12 @@ export function Notice() {
                     <div className="relative mb-2">
                         <select
                             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            onChange={(e) => debouncedChangeHandler({educationalResourceType: e.target.value})}
-
+                            onChange={(e) => handleUserInputChange({educationalResourceType: e.target.value})}
+                            value={notice.domain}
                             id="grid-state">
-                            <option selected={!notice.domain}>Choisissez une discipline</option>
+                            <option>Choisissez une discipline</option>
                             {Object.entries(getVocabularyTerms('15GTPX')).map((entry) => (
-                                <option value={entry[0]} selected={entry[0] === notice.domain}>{entry[1]}</option>
+                                <option key={`option-domain-${entry[0]}`} value={entry[0]}>{entry[1]}</option>
                             ))}
 
                         </select>
