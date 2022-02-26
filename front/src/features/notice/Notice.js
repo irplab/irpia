@@ -74,10 +74,10 @@ export function Notice() {
 
     const statusText = useMemo(() => {
         const running = currentSuggestion?.status === 'running'
-        let text = 'À l\'arrêt'
+        let text = 'Irpia attend'
         let color = 'teal'
         if (running) {
-            text = `En cours : reçu ${currentSuggestion?.terminated} / ${currentSuggestion?.total}`
+            text = `Irpia réfléchit ${currentSuggestion?.terminated} / ${currentSuggestion?.total}`
             color = 'sky'
         }
         return (
@@ -91,7 +91,7 @@ export function Notice() {
     return (<div className='pt-36 pb-24 px-6'>
         <div className="flex flex-row justify-end">
             <div className="flex flex-col justify-end align-middle">
-                Moteur de suggestion : {statusText}
+                {statusText}
             </div>
         </div>
         <form className="w-full mt-5">
@@ -121,8 +121,11 @@ export function Notice() {
                     <textarea
                         className="resize-y appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="grid-description" placeholder="Description de votre ressource"
+                        value={notice.description}
                         onChange={(e) => debouncedChangeHandler({description: e.target.value})}/>
                     <p className="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
+                    {currentSuggestion && <SuggestionComponent suggestions={currentSuggestion.suggestions?.description}
+                                                               acceptCallback={(value) => handleUserInputChange({description: value})}/>}
                 </div>
             </div>
             <div className="flex flex-wrap -mx-3 mb-2">
@@ -163,6 +166,7 @@ export function Notice() {
                             onChange={(e) => debouncedChangeHandler({educationalResourceType: e.target.value})}
 
                             id="grid-state">
+                            <option selected={!notice.domain}>Choisissez une discipline</option>
                             {Object.entries(getVocabularyTerms('15GTPX')).map((entry) => (
                                 <option value={entry[0]} selected={entry[0] === notice.domain}>{entry[1]}</option>
                             ))}
