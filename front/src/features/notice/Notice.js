@@ -13,7 +13,7 @@ export function Notice() {
     const suggestions = useSelector(selectSuggestions);
     const vocabularies = useSelector(selectVocabularies);
     const dispatch = useDispatch();
-    const [notice, setNotice] = useState({title: ''});
+    const [notice, setNotice] = useState({title: '', description: '', url: ''});
     const [submittedNotice, setSubmittedNotice] = useState({title: ''});
     const [suggestionId, setSuggestionId] = useState(undefined);
     const [pollingFlag, setPollingFlag] = useState(false);
@@ -108,6 +108,20 @@ export function Notice() {
         <form className="w-full mt-5" onSubmit={e => {
             e.preventDefault();
         }}>
+            <div className="flex flex-wrap -mx-3 mb-6">
+                <div className="w-full px-3 mb-6 md:mb-0">
+                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                           htmlFor="grid-url">
+                        URL
+                    </label>
+                    <input
+                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                        id="grid-url" type="text"
+                        value={notice.url}
+                        onChange={(e) => handleUserInputChange({url: e.target.value})}/>
+                    <p className="text-xs italic">Please fill out this field.</p>
+                </div>
+            </div>
             <div className="flex flex-wrap -mx-3 mb-6">
                 <div className="w-full px-3 mb-6 md:mb-0">
                     <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"

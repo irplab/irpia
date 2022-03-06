@@ -18,16 +18,23 @@ default: &default
       args:
         - 'domain-predict-title.py'
       exec: 'bin/python'
+    webpage-extract:
+      type: 'emb'
+      service: 'Modules::WebPageExtractor'
   rules:
+#    title:
+#      - - dummy_1
+#        - dummy_2
+#      - - dummy_3
+#    description:
+#      - - dummy_2
+#    educational_resource_type:
+#      - - dummy_3
+#      - - dummy_1
     title:
-      - - dummy_1
-        - dummy_2
-      - - dummy_3
+      - - webpage-extract
     description:
-      - - dummy_2
-    educational_resource_type:
-      - - dummy_3
-      - - dummy_1
+      - - webpage-extract
     domain:
       - - domain-predict
 
