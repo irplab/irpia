@@ -25,7 +25,7 @@ class Suggestion < Ohm::Model
   end
 
   def terminated_count
-    self.threads.filter { |thread| %w[complete failed].include?(thread.status) }.count
+    self.threads.filter { |thread| %w[complete error].include?(thread.status) }.count
   end
 
   def to_hash

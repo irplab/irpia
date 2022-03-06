@@ -31,7 +31,7 @@ class Api::V1::SuggestionsController < ApplicationController
   end
 
   def permitted_params
-    params.require(:notice).permit(:title)
+    params.require(:notice).permit(:title, :url)
   end
 
 end

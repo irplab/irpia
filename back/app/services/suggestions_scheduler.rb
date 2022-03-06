@@ -11,6 +11,8 @@ class SuggestionsScheduler
     job_class = case config[:type]
                 when 'cli'
                   CommandLineModuleJob
+                when 'emb'
+                  EmbeddedModuleJob
                 end
     job_id = job_class.perform_async(config, data.to_h)
     SuggestionsThread.create(key:, job_id: job_id, status: Sidekiq::Status::status(job_id), suggestion: suggestion)
