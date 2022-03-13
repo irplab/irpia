@@ -1,0 +1,8 @@
+development:
+  uri: http://localhost:3030/scolomfr
+
+test:
+  uri: http://localhost:3030/scolomfr
+
+production:
+  uri: http://localhost:3030/scolomfr

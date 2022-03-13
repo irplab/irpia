@@ -33,5 +33,7 @@ module Back
 
     require "ohm"
     Ohm.redis = Redic.new("redis://127.0.0.1:6379")
+
+    config.sparql = config_for(:sparql)
   end
 end

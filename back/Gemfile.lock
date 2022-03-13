@@ -183,6 +183,8 @@ GEM
     nest (3.2.0)
       redic
     nesty (1.0.2)
+    net-http-persistent (4.0.1)
+      connection_pool (~> 2.2)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -299,6 +301,9 @@ GEM
     sidekiq-status (2.1.0)
       chronic_duration
       sidekiq (>= 5.0)
+    sparql-client (3.2.0)
+      net-http-persistent (~> 4.0, >= 4.0.1)
+      rdf (~> 3.2)
     sqlite3 (1.4.2)
     sshkit (1.21.2)
       net-scp (>= 1.1.2)
@@ -343,6 +348,7 @@ DEPENDENCIES
   rspec-rails
   sidekiq (~> 6.4)
   sidekiq-status (~> 2.1)
+  sparql-client (~> 3.2)
   sqlite3 (~> 1.4)
   tzinfo-data
 

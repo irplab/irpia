@@ -33,7 +33,7 @@ class Suggestion < Ohm::Model
   end
 
   def update_suggestions!
-    self.suggestions = MetadataProcessor.new.postprocess(SuggestionsAggregator.new.aggregate(from: self.threads)).to_json
+    self.suggestions = MetadataProcessor.new(SuggestionsAggregator.new.aggregate(from: self.threads)).postprocess.metadata.to_json
   end
 
   private

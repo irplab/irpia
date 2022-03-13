@@ -23,7 +23,7 @@ class Api::V1::SuggestionsController < ApplicationController
   private
 
   def create_suggestion
-    @suggestion = SuggestionsScheduler.new.init(with_params: MetadataProcessor.new.preprocess(permitted_params))
+    @suggestion = SuggestionsScheduler.new.init(with_params: MetadataProcessor.new(permitted_params).preprocess.metadata)
   end
 
   def fetch_suggestion
