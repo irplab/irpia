@@ -40,11 +40,15 @@ export function Notice() {
         setSubmittedNotice({...submittedNotice, ...field});
     };
 
-    const debouncedChangeHandler = useMemo(() => debounce(handleSubmittedNoticeChange, 300), []);
+    const debouncedChangeHandler = useMemo(() => debounce(handleSubmittedNoticeChange, 1500), []);
 
     const handleUserInputChange = (field) => {
         setNotice({...notice, ...field});
         debouncedChangeHandler(field)
+    };
+    const handleUserSelectionChange = (field) => {
+        setNotice({...notice, ...field});
+        handleSubmittedNoticeChange(field)
     };
 
     const isValueExcluded = useCallback((field, value) => {
@@ -53,12 +57,19 @@ export function Notice() {
 
     const currentSuggestion = useMemo(() => suggestions.entities[suggestionId], [suggestions, suggestionId])
 
-    useEffect(() => dispatch(initSuggestion(submittedNotice)).then(unwrapResult).then((data) => {
-        setSuggestionId(data.id)
-        data.status === "running" && setPollingFlag(!pollingFlag)
-    }).catch((error) => {
-        console.log(error)
-    }), [submittedNotice, dispatch])
+    const formIsEmpty = useMemo(() => Object.values(submittedNotice).every(x => (x === null || x === undefined || x === '' || x?.length == 0)), [submittedNotice])
+
+    useEffect(() => {
+        if (formIsEmpty) {
+            return;
+        }
+        dispatch(initSuggestion(submittedNotice)).then(unwrapResult).then((data) => {
+            setSuggestionId(data.id)
+            data.status === "running" && setPollingFlag(!pollingFlag)
+        }).catch((error) => {
+            console.log(error)
+        });
+    }, [submittedNotice, dispatch])
 
     useEffect(() => {
         dispatch(fetchVocabularyById('10'))
@@ -136,7 +147,7 @@ export function Notice() {
                     <p className="text-xs italic">Please fill out this field.</p>
                     {currentSuggestion && <SuggestionComponent
                         field='title' suggestions={currentSuggestion.suggestions?.title}
-                        acceptCallback={(value) => handleUserInputChange({title: value})}/>}
+                        acceptCallback={(value) => handleUserSelectionChange({title: value})}/>}
                 </div>
             </div>
             <div className="flex flex-wrap -mx-3 mb-6">
@@ -150,12 +161,12 @@ export function Notice() {
                         className="resize-y appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="grid-description" placeholder="Description de votre ressource"
                         value={notice.description}
-                        onChange={(e) => debouncedChangeHandler({description: e.target.value})}/>
+                        onChange={(e) => handleUserInputChange({description: e.target.value})}/>
                     <p className="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
                     {currentSuggestion && <SuggestionComponent
                         field='description'
                         suggestions={currentSuggestion.suggestions?.description}
-                        acceptCallback={(value) => handleUserInputChange({description: value})}/>}
+                        acceptCallback={(value) => handleUserSelectionChange({description: value})}/>}
                 </div>
             </div>
             <div className="flex flex-wrap -mx-3 mb-2">
@@ -167,7 +178,7 @@ export function Notice() {
                     <div className="relative">
                         <select
                             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            onChange={(e) => handleUserInputChange({educationalResourceType: e.target.value})}
+                            onChange={(e) => handleUserSelectionChange({educationalResourceType: e.target.value})}
                             value={notice.educationalResourceType}
                             id="grid-state">
                             <option>Choisissez un type de ressource</option>
@@ -196,7 +207,7 @@ export function Notice() {
                     <div className="relative mb-2">
                         <select
                             className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            onChange={(e) => handleUserInputChange({educationalResourceType: e.target.value})}
+                            onChange={(e) => handleUserSelectionChange({educationalResourceType: e.target.value})}
                             value={notice.domain}
                             id="grid-state">
                             <option>Choisissez une discipline</option>
@@ -218,7 +229,7 @@ export function Notice() {
                         suggestions={currentSuggestion.suggestions?.domain?.filter((x) => x !== notice.domain && !isValueExcluded('domain', x))}
                         titleProvider={id => getVocabularyTerms('15GTPX')[id]}
                         rejectCallback={(value) => dispatchExcludedValues({field: 'domain', value: value})}
-                        acceptCallback={(value) => handleUserInputChange({domain: value})}
+                        acceptCallback={(value) => handleUserSelectionChange({domain: value})}
                     />}
                 </div>
 
