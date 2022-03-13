@@ -1,8 +1,8 @@
 development:
-  uri: http://localhost:3030/scolomfr
+  uri: http://localhost:3030/scolomfr8
 
 test:
-  uri: http://localhost:3030/scolomfr
+  uri: http://localhost:3030/scolomfr8
 
 production:
-  uri: http://localhost:3030/scolomfr
+  uri: http://localhost:3030/scolomfr8
