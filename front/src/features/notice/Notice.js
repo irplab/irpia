@@ -1,15 +1,28 @@
 import React, {useCallback, useEffect, useMemo, useReducer, useState} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import debounce from 'lodash.debounce';
-import {
-    pollSuggestionById, initSuggestion, selectSuggestions,
-} from './suggestionsSlice';
-import styles from './Notice.module.css';
+import 'react-dropdown-tree-select/dist/styles.css'
+import {initSuggestion, pollSuggestionById, selectSuggestions,} from './suggestionsSlice';
+import './Notice.module.css';
 import {unwrapResult} from "@reduxjs/toolkit";
 import {fetchVocabularyById, selectVocabularies} from "./vocabulariesSlice";
 import {SuggestionComponent} from "./SuggestionComponent";
+import {
+    Box,
+    FormControl,
+    InputLabel,
+    LinearProgress,
+    MenuItem,
+    Paper,
+    Select,
+    TextField,
+    Typography
+} from "@mui/material";
+import {useTheme} from "@mui/styles";
+import DropdownTreeSelect from "react-dropdown-tree-select";
 
 export function Notice() {
+    const theme = useTheme();
     const suggestions = useSelector(selectSuggestions);
     const vocabularies = useSelector(selectVocabularies);
     const dispatch = useDispatch();
@@ -19,6 +32,7 @@ export function Notice() {
     const [pollingFlag, setPollingFlag] = useState(false);
 
     const initiallyExcludedValues = {};
+
 
     function excludedValuesReducer(state, action) {
         if (action.field && action.value) {
@@ -72,8 +86,8 @@ export function Notice() {
     }, [submittedNotice, dispatch])
 
     useEffect(() => {
-        dispatch(fetchVocabularyById('10'))
-        dispatch(fetchVocabularyById('15GTPX'))
+        dispatch(fetchVocabularyById({vocabularyId: '10'}))
+        dispatch(fetchVocabularyById({vocabularyId: '15GTPX', hierarchy: true}))
     }, [])
 
 
@@ -94,6 +108,25 @@ export function Notice() {
         });
     }, [dispatch, pollingFlag])
 
+    const domainsTree = useMemo(() => {
+        return <DropdownTreeSelect
+            data={getVocabularyTerms('15GTPX')}
+            className="mdl-demo"
+            keepTreeOnSearch
+            showPartiallySelected
+            inlineSearchInput
+            inlineSearchPlaceholder={"Domaine d'enseignement"}
+            texts={{
+                placeholder: "Domaine d'enseignement",              // optional: The text to display as placeholder on the search box. Defaults to `Choose...`
+                inlineSearchPlaceholder: "Taper quelques lettres",  // optional: The text to display as placeholder on the inline search box. Only applicable with the `inlineSearchInput` setting. Defaults to `Search...`
+                noMatches: "Aucune correspondance",                // optional: The text to display when the search does not find results in the content list. Defaults to `No matches found`
+                label: "Dom",                    // optional: Adds `aria-labelledby` to search input when input starts with `#`, adds `aria-label` to search input when label has value (not containing '#')
+                labelRemove: "Domdom",              // optional: The text to display for `aria-label` on tag delete buttons which is combined with `aria-labelledby` pointing to the node label. Defaults to `Remove`
+            }}
+
+        />
+    }, [vocabularies])
+
     const statusText = useMemo(() => {
         const running = currentSuggestion?.status === 'running'
         let text = 'Irpia attend'
@@ -103,138 +136,88 @@ export function Notice() {
             color = 'sky'
         }
         return (
-            <span className="flex h-3 w-auto mt-2">
-                {running && <span
-                    className="animate-ping absolute inline-flex h-6 w-6 rounded-full bg-sky-400 opacity-75"></span>}
-                <span className={`relative inline-flex rounded-full h-10 w-auto p-2 bg-${color}-500`}>{text}</span>
-        </span>)
+            <Paper p={5} xs={{margin: theme.spacing(5)}} elevation={4}>
+                <Box p={2}>
+                    <Typography fontSize='medium'>
+                        {text}
+                    </Typography>
+                    {
+                        running && <LinearProgress/>
+                    }
+                </Box>
+            </Paper>)
     }, [suggestions])
 
-    return (<div className='pt-36 pb-24 px-6'>
-        <div className="flex flex-row justify-end">
-            <div className="flex flex-col justify-end align-middle">
-                {statusText}
-            </div>
-        </div>
-        <form className="w-full mt-5" onSubmit={e => {
-            e.preventDefault();
-        }}>
-            <div className="flex flex-wrap -mx-3 mb-6">
-                <div className="w-full px-3 mb-6 md:mb-0">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                           htmlFor="grid-url">
-                        URL
-                    </label>
-                    <input
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                        id="grid-url" type="text"
-                        value={notice.url}
-                        onChange={(e) => handleUserInputChange({url: e.target.value})}/>
-                    <p className="text-xs italic">Please fill out this field.</p>
-                </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-6">
-                <div className="w-full px-3 mb-6 md:mb-0">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                           htmlFor="grid-title">
-                        Titre
-                    </label>
-                    <input
-                        className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                        id="grid-title" type="text"
-                        value={notice.title}
-                        onChange={(e) => handleUserInputChange({title: e.target.value})}/>
-                    <p className="text-xs italic">Please fill out this field.</p>
-                    {currentSuggestion && <SuggestionComponent
-                        field='title' suggestions={currentSuggestion.suggestions?.title}
-                        acceptCallback={(value) => handleUserSelectionChange({title: value})}/>}
-                </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-6">
-                <div className="w-full px-3">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                           htmlFor="grid-description">
-                        description
-                    </label>
+    return (<>
+            {statusText}
+            <form className="w-full mt-5" onSubmit={e => {
+                e.preventDefault();
+            }}>
+                <TextField
+                    margin='normal' fullWidth
+                    id="outlined-adornment-url"
+                    aria-describedby="outlined-url-helper-text"
+                    inputProps={{
+                        'aria-label': 'url',
+                    }}
+                    label='URL'
+                    id="grid-url"
+                    value={notice.url}
+                    onChange={(e) => handleUserInputChange({url: e.target.value})}
+                />
+                <TextField margin='normal' fullWidth id="grid-title"
+                           label="Titre"
+                           variant="outlined"
+                           placeholder="Titre de votre ressource"
+                           onChange={(e) => handleUserInputChange({title: e.target.value})}/>
+                {currentSuggestion && <SuggestionComponent
+                    field='title' suggestions={currentSuggestion.suggestions?.title}
+                    acceptCallback={(value) => handleUserSelectionChange({title: value})}/>}
+                <TextField margin='normal' fullWidth id="grid-title" label="Description" variant="outlined"
+                           multiline
+                           placeholder="Description de votre ressource"
+                           value={notice.description}
+                           onChange={(e) => handleUserInputChange({description: e.target.value})}/>
+                {currentSuggestion && <SuggestionComponent
+                    field='description'
+                    suggestions={currentSuggestion.suggestions?.description}
+                    acceptCallback={(value) => handleUserSelectionChange({description: value})}/>}
+                <FormControl fullWidth margin='normal'>
+                    <InputLabel id="educational-resource-type-select-label"> Type de ressource</InputLabel>
+                    <Select
+                        labelId="educational-resource-type-select-label"
+                        id="educational-resource-type-select"
+                        label='Type de ressource'
+                        onChange={(e) => handleUserSelectionChange({educationalResourceType: e.target.value})}
+                        value={notice.educationalResourceType}
+                    >
+                        <MenuItem>Choisissez un type de ressource</MenuItem>
+                        {Object.entries(getVocabularyTerms(10)).map((entry) => (
+                            <MenuItem key={`option-educational-resource-type-${entry[0]}`}
+                                      value={entry[0]}>{entry[1]}</MenuItem>
+                        ))}
+                    </Select>
+                    {currentSuggestion && currentSuggestion.suggestions?.educationalResourceType && <SuggestionComponent
+                        field='domain'
+                        suggestions={currentSuggestion.suggestions.educationalResourceType?.filter((x) => x !== notice.domain && !isValueExcluded('educationalResourceType', x))}
+                        titleProvider={id => getVocabularyTerms('10')[id]}
+                        rejectCallback={(value) => dispatchExcludedValues({field: 'educationalResourceType', value: value})}
+                        acceptCallback={(value) => handleUserSelectionChange({educationalResourceType: value})}
+                    />}
+                </FormControl>
 
-                    <textarea
-                        className="resize-y appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="grid-description" placeholder="Description de votre ressource"
-                        value={notice.description}
-                        onChange={(e) => handleUserInputChange({description: e.target.value})}/>
-                    <p className="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
-                    {currentSuggestion && <SuggestionComponent
-                        field='description'
-                        suggestions={currentSuggestion.suggestions?.description}
-                        acceptCallback={(value) => handleUserSelectionChange({description: value})}/>}
-                </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-2">
-                <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                           htmlFor="grid-state">
-                        Type de ressource
-                    </label>
-                    <div className="relative">
-                        <select
-                            className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            onChange={(e) => handleUserSelectionChange({educationalResourceType: e.target.value})}
-                            value={notice.educationalResourceType}
-                            id="grid-state">
-                            <option>Choisissez un type de ressource</option>
-                            {Object.entries(getVocabularyTerms(10)).map((entry) => (
-                                <option key={`option-educational-resource-type-${entry[0]}`}
-                                        value={entry[0]}>{entry[1]}</option>
-                            ))}
-
-                        </select>
-                        <div
-                            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                 viewBox="0 0 20 20">
-                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-2">
-                <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                           htmlFor="grid-state">
-                        Domaine d'enseignement
-                    </label>
-                    <div className="relative mb-2">
-                        <select
-                            className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            onChange={(e) => handleUserSelectionChange({educationalResourceType: e.target.value})}
-                            value={notice.domain}
-                            id="grid-state">
-                            <option>Choisissez une discipline</option>
-                            {Object.entries(getVocabularyTerms('15GTPX')).map((entry) => (
-                                <option key={`option-domain-${entry[0]}`} value={entry[0]}>{entry[1]}</option>
-                            ))}
-
-                        </select>
-                        <div
-                            className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                 viewBox="0 0 20 20">
-                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                            </svg>
-                        </div>
-                    </div>
+                <FormControl fullWidth margin='normal'>
+                    {domainsTree}
                     {currentSuggestion && currentSuggestion.suggestions?.domain && <SuggestionComponent
                         field='domain'
-                        suggestions={currentSuggestion.suggestions?.domain?.filter((x) => x !== notice.domain && !isValueExcluded('domain', x))}
+                        suggestions={currentSuggestion.suggestions.domain?.filter((x) => x !== notice.domain && !isValueExcluded('domain', x))}
                         titleProvider={id => getVocabularyTerms('15GTPX')[id]}
                         rejectCallback={(value) => dispatchExcludedValues({field: 'domain', value: value})}
                         acceptCallback={(value) => handleUserSelectionChange({domain: value})}
                     />}
-                </div>
+                </FormControl>
 
-            </div>
-        </form>
-    </div>)
-        ;
+            </form>
+        </>
+    );
 }

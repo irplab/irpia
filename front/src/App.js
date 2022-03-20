@@ -1,58 +1,158 @@
 import React from 'react';
-import {Route, Routes} from "react-router-dom";
+import {NavLink, Route, Routes} from "react-router-dom";
 import {Notice} from './features/notice/Notice';
 import './App.css';
 import {Home} from "./features/notice/Home";
-import {HeaderLink} from "./features/notice/HeaderLink";
+import {
+    AppBar,
+    Box,
+    Container, createTheme,
+    CssBaseline,
+    IconButton,
+    Menu,
+    MenuItem,
+    Toolbar,
+    Typography
+} from "@mui/material";
+
+import {
+    makeStyles, ThemeProvider, useTheme
+} from "@mui/styles";
+import {MenuOutlined} from "@mui/icons-material";
+
+
+const pages = {
+    'home': {path: '', label: 'Accueil'},
+    'form': {path: 'form', label: 'Formulaire'},
+    'about': {path: 'about', label: 'À propos'},
+};
+
+const navigationStyles = makeStyles((theme) => ({
+    spacing: 5,
+    navlinks: {
+        marginLeft: theme.spacing(10),
+        display: "flex",
+    },
+    link: {
+        textDecoration: "none",
+        color: "white",
+        fontSize: "20px",
+        marginLeft: theme.spacing(5),
+        "&:hover": {
+            color: "yellow",
+            borderBottom: "1px solid white",
+        },
+    }
+}));
+
 
 const Navigation = () => {
+    const theme = useTheme();
+    const classes = navigationStyles();
+    const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    const handleOpenNavMenu = (event) => {
+        setAnchorElNav(event.currentTarget);
+    };
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseNavMenu = () => {
+        setAnchorElNav(null);
+    };
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null);
+    };
     return (
-        <nav className="flex flex-col justify-between flex-wrap bg-white fixed w-full z-10 top-0">
-            <div className="container mx-auto bg-white">
-                <div className="flex flex-col items-start flex-shrink-0 text-pink-600 mr-6 p-6">
-                    <a className="no-underline hover:text-black  hover:no-underline" href="/">
-                        <span className="text-2xl pl-2 font-bold"><i className="em em-grinning"></i> IRPIA</span>
-                    </a>
-                    <p className='pl-2'>Indexation de ressources pédagogiques intelligente et assistée</p>
-                </div>
-            </div>
+        <> <AppBar position='sticky' xs={{marginBottom: theme.spacing(0)}}>
+            <Container maxWidth="xl">
+                <Toolbar disableGutters>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="div"
+                        sx={{mr: 2, display: {xs: 'none', md: 'flex'}}}
+                    >
+                        IRPIA
+                    </Typography>
 
-            <div className="block lg:hidden">
-                <button id="nav-toggle"
-                        className="flex items-center px-3 py-2 border rounded text-gray-500 border-gray-600 hover:text-white hover:border-white">
-                    <svg className="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <title>Menu</title>
-                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
-                    </svg>
-                </button>
-            </div>
-
-            <div className="bg-black w-full flex-grow lg:flex items-center p-4"
-                 id="nav-content">
-                <div className="container mx-auto">
-                    <ul className="list-reset lg:flex flex-1 items-center">
-                        <HeaderLink path='' label='Accueil'/>
-                        <HeaderLink path='form' label='Formulaire'/>
-                        <HeaderLink path='about' label='À propos'/>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+                    <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleOpenNavMenu}
+                            color="inherit"
+                        >
+                            <MenuOutlined/>
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorElNav}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                            }}
+                            open={Boolean(anchorElNav)}
+                            onClose={handleCloseNavMenu}
+                            sx={{
+                                display: {xs: 'block', md: 'none'},
+                            }}
+                        >
+                            <div>
+                                {Object.keys(pages).map((page) => (
+                                    <MenuItem key={`${page}-xs`} onClick={handleCloseNavMenu}>
+                                        <NavLink to={`/${pages[page].path}`}>{pages[page].label}</NavLink>
+                                    </MenuItem>
+                                ))}
+                            </div>
+                        </Menu>
+                    </Box>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="div"
+                        sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}
+                    >
+                        IRPIA
+                    </Typography>
+                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}} className={classes.navlinks}>
+                        {Object.keys(pages).map((page) => (
+                            <NavLink key={`${page}-xs`} to={`/${pages[page].path}`}
+                                     className={classes.link}>{pages[page].label}</NavLink>
+                        ))}
+                    </Box>
+                </Toolbar>
+            </Container>
+        </AppBar>
+            <Toolbar/>
+        </>
     );
 };
 
 
 function App() {
+    const theme = createTheme();
     return (
-        <>
-            <div className="container shadow-lg mx-auto bg-white mt-24 md:mt-18">
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <Navigation/>
+            <Container maxWidth="lg">
                 <Routes>
                     <Route path="" element={<Home/>}/>
                     <Route path="form" element={<Notice/>}/>
                 </Routes>
-            </div>
-            <Navigation/>
-        </>
+            </Container>
+        </ThemeProvider>
 
     );
 }
