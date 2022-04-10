@@ -9,16 +9,15 @@ import {fetchVocabularyById, selectVocabularies} from "./vocabulariesSlice";
 import {SuggestionComponent} from "./SuggestionComponent";
 import {
     Box,
-    FormControl,
+    FormControl, Grid,
     InputLabel,
     LinearProgress,
     MenuItem,
     Paper,
     Select,
     TextField,
-    Typography
+    Typography, useTheme
 } from "@mui/material";
-import {useTheme} from "@mui/styles";
 import DropdownTreeSelect from "react-dropdown-tree-select";
 
 export function Notice() {
@@ -148,11 +147,11 @@ export function Notice() {
             </Paper>)
     }, [suggestions])
 
-    return (<>
+    return (<Grid container sx={{marginTop: theme.spacing(5)}} direction='column'>
             {statusText}
-            <form className="w-full mt-5" onSubmit={e => {
+            <form onSubmit={e => {
                 e.preventDefault();
-            }}>
+            }} >
                 <TextField
                     margin='normal' fullWidth
                     id="outlined-adornment-url"
@@ -210,7 +209,7 @@ export function Notice() {
                     {domainsTree}
                     {currentSuggestion && currentSuggestion.suggestions?.domain && <SuggestionComponent
                         field='domain'
-                        suggestions={currentSuggestion.suggestions.domain?.filter((x) => x !== notice.domain && !isValueExcluded('domain', x))}
+                        suggestions={currentSuggestion.suggestions?.domain?.filter((x) => x !== notice.domain && !isValueExcluded('domain', x))}
                         titleProvider={id => getVocabularyTerms('15GTPX')[id]}
                         rejectCallback={(value) => dispatchExcludedValues({field: 'domain', value: value})}
                         acceptCallback={(value) => handleUserSelectionChange({domain: value})}
@@ -218,6 +217,6 @@ export function Notice() {
                 </FormControl>
 
             </form>
-        </>
+        </Grid>
     );
 }
