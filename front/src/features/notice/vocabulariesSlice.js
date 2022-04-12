@@ -4,9 +4,9 @@ import {fetchVocabulary} from "./vocabularyAPI";
 
 export const fetchVocabularyById = createAsyncThunk(
     'vocabularies/fetchVocabulary',
-    async (vocabularyId, {rejectWithValue}) => {
+    async ({vocabularyId, hierarchy}=false, {rejectWithValue}) => {
         try {
-            const response = await fetchVocabulary(vocabularyId);
+            const response = await fetchVocabulary(vocabularyId, hierarchy);
             return response.data;
         } catch (err) {
             return rejectWithValue(err.response?.data);

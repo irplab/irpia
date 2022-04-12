@@ -1,0 +1,8 @@
+.MuiToolbar-gutters {
+    display: none !important;
+}
+
+.MuiToolbar-root a.active,
+.MuiMenuItem-root a.active {
+    font-weight: 600 !important;
+}
