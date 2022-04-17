@@ -8,9 +8,10 @@ export function Home() {
     const theme = useTheme();
     return (
         <Grid container>
-            <Grid item md={6} xs={12}>
+            <Grid item md={5} xs={12}>
                 <Grid container direction='column' sx={{
-                    paddingLeft: {xs: theme.spacing(2), md: theme.spacing(8)},
+                    paddingLeft: {xs: theme.spacing(2), md: theme.spacing(12)},
+                    paddingRight: {xs: theme.spacing(2), md: theme.spacing(4)},
                     paddingTop: {xs: theme.spacing(8), sm: theme.spacing(8), lg: theme.spacing(8)}
                 }}>
                     <Grid item alignSelf='center' component={Box} sx={{display: {md: 'inline', xs: 'none'}}}>
@@ -20,17 +21,14 @@ export function Home() {
                           sx={{mt: -4, mb: 2, display: {md: 'none', xs: 'inline'}}}>
                         <img src={Banner} height={150} sx={{textAlign: 'center'}}/>
                     </Grid>
-                    <Grid item><Typography variant='h2' sx={{
+                    <Grid item><Typography variant='h2' color='secondary' sx={{
                         fontSize: "3rem",
                         [theme.breakpoints.down("sm")]: {
                             fontSize: "2rem"
-                        },
-                        lineHeight: 1,
-                        fontWeight: '500',
-                        color: theme.palette.secondary.light
+                        }
                     }}>Prototype d'assistant intelligent pour la description de vos ressources
                         pédagogiques</Typography> </Grid>
-                    <Grid item sx={{marginTop: theme.spacing(2)}}><Typography variant='subtitle1'
+                    <Grid item sx={{marginTop: theme.spacing(6)}}><Typography variant='subtitle2'
                                                                               sx={{lineHeight: 1.2}}>
                         Saisir les informations qui permettront aux utilisateurs de trouver les ressources que vous
                         proposez
@@ -40,7 +38,7 @@ export function Home() {
                     </Typography></Grid>
                 </Grid>
             </Grid>
-            <Grid item sm={6} md={6} sx={{display: {md: 'block', sm: 'none', xs: 'none'}}}>
+            <Grid item sm={6} md={7} sx={{display: {md: 'block', sm: 'none', xs: 'none'}}}>
                 <img src={BgHome} width='100%' sx={{textAlign: 'center'}}/>
             </Grid>
 

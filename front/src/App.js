@@ -1,40 +1,70 @@
 import React from 'react';
 import {Route, Routes} from "react-router-dom";
-import {Notice} from './features/notice/Notice';
 import './App.css';
-import {Home} from "./features/notice/Home";
-import {Container, createTheme, CssBaseline, ThemeProvider} from "@mui/material";
+import {Home} from "./features/home/Home";
+import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 
 import {Navigation} from "./commons/Navigation";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import {Form} from "./features/form/Form";
 
 
 function App() {
-    const theme = createTheme({
+    const theme = createTheme( {
         palette: {
-            secondary: {
-                light: '#619AFC',
-                main: '#385EBA',
-                dark: '#212474',
-                contrastText: '#000',
-            },
+            type: 'light',
             primary: {
-                light: '#C683A4',
-                main: '#B52168',
-                contrastText: '#fff',
+                main: '#b52168',
+                dark: '#80003e',
+            },
+            secondary: {
+                main: '#619afc',
+                light: '#99caff',
+                dark: '#186cc8',
+            },
+            info: {
+                main: '#18ffff',
+                light: '#76ffff',
+                dark: '#00cbcc',
             },
         },
+        typography: {
+            h2: {
+                lineHeight: 1,
+                fontWeight: '500',
+                fontSize: "3rem",
+            },
+            h3: {
+                lineHeight: 1,
+                fontWeight: '500',
+                fontSize: "3rem",
+            },
+            h4: {
+                lineHeight: 1,
+                fontWeight: '500',
+                fontSize: "2rem",
+            },
+            subtitle1: {
+                fontSize: "1.2rem",
+            },
+            subtitle2: {
+                fontWeight: '400',
+                fontSize: "1.2rem",
+            }
+        }
     });
     return (
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme} >
             <CssBaseline/>
             <Navigation/>
             <Routes>
-                <Route exact path="" element={<Home/>}/>
-                <Route exact path="form" element={<Notice/>}/>
+                <Route index element={<Home/>}/>
+                <Route exact path="form/contribution" element={<Form />}/>
+                <Route exact path="form/notice" element={<Form />}/>
+                <Route exact path="form/end" element={<Form />}/>
             </Routes>
         </ThemeProvider>
 
