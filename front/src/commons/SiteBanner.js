@@ -55,7 +55,7 @@ export function SiteBanner(props) {
             <img src={Banner} height={100}/>
         </Grid>
         <Grid item xs={6} md={3} sx={{alignSelf: "center"}}>
-            <Typography sx={{fontWeight: 600, color: theme.palette.secondary.light, fontSize: "18px"}}>
+            <Typography sx={{fontWeight: 600, color: theme.palette.secondary.main, fontSize: "18px"}}>
                 Indexation de Ressources Pédagogiques<br/>
                 Intelligente et Assistée
             </Typography>

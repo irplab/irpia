@@ -8,7 +8,7 @@ import {unwrapResult} from "@reduxjs/toolkit";
 import {fetchVocabularyById, selectVocabularies} from "./vocabulariesSlice";
 import {SuggestionComponent} from "./SuggestionComponent";
 import {
-    Box,
+    Box, Container,
     FormControl, Grid,
     InputLabel,
     LinearProgress,
@@ -147,11 +147,11 @@ export function Notice() {
             </Paper>)
     }, [suggestions])
 
-    return (<Grid container sx={{marginTop: theme.spacing(5)}} direction='column'>
+    return (<Container><Grid container sx={{marginTop: theme.spacing(5)}} direction='column'>
             {statusText}
             <form onSubmit={e => {
                 e.preventDefault();
-            }} >
+            }}>
                 <TextField
                     margin='normal' fullWidth
                     id="outlined-adornment-url"
@@ -200,7 +200,10 @@ export function Notice() {
                         field='domain'
                         suggestions={currentSuggestion.suggestions.educationalResourceType?.filter((x) => x !== notice.domain && !isValueExcluded('educationalResourceType', x))}
                         titleProvider={id => getVocabularyTerms('10')[id]}
-                        rejectCallback={(value) => dispatchExcludedValues({field: 'educationalResourceType', value: value})}
+                        rejectCallback={(value) => dispatchExcludedValues({
+                            field: 'educationalResourceType',
+                            value: value
+                        })}
                         acceptCallback={(value) => handleUserSelectionChange({educationalResourceType: value})}
                     />}
                 </FormControl>
@@ -218,5 +221,6 @@ export function Notice() {
 
             </form>
         </Grid>
+        </Container>
     );
 }

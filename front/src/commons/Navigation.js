@@ -8,7 +8,7 @@ export const Navigation = () => {
     const theme = useTheme();
     const pages = {
         'home': {path: '', label: 'Accueil'},
-        'form': {path: 'form', label: 'Formulaire'},
+        'form': {path: 'form/contribution', label: 'Formulaire'},
         'about': {path: 'about', label: 'À propos'},
     };
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -42,12 +42,13 @@ export const Navigation = () => {
                             {Object.keys(pages).map((page) => (
                                 <Grid item
                                       flexGrow={0.2}
-
+                                      textAlign='center'
                                       key={`${page}-xs`}>
                                     <NavLink exact='true'
                                              style={{
                                                  textDecoration: 'none',
                                                  fontWeight: '300',
+                                                 textAlign: 'center',
                                                  color: theme.palette.primary.contrastText,
                                                  marginLeft: theme.spacing(2)
                                              }}
