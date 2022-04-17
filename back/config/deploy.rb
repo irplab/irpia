@@ -11,7 +11,7 @@ set :repo_url, "git@github.com:irplab/irpia.git"
 set :deploy_to, "/home/#{fetch :application}/api"
 
 # set :branch, :'request-workflow'
-set :branch, :'mui-migration'
+set :branch, :'main'
 
 set :repo_tree, :back
 
