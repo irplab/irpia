@@ -8,14 +8,22 @@ import {getContributors} from "../notice/contributionAPI";
 export function Contribution() {
     const theme = useTheme();
     const [submittedName, setSubmittedName] = useState('');
+    const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
     const [options, setOptions] = useState([])
     useEffect(() => {
+        if (!submittedName) {
+            setAutocompleteIsLoading(false);
+            return;
+        }
         getContributors(submittedName).then((result) => {
             setOptions(result.data);
+        }).finally(() => {
+            setAutocompleteIsLoading(false);
         })
     }, [submittedName])
 
     const handleSubmittedNameChange = (name) => {
+        setAutocompleteIsLoading(true);
         setSubmittedName(name);
     };
 
@@ -31,8 +39,10 @@ export function Contribution() {
                 <Grid item md={12} sx={{marginTop: theme.spacing(5)}}>
                     <Autocomplete
                         id="grouped-suggest"
-
+                        noOptionsText={submittedName ? "Aucune correspondance" : "Saisissez quelques lettres"}
                         options={options}
+                        loading={autocompleteIsLoading}
+                        loadingText="Recherche en cours"
                         groupBy={(option) => option.source}
                         getOptionLabel={(option) => option.name}
                         renderOption={(props, option) => (
