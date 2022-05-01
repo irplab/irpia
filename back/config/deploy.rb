@@ -12,6 +12,7 @@ set :deploy_to, "/home/#{fetch :application}/api"
 
 # set :branch, :'request-workflow'
 set :branch, :'main'
+# set :branch, :'contributor-suggest'
 
 set :repo_tree, :back
 
@@ -31,7 +32,7 @@ Rake::Task['deploy:migrate'].clear_actions
 # set :pty, true
 
 # Default value for :linked_files is []
-# append :linked_files, "config/database.yml"
+append :linked_files, "config/sirene.yml"
 
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public'
@@ -66,6 +67,7 @@ WEB_CONCURRENCY
 )
 
 namespace :deploy do
+  before "deploy:check:linked_dirs", 'irpia:generate_sirene_yml'
   after :finished, 'dotenv:read'
   after :finished, 'dotenv:check'
   after :finished, 'dotenv:setup'

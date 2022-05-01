@@ -24,6 +24,7 @@ module Back
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     config.modules = config_for(:modules)
+    config.sirene = config_for(:sirene)
 
     config.batch_modules_dir = "~/irpia_scripts/"
 
