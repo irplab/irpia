@@ -6,19 +6,19 @@ class Api::SireneClient
   SUGGESTION_PATH = "/entreprises/sirene/V3/siren".freeze
   AUTH_PARAMS = { grant_type: "client_credentials" }
 
-  def get_suggestions(name:, first_try: true)
-    params = { q: "periode(denominationUniteLegale:#{name}*)" }
+  def get_suggestions(query:, first_try: true)
+    params = { q: "periode(denominationUniteLegale:#{query}*)" }
     response = connection.get SUGGESTION_PATH, params do |request|
       request.headers["Authorization"] = "Bearer #{token}"
     end
-    if response.status == 403
+    if response.status ==  403
       Rails.logger.error("Access to Sirene API denied.")
       return []
     end
     if response.status == 401
       if first_try
         generate_token
-        return get_suggestions(name: name, first_try: false)
+        return get_suggestions(query: query, first_try: false)
       else
         Rails.logger.error("Unable to get data from sirene api with current credentials")
         return []
@@ -28,7 +28,7 @@ class Api::SireneClient
   end
 
   def convert(results)
-    results.map { |result| { source: "Sirène", name: result['periodesUniteLegale'][0]['denominationUniteLegale'], siren: result['siren'] } }
+    results.map { |result| { source: "Sirène", name: result['periodesUniteLegale'][0]['denominationUniteLegale'], identifier: result['siren'] } }
   end
 
   SIRENE_TOKEN_NAME = 'sirene'
@@ -46,6 +46,7 @@ class Api::SireneClient
       request.headers["Authorization"] = "Basic " + Base64::encode64("#{Rails.application.config.sirene[:key]}:#{Rails.application.config.sirene[:secret]}").gsub("\n", '')
     end
     token = JSON.parse(response.body)['access_token']
+    Token.find(name: SIRENE_TOKEN_NAME).map(&:delete)
     Token.create(name: SIRENE_TOKEN_NAME, value: token)
   end
 
