@@ -28,7 +28,7 @@ class Api::SireneClient
   end
 
   def convert(results)
-    results.map { |result| { source: "Sirène", name: result['periodesUniteLegale'][0]['denominationUniteLegale'], identifier: result['siren'] } }
+    (results || []).map { |result| { source: "Sirène", name: result['periodesUniteLegale'][0]['denominationUniteLegale'], identifier: result['siren'] } }
   end
 
   SIRENE_TOKEN_NAME = 'sirene'

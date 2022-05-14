@@ -1,7 +1,7 @@
 class Api::IsniClient
 
   ISNI_SRU_HOST = 'http://isni.oclc.org'
-  ISNI_SRU_PATH = '/sru/DB=1.2/?query=pica.na+%3D+"$QUERY"&version=1.1&operation=searchRetrieve&recordSchema=isni-b&maximumRecords=$ROWS&startRecord=1&recordPacking=xml&sortKeys=none&x-info-5-mg-requestGroupings=none&x-info-5-mh-requestHints=*'
+  ISNI_SRU_PATH = '/sru/DB=1.2/?query=pica.nw+%3D+"$QUERY"&version=1.1&operation=searchRetrieve&recordSchema=isni-b&maximumRecords=$ROWS&startRecord=1&recordPacking=xml&sortKeys=none&x-info-5-mg-requestGroupings=none&x-info-5-mh-requestHints=*'
   DEFAULT_ROWS = 100
   SOURCE_IDENTIFIER = 'ISNI'
 
@@ -9,7 +9,7 @@ class Api::IsniClient
     results = []
     begin
       unless query.blank?
-        path = ISNI_SRU_PATH.gsub('$QUERY', query).gsub('$ROWS', DEFAULT_ROWS.to_s)
+        path = ISNI_SRU_PATH.gsub('$QUERY', URI.encode_www_form_component(query)).gsub('$ROWS', DEFAULT_ROWS.to_s)
         results = get_results(path)
       end
       results << { name: 'Aucun résultat ISNI', identifier: 0, source: SOURCE_IDENTIFIER } if results.blank?
