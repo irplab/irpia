@@ -36,6 +36,7 @@ export function Contribution() {
 
     const debouncedChangeHandler = useMemo(() => debounce(handleSubmittedNameChange, 1500), []);
     const handleUserInputChange = (name) => {
+        setOptions([])
         debouncedChangeHandler(name)
     };
 
@@ -77,7 +78,11 @@ export function Contribution() {
             <Grid item md={12} sx={{marginTop: theme.spacing(5)}}>
                 <Autocomplete
                     PopperComponent={PopperMy}
+                    isOptionEqualToValue={(option, value) => {
+                        return option.source === value.source && option.identifier === value.identifier;
+                    }}
                     id="grouped-suggest"
+                    onBlur={() => setOpenAutoComplete(false)}
                     open={openAutoComplete}
                     onOpen={() => setOpenAutoComplete(true)}
                     onClose={() => setOpenAutoComplete(!selectedSiren || !selectedIsni)}
