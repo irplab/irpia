@@ -1,4 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
+import InputMask from "react-input-mask";
 import {Autocomplete, Box, Chip, Grid, Popper, Stack, TextField, Typography, useTheme} from "@mui/material";
 import debounce from "lodash.debounce";
 import {getContributors} from "../notice/contributionAPI";
@@ -11,8 +12,11 @@ export function Contribution() {
     const theme = useTheme();
     const [openAutoComplete, setOpenAutoComplete] = useState(false);
     const [submittedName, setSubmittedName] = useState('');
-    const [selectedSiren, setSelectedSiren] = useState(null);
-    const [selectedIsni, setSelectedIsni] = useState(null);
+    const [selectedSirenInfo, setSelectedSirenInfo] = useState(null);
+    const [customSiren, setCustomSiren] = useState(null);
+    const [selectedIsniInfo, setSelectedIsniInfo] = useState(null);
+    const [autocompleteSelectedOptions, setAutocompleteSelectedOptions] = useState([]);
+    const [customIsni, setCustomIsni] = useState(null);
     const [editorName, setEditorName] = useState('');
     const [editorialBrand, setEditorialBrand] = useState('');
     const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
@@ -43,31 +47,50 @@ export function Contribution() {
     const optionChoosed = (event, newValues) => {
         const siren = newValues.filter((value) => value.source === SIRENE_IDENTIFIER)[0]
         const isni = newValues.filter((value) => value.source === ISNI_IDENTIFIER)[0]
-        setSelectedIsni(isni);
-        setSelectedSiren(siren);
+        setSelectedIsniInfo(isni);
+        setSelectedSirenInfo(siren);
+        if (isni) {
+            setCustomIsni(null);
+        }
         if (siren) {
+            setCustomSiren(null)
             setEditorName(siren.name);
             setEditorialBrand(siren.name);
         }
     }
 
     useEffect(() => {
-            if (selectedIsni && selectedSiren) {
+            if (selectedIsniInfo && selectedSirenInfo) {
                 setOpenAutoComplete(false)
             }
-        }, [selectedSiren, selectedIsni]
+        }, [selectedSirenInfo, selectedIsniInfo]
     )
+
+
+    const currentSiren = useMemo(() => {
+        return customSiren || selectedSirenInfo?.identifier || ''
+    }, [customSiren, selectedSirenInfo])
+
+    const currentIsni = useMemo(() => {
+        return customIsni || selectedIsniInfo?.identifier || ''
+    }, [customIsni, selectedIsniInfo])
 
     const filteredOptions = useMemo(() => {
         let filtered = options;
-        if (selectedSiren != null) {
-            filtered = filtered.filter((option) => option.source !== SIRENE_IDENTIFIER)
+        if (selectedSirenInfo != null) {
+            filtered = filtered.filter((option) => option.identifier === currentSiren || option.source !== SIRENE_IDENTIFIER)
         }
-        if (selectedIsni != null) {
-            filtered = filtered.filter((option) => option.source !== ISNI_IDENTIFIER)
+        if (selectedIsniInfo != null) {
+            filtered = filtered.filter((option) => option.identifier === currentIsni || option.source !== ISNI_IDENTIFIER)
         }
         return filtered
-    }, [options, selectedSiren, selectedIsni])
+    }, [options, selectedSirenInfo, selectedIsniInfo])
+
+    useEffect(() => {
+        setAutocompleteSelectedOptions([selectedIsniInfo, selectedSirenInfo].filter(function (el) {
+            return el != null;
+        }));
+    }, [selectedSirenInfo, selectedIsniInfo])
 
     const PopperMy = function (props) {
         return (<Popper {...props} placement='top-start'/>)
@@ -78,16 +101,23 @@ export function Contribution() {
             <Grid item md={12} sx={{marginTop: theme.spacing(5)}}>
                 <Autocomplete
                     PopperComponent={PopperMy}
+                    value={autocompleteSelectedOptions}
                     isOptionEqualToValue={(option, value) => {
                         return option.source === value.source && option.identifier === value.identifier;
                     }}
+                    getOptionDisabled={(option) =>
+                        option?.disabled === true
+                    }
                     id="grouped-suggest"
                     onBlur={() => setOpenAutoComplete(false)}
                     open={openAutoComplete}
                     onOpen={() => setOpenAutoComplete(true)}
-                    onClose={() => setOpenAutoComplete(!selectedSiren || !selectedIsni)}
-                    noOptionsText={(selectedSiren && selectedIsni) ? submittedName ? "Sélection complète" : "Aucune correspondance" : "Saisissez quelques lettres"}
+                    onClose={() => setOpenAutoComplete(!selectedSirenInfo || !selectedIsniInfo)}
+                    noOptionsText={(selectedSirenInfo && selectedIsniInfo) ? submittedName ? "Sélection complète" : "Aucune correspondance" : "Saisissez quelques lettres"}
                     options={filteredOptions}
+                    filterOptions={(options) =>
+                        options
+                    }
                     loading={autocompleteIsLoading}
                     renderTags={(value, getTagProps) =>
                         value.map((option, index) => {
@@ -105,7 +135,7 @@ export function Contribution() {
                     onChange={optionChoosed}
                     multiple
                     // filterOptions={x => x.source === 'sirene' ? null : x}
-                    groupBy={(option) => option.source}
+                    groupBy={(option) => option?.source}
                     getOptionLabel={(option) => option.name}
                     renderOption={(props, option) => (<Box component="li" {...props} key={`li${option.identifier}`}>
                         <Stack direction='column'>
@@ -129,16 +159,43 @@ export function Contribution() {
             <Grid item md={12} sx={{marginTop: theme.spacing(3)}}>
                 <Grid container direction='row' spacing={theme.spacing(1)}>
                     <Grid item md={6}>
-                        <TextField id="siren" label="Siren" value={selectedSiren?.identifier || ''} variant="outlined"
-                                   fullWidth
-                                   InputLabelProps={{shrink: !!selectedSiren}}
-                                   color={selectedSiren ? "error" : "success"}/>
+
+                        <InputMask
+                            id="siren"
+                            mask="999 999 999"
+                            value={currentSiren}
+                            disabled={false}
+                            maskChar=" "
+                            onChange={(e) => {
+                                setCustomSiren(e.target.value);
+                                setSelectedSirenInfo(null);
+                                console.log("cleared selected siren")
+                            }
+                            }
+                        >
+                            {() => <TextField label="Siren" variant="outlined" fullWidth
+                                              InputLabelProps={{shrink: !!currentSiren}}
+                                              color={selectedSirenInfo ? "error" : "success"}/>}
+                        </InputMask>
                     </Grid>
                     <Grid item md={6}>
-                        <TextField id="ISNI" label="ISNI" value={selectedIsni?.identifier || ''} variant="outlined"
-                                   fullWidth
-                                   InputLabelProps={{shrink: !!selectedIsni}}
-                                   color={selectedIsni ? "error" : "success"}/>
+                        <InputMask
+                            id="isni"
+                            mask="9999-9999-9999-9999"
+                            value={currentIsni}
+                            disabled={false}
+                            maskChar=" "
+                            onChange={(e) => {
+                                setCustomIsni(e.target.value);
+                                setSelectedIsniInfo(null);
+                                console.log("cleared selected isni")
+                            }
+                            }
+                        >
+                            {() => <TextField label="ISNI" variant="outlined" fullWidth
+                                              InputLabelProps={{shrink: !!currentIsni}}
+                                              color={selectedIsniInfo ? "error" : "success"}/>}
+                        </InputMask>
                     </Grid></Grid>
             </Grid>
 

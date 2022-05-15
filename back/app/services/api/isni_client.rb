@@ -12,7 +12,9 @@ class Api::IsniClient
         path = ISNI_SRU_PATH.gsub('$QUERY', URI.encode_www_form_component(query)).gsub('$ROWS', DEFAULT_ROWS.to_s)
         results = get_results(path)
       end
-      results << { name: 'Aucun résultat ISNI', identifier: 0, source: SOURCE_IDENTIFIER } if results.blank?
+      results << { source: SOURCE_IDENTIFIER, name: 'Toto', identifier: '1234' }
+      results << { source: SOURCE_IDENTIFIER, name: 'Titi', identifier: '4567' }
+      results << { name: 'Aucun résultat ISNI', disabled: true, source: SOURCE_IDENTIFIER } if results.blank?
     rescue Faraday::ConnectionFailed => e
       Rails.logger.error e.message
       results << { name: 'Service ISNI indisponible' + ' : ' + e.message, identifier: 0, source: SOURCE_IDENTIFIER } if results.blank?
@@ -36,9 +38,9 @@ class Api::IsniClient
     end
     organisations.compact.map do |org|
       hash = {}
+      hash[:source] = SOURCE_IDENTIFIER
       hash[:name] = org.xpath("ISNIAssigned/ISNIMetadata/identity/organisation/organisationName/mainName/text()").map(&:text).flatten.uniq.sort_by(&:length).join(" / ")
       hash[:identifier] = org.xpath("ISNIAssigned/isniUnformatted/text()").first&.text()
-      hash[:source] = SOURCE_IDENTIFIER
       hash[:type] = org.xpath("ISNIAssigned/ISNIMetadata/identity/organisation/organisationType/text()").first&.text()
       hash
     end
