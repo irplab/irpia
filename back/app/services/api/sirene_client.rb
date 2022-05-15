@@ -1,5 +1,8 @@
 class Api::SireneClient
 
+  require "erb"
+  include ERB::Util
+
   # set variables
   BASE_URL = "https://api.insee.fr".freeze
   TOKEN_PATH = "/token".freeze
@@ -15,10 +18,9 @@ class Api::SireneClient
     #56.30Z débits de boissons
     #86.21Z généralistes
     sectorExclusions = ["47.73Z", "68.20B", "56.10A", "56.10B", "56.10C", "56.30Z", "86.21Z"]
-    formattedQuery = "periode(denominationUniteLegale:#{query}*) AND -periode(#{sectorExclusions.map { |code| "activitePrincipaleUniteLegale:#{code}" }.join(' OR ')})"
-    params = { q: formattedQuery }
+    formattedQuery = "#{query.split(/\s/).map {|word| "raisonSociale:#{word}~"}.join(' AND ')} AND -periode(#{sectorExclusions.map { |code| "activitePrincipaleUniteLegale:#{code}" }.join(' OR ')})"
 
-    response = connection.get SUGGESTION_PATH, params do |request|
+    response = connection.get SUGGESTION_PATH, { q: formattedQuery } do |request|
       request.headers["Authorization"] = "Bearer #{token}"
     end
     if response.status == 403
