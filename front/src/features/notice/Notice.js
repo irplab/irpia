@@ -86,6 +86,7 @@ export function Notice() {
 
     useEffect(() => {
         dispatch(fetchVocabularyById({vocabularyId: '10'}))
+        dispatch(fetchVocabularyById({vocabularyId: '15GTPX'}))
         dispatch(fetchVocabularyById({vocabularyId: '15GTPX', hierarchy: true}))
     }, [])
 
@@ -109,7 +110,7 @@ export function Notice() {
 
     const domainsTree = useMemo(() => {
         return <DropdownTreeSelect
-            data={getVocabularyTerms('15GTPX')}
+            data={getVocabularyTerms('15GTPX-hierarchy')}
             className="mdl-demo"
             keepTreeOnSearch
             showPartiallySelected
@@ -213,7 +214,7 @@ export function Notice() {
                     {currentSuggestion && currentSuggestion.suggestions?.domain && <SuggestionComponent
                         field='domain'
                         suggestions={currentSuggestion.suggestions?.domain?.filter((x) => x !== notice.domain && !isValueExcluded('domain', x))}
-                        titleProvider={id => getVocabularyTerms('15GTPX')[id]}
+                        titleProvider={id => getVocabularyTerms('15GTPX-flat')[id]}
                         rejectCallback={(value) => dispatchExcludedValues({field: 'domain', value: value})}
                         acceptCallback={(value) => handleUserSelectionChange({domain: value})}
                     />}

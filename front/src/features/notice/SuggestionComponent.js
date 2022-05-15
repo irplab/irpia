@@ -1,6 +1,5 @@
 import React from 'react';
-import {CheckCircleOutline, ThumbDownAltOutlined, ThumbUpOffAltOutlined} from "@mui/icons-material";
-import {Chip, Grid, ListItem, Paper, Stack} from "@mui/material";
+import {Chip, Grid, ListItem} from "@mui/material";
 
 function DoneIcon() {
     return null;
@@ -28,7 +27,7 @@ export function SuggestionComponent({field, suggestions, acceptCallback, rejectC
                         <Chip
                             color="primary"
                             variant="outlined"
-                            label={titleProvider(suggestionId)}
+                            label={titleProvider(suggestionId) || suggestionId}
                             onDelete={() => acceptCallback(suggestionId)}
                             icon={<DoneIcon/>}
                         />

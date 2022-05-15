@@ -16,20 +16,28 @@ namespace :vocabularies do
       filename = File.basename(file, '.rdf')
       p filename
       graph = RDF::Graph.load(file)
-      query = RDF::Query.new({
-                               concept: {
-                                 RDF.type => RDF::Vocab::SKOS.Concept,
-                                 RDF::Vocab::SKOS.prefLabel => :label,
-                                 RDF::Vocab::SKOS.broader => :broader,
-                               }
-                             }, **{})
-      hash = { id: filename.gsub('XL', ''), terms: {} }
-      hash_hierarchy = { id: filename.gsub('XL', ''), terms: [] }
+      # optional is not possible, so two queries are required
+      query_for_labels = RDF::Query.new({
+                                          concept: {
+                                            RDF.type => RDF::Vocab::SKOS.Concept,
+                                            RDF::Vocab::SKOS.prefLabel => :label,
+                                          }
+                                        }, **{})
+      query_for_parents = RDF::Query.new({
+                                           concept: {
+                                             RDF.type => RDF::Vocab::SKOS.Concept,
+                                             RDF::Vocab::SKOS.prefLabel => :label,
+                                             RDF::Vocab::SKOS.broader => :broader,
+                                           }
+                                         }, **{})
+      hash = { id: filename.gsub('XL', '') + '-flat', terms: {} }
+      hash_hierarchy = { id: filename.gsub('XL', '') + '-hierarchy', terms: [] }
       parents = {}
-      query.execute(graph) do |concept|
+      query_for_labels.execute(graph) do |concept|
         hash[:terms][concept.concept.to_s.gsub("http://data.education.fr/voc/scolomfr/concept/", "")] = concept.label
-        next unless concept.broader
-        (parents[concept.broader.to_s] ||= []) << [concept.concept.to_s, concept.label]
+      end
+      query_for_parents.execute(graph) do |concept|
+        (parents[concept.broader.to_s] ||= []) << [concept.concept.to_s, concept.label] if concept.broader
       end
       vocab_uri_query = RDF::Query.new({
                                          concept: {
