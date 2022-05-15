@@ -6,12 +6,22 @@ class Api::SireneClient
   SUGGESTION_PATH = "/entreprises/sirene/V3/siren".freeze
   AUTH_PARAMS = { grant_type: "client_credentials" }
 
+  SOURCE_IDENTIFIER = "Sirène"
+
   def get_suggestions(query:, first_try: true)
-    params = { q: "periode(denominationUniteLegale:#{query}*)" }
+    #47.73 pharmacies
+    #68.20B SCI
+    #56.10 restaurants
+    #56.30Z débits de boissons
+    #86.21Z généralistes
+    sectorExclusions = ["47.73Z", "68.20B", "56.10A", "56.10B", "56.10C", "56.30Z", "86.21Z"]
+    formattedQuery = "periode(denominationUniteLegale:#{query}*) AND -periode(#{sectorExclusions.map { |code| "activitePrincipaleUniteLegale:#{code}" }.join(' OR ')})"
+    params = { q: formattedQuery }
+
     response = connection.get SUGGESTION_PATH, params do |request|
       request.headers["Authorization"] = "Bearer #{token}"
     end
-    if response.status ==  403
+    if response.status == 403
       Rails.logger.error("Access to Sirene API denied.")
       return []
     end
@@ -24,11 +34,13 @@ class Api::SireneClient
         return []
       end
     end
-    convert(JSON.parse(response.body)["unitesLegales"])
+    results = convert(JSON.parse(response.body)["unitesLegales"])
+    results << { name: 'Aucun résultat Sirène', disabled: true, source: SOURCE_IDENTIFIER } if results.blank?
+    results
   end
 
   def convert(results)
-    (results || []).map { |result| { source: "Sirène", name: result['periodesUniteLegale'][0]['denominationUniteLegale'], identifier: result['siren'] } }
+    (results || []).map { |result| { source: SOURCE_IDENTIFIER, name: result['periodesUniteLegale'][0]['denominationUniteLegale'], identifier: result['siren'] } }
   end
 
   SIRENE_TOKEN_NAME = 'sirene'
