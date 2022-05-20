@@ -17,6 +17,8 @@ export function Form() {
 
     const [activeStep, setActiveStep] = React.useState(0);
 
+    const [navigationFromSteps, setNavigationFromSteps] = React.useState(false);
+
     const [completed, setCompleted] = React.useState({});
 
     const stepFromLocation = () => steps.indexOf(location.pathname.split("/").pop());
@@ -27,7 +29,9 @@ export function Form() {
     }, [location]);
 
     useEffect(() => {
+        if (!navigationFromSteps) return;
         if (activeStep === stepFromLocation()) return;
+        setNavigationFromSteps(false);
         navigate(`/form/${steps[activeStep]}`);
     }, [activeStep]);
 
@@ -57,14 +61,17 @@ export function Form() {
                   // find the first step that has been completed
                 stepLabels.findIndex((step, i) => !(i in completed))
                 : activeStep + 1;
+        setNavigationFromSteps(true);
         setActiveStep(newActiveStep);
     };
 
     const handleBack = () => {
+        setNavigationFromSteps(true);
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
     const handleStep = (step) => () => {
+        setNavigationFromSteps(true);
         setActiveStep(step);
     };
 
