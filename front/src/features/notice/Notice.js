@@ -25,7 +25,7 @@ export function Notice() {
     const suggestions = useSelector(selectSuggestions);
     const vocabularies = useSelector(selectVocabularies);
     const dispatch = useDispatch();
-    const [notice, setNotice] = useState({title: '', description: '', url: ''});
+    const [notice, setNotice] = useState({title: '', description: '', url: '', domain: []});
     const [submittedNotice, setSubmittedNotice] = useState({title: ''});
     const [suggestionId, setSuggestionId] = useState(undefined);
     const [pollingFlag, setPollingFlag] = useState(false);
@@ -108,9 +108,17 @@ export function Notice() {
         });
     }, [dispatch, pollingFlag])
 
+    const markSelected = (vocabulary, field) => vocabulary.map((term) => {
+        if (notice[field]?.indexOf(term.value.split("/").pop()) >= 0) {
+            return {...term, checked: true, children: markSelected(term.children, field)};
+        } else {
+            return {...term, checked: false, children: markSelected(term.children, field)};
+        }
+    });
+
     const domainsTree = useMemo(() => {
         return <DropdownTreeSelect
-            data={getVocabularyTerms('15GTPX-hierarchy')}
+            data={markSelected(getVocabularyTerms('15GTPX-hierarchy'), 'domain')}
             className="mdl-demo"
             keepTreeOnSearch
             showPartiallySelected
@@ -125,7 +133,7 @@ export function Notice() {
             }}
 
         />
-    }, [vocabularies])
+    }, [vocabularies, notice])
 
     const statusText = useMemo(() => {
         const running = currentSuggestion?.status === 'running'
@@ -168,6 +176,8 @@ export function Notice() {
                 <TextField margin='normal' fullWidth id="grid-title"
                            label="Titre"
                            variant="outlined"
+                           InputLabelProps={{shrink: !!notice.title}}
+                           value={notice.title}
                            placeholder="Titre de votre ressource"
                            onChange={(e) => handleUserInputChange({title: e.target.value})}/>
                 {currentSuggestion && <SuggestionComponent
@@ -176,6 +186,7 @@ export function Notice() {
                 <TextField margin='normal' fullWidth id="grid-title" label="Description" variant="outlined"
                            multiline
                            placeholder="Description de votre ressource"
+                           InputLabelProps={{shrink: !!notice.description}}
                            value={notice.description}
                            onChange={(e) => handleUserInputChange({description: e.target.value})}/>
                 {currentSuggestion && <SuggestionComponent
@@ -216,7 +227,7 @@ export function Notice() {
                         suggestions={currentSuggestion.suggestions?.domain?.filter((x) => x !== notice.domain && !isValueExcluded('domain', x))}
                         titleProvider={id => getVocabularyTerms('15GTPX-flat')[id]}
                         rejectCallback={(value) => dispatchExcludedValues({field: 'domain', value: value})}
-                        acceptCallback={(value) => handleUserSelectionChange({domain: value})}
+                        acceptCallback={(value) => handleUserSelectionChange({domain: (notice.domain || []).concat([value])})}
                     />}
                 </FormControl>
 

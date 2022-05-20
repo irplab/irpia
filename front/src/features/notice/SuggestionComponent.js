@@ -28,7 +28,8 @@ export function SuggestionComponent({field, suggestions, acceptCallback, rejectC
                             color="primary"
                             variant="outlined"
                             label={titleProvider(suggestionId) || suggestionId}
-                            onDelete={() => acceptCallback(suggestionId)}
+                            onDelete={() => rejectCallback(suggestionId)}
+                            onClick={() => acceptCallback(suggestionId)}
                             icon={<DoneIcon/>}
                         />
                     </ListItem>
