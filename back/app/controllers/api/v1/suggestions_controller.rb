@@ -8,7 +8,7 @@ class Api::V1::SuggestionsController < ApplicationController
     render json: @suggestion
   end
 
-  POLL_WAIT_DURATION = 0.2
+  POLL_WAIT_DURATION = 0.1
 
   def show
     unless @suggestion.status == 'complete'
