@@ -2,7 +2,9 @@ import React, {useEffect, useMemo, useState} from 'react';
 import InputMask from "react-input-mask";
 import {Autocomplete, Box, Chip, Grid, Popper, Stack, TextField, Typography, useTheme} from "@mui/material";
 import debounce from "lodash.debounce";
-import {getContributors} from "../notice/contributionAPI";
+import {getContributors} from "./contributionAPI";
+import {useDispatch, useSelector} from "react-redux";
+import {setContributor} from "./contributorsSlice";
 
 const SIRENE_IDENTIFIER = "Sirène";
 
@@ -10,6 +12,8 @@ const ISNI_IDENTIFIER = "ISNI";
 
 export function Contribution() {
     const theme = useTheme();
+    const dispatch = useDispatch();
+    const contributors = useSelector((state) => state.contributors);
     const [openAutoComplete, setOpenAutoComplete] = useState(false);
     const [submittedName, setSubmittedName] = useState('');
     const [selectedSirenInfo, setSelectedSirenInfo] = useState(null);
@@ -21,6 +25,30 @@ export function Contribution() {
     const [editorialBrand, setEditorialBrand] = useState('');
     const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
     const [options, setOptions] = useState([])
+
+    useEffect(() => {
+        const publisher = contributors.publishers ? contributors.publishers[0] : null;
+        if (!publisher) return;
+        setEditorName(publisher.editorName);
+        setEditorialBrand(publisher.editorialBrand);
+        setSelectedSirenInfo(publisher.selectedSirenInfo);
+        setSelectedIsniInfo(publisher.selectedIsniInfo);
+        setCustomIsni(publisher.customIsni);
+        setCustomSiren(publisher.customSiren);
+    }, [])
+
+    useEffect(() => {
+        dispatch(setContributor({
+            publisher: {
+                selectedSirenInfo,
+                selectedIsniInfo,
+                customSiren,
+                customIsni,
+                editorName,
+                editorialBrand
+            }
+        }))
+    }, [selectedSirenInfo, selectedIsniInfo, customIsni, customSiren, editorialBrand, editorName])
     useEffect(() => {
         if (!submittedName) {
             setAutocompleteIsLoading(false);
