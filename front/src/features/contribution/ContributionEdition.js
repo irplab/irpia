@@ -33,7 +33,7 @@ export function ContributionEdition({contributorId, roles}) {
 
 
     const handleDelete = useCallback((e, t) => {
-        confirm({description: 'Voulez-vous supprimer cette contribution'})
+        confirm({title: 'Confirmation', description: 'Voulez-vous supprimer cette contribution ?'})
             .then(() => {
                 dispatch(deleteContributorById({contributor}))
             });

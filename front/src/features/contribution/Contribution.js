@@ -14,7 +14,7 @@ export function Contribution({contributorId}) {
     const contributor = useSelector(state => selectContributorById(state, contributorId))
 
     const handleDelete = useCallback((e, t) => {
-        confirm({title: 'Confirmation', description: 'Voulez-vous supprimer cette contribution'})
+        confirm({title: 'Confirmation', description: 'Voulez-vous supprimer cette contribution ?'})
             .then(() => {
                 dispatch(deleteContributorById({contributor}))
             });
