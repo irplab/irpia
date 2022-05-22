@@ -38,6 +38,8 @@ export const contributorsSlice = createSlice({
                 selectedIsniInfo: null,
                 customIsni: undefined,
                 customSiren: undefined,
+                editorRole: null,
+                editorRoleLabel: '',
                 edited: true,
             })
             setEditedState(state, state.count);

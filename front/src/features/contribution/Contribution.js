@@ -14,7 +14,7 @@ export function Contribution({contributorId}) {
     const contributor = useSelector(state => selectContributorById(state, contributorId))
 
     const handleDelete = useCallback((e, t) => {
-        confirm({description: 'Voulez-vous supprimer cette contribution'})
+        confirm({title: 'Confirmation', description: 'Voulez-vous supprimer cette contribution'})
             .then(() => {
                 dispatch(deleteContributorById({contributor}))
             });
@@ -23,7 +23,7 @@ export function Contribution({contributorId}) {
     return (<Card sx={{marginTop: theme.spacing(2)}}>
         <CardContent>
             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                Éditeur
+                {contributor.editorRoleLabel}
             </Typography>
             <Typography variant="h5" component="div">
                 {contributor.editorialBrand}

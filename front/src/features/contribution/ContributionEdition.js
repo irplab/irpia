@@ -6,8 +6,8 @@ import {
     Card, CardActions,
     CardContent,
     Chip,
-    Grid, LinearProgress,
-    Popper,
+    Grid, LinearProgress, MenuItem,
+    Popper, Select,
     Stack,
     TextField,
     Typography,
@@ -24,7 +24,7 @@ const SIRENE_IDENTIFIER = "Sirène";
 
 const ISNI_IDENTIFIER = "ISNI";
 
-export function ContributionEdition({contributorId}) {
+export function ContributionEdition({contributorId, roles}) {
     const theme = useTheme();
     const dispatch = useDispatch();
     const confirm = useConfirm();
@@ -46,9 +46,19 @@ export function ContributionEdition({contributorId}) {
     const [autocompleteSelectedOptions, setAutocompleteSelectedOptions] = useState([]);
     const [customIsni, setCustomIsni] = useState(null);
     const [editorName, setEditorName] = useState('');
+    const [editorRoleLabel, setEditorRoleLabel] = useState(null);
+    const [editorRole, setEditorRole] = useState(null);
     const [editorialBrand, setEditorialBrand] = useState('');
     const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
     const [options, setOptions] = useState([])
+
+
+
+    const updateContributorRoleLabel = (roles, value) => {
+        let option = roles.find((role) => role[0] === value);
+        if (!option) return;
+        setEditorRoleLabel(option[1])
+    };
 
     useEffect(() => {
         setEditorName(contributor.editorName);
@@ -57,6 +67,8 @@ export function ContributionEdition({contributorId}) {
         setSelectedIsniInfo(contributor.selectedIsniInfo);
         setCustomIsni(contributor.customIsni);
         setCustomSiren(contributor.customSiren);
+        setEditorRole(contributor.editorRole || roles[0][0]);
+        updateContributorRoleLabel(roles, contributor.editorRole);
     }, [])
 
     useEffect(() => {
@@ -69,10 +81,12 @@ export function ContributionEdition({contributorId}) {
                 customSiren,
                 customIsni,
                 editorName,
-                editorialBrand
+                editorialBrand,
+                editorRole,
+                editorRoleLabel
             }
         }))
-    }, [selectedSirenInfo, selectedIsniInfo, customIsni, customSiren, editorialBrand, editorName])
+    }, [selectedSirenInfo, selectedIsniInfo, customIsni, customSiren, editorialBrand, editorName, editorRole, editorRoleLabel])
 
     useEffect(() => {
         if (!submittedName) {
@@ -112,13 +126,17 @@ export function ContributionEdition({contributorId}) {
         }
     }
 
+    const roleChoosed = useCallback((value, roles) => {
+        setEditorRole(value);
+        updateContributorRoleLabel(roles, value);
+    }, [roles])
+
     useEffect(() => {
             if (selectedIsniInfo && selectedSirenInfo) {
                 setOpenAutoComplete(false)
             }
         }, [selectedSirenInfo, selectedIsniInfo]
     )
-
 
     const currentSiren = useMemo(() => {
         return customSiren || selectedSirenInfo?.identifier || ''
@@ -152,6 +170,20 @@ export function ContributionEdition({contributorId}) {
         <Card sx={{marginTop: theme.spacing(2)}}>
             <CardContent>
                 <Grid container direction='column'>
+                    <Grid item md={12} sx={{marginTop: theme.spacing(5)}}>
+                        <Select
+                            labelId="educational-resource-type-select-label"
+                            id="educational-resource-type-select"
+                            label='Type de ressource'
+                            value={editorRole}
+                            onChange={(e) => roleChoosed(e.target.value, roles)}
+                        >
+                            {roles.map((entry) => (
+                                <MenuItem key={`option-educational-resource-type-${entry[0]}`}
+                                          value={entry[0]}>{entry[1]}</MenuItem>
+                            ))}
+                        </Select>
+                    </Grid>
                     <Grid item md={12} sx={{marginTop: theme.spacing(5)}}>
                         <Autocomplete
                             PopperComponent={PopperMy}
@@ -245,7 +277,6 @@ export function ContributionEdition({contributorId}) {
                                     onChange={(e) => {
                                         setCustomIsni(e.target.value);
                                         setSelectedIsniInfo(null);
-                                        console.log("cleared selected isni")
                                     }
                                     }
                                 >
@@ -286,7 +317,7 @@ export function ContributionEdition({contributorId}) {
                         edited: false
                     }
                 }))}>Enregistrer</Button>
-                <Button size="small"  onClick={handleDelete}>Supprimer</Button>
+                <Button size="small" onClick={handleDelete}>Supprimer</Button>
             </CardActions>
         </Card>);
 }
