@@ -22,7 +22,7 @@ export function Contributions() {
 
     const roles = useMemo(() => {
         if (!vocabularies.entities['03-flat']) return []
-        return Object.entries(vocabularies.entities['03-flat'].terms).sort((a, b) => a[1] > b[1] ? 1 : -1);
+        return Object.entries(vocabularies.entities['03-flat'].terms).sort((a, b) => a[1].localeCompare(b[1]));
     }, [vocabularies])
 
 
