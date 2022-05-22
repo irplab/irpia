@@ -55,7 +55,6 @@ export function ContributionEdition({contributorId, roles}) {
     const [options, setOptions] = useState([])
 
 
-
     const updateContributorRoleLabel = (roles, value) => {
         let option = roles.find((role) => role[0] === value);
         if (!option) return;
@@ -302,7 +301,8 @@ export function ContributionEdition({contributorId, roles}) {
                     </Grid>
 
                     <Grid item md={12} sx={{marginTop: theme.spacing(3)}}>
-                        <TextField id="contributor-editorial-brand" label="Marque éditoriale" value={contributorEditorialBrand}
+                        <TextField id="contributor-editorial-brand" label="Marque éditoriale"
+                                   value={contributorEditorialBrand}
                                    variant="outlined"
                                    fullWidth
                                    required
@@ -312,7 +312,12 @@ export function ContributionEdition({contributorId, roles}) {
                     </Grid>
 
                     <Grid item md={12} sx={{marginTop: theme.spacing(3), marginLeft: theme.spacing(1)}}>
-                        <MuiPhoneNumber defaultCountry={'fr'} value={contributorPhoneNumber} onChange={(value) => setContributorPhoneNumber(value)} />
+                        <MuiPhoneNumber sx={{
+                            svg: {
+                                height: "20px",
+                            },
+                        }} defaultCountry={'fr'} value={contributorPhoneNumber}
+                                        onChange={(value) => setContributorPhoneNumber(value)}/>
                     </Grid>
                 </Grid></CardContent>
             <CardActions sx={{
