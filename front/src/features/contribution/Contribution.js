@@ -23,13 +23,13 @@ export function Contribution({contributorId}) {
     return (<Card sx={{marginTop: theme.spacing(2)}}>
         <CardContent>
             <Typography sx={{fontSize: 14}} color="text.secondary" gutterBottom>
-                {contributor.editorRoleLabel}
+                {contributor.contributorRoleLabel}
             </Typography>
             <Typography variant="h5" component="div">
                 {contributor.editorialBrand}
             </Typography>
             <Typography sx={{mb: 1.5}} color="text.secondary">
-                {contributor.editorName}
+                {contributor.contributorName}
             </Typography>
             <Typography variant="body2">
                 ISNI : {contributor.customIsni || contributor.selectedIsniInfo?.identifier}

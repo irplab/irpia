@@ -46,11 +46,11 @@ export function ContributionEdition({contributorId, roles}) {
     const [selectedIsniInfo, setSelectedIsniInfo] = useState(null);
     const [autocompleteSelectedOptions, setAutocompleteSelectedOptions] = useState([]);
     const [customIsni, setCustomIsni] = useState(null);
-    const [editorName, setEditorName] = useState('');
+    const [contributorName, setContributorName] = useState('');
     const [contributorPhoneNumber, setContributorPhoneNumber] = useState('');
-    const [editorRoleLabel, setEditorRoleLabel] = useState(null);
-    const [editorRole, setEditorRole] = useState(null);
-    const [editorialBrand, setEditorialBrand] = useState('');
+    const [contributorRoleLabel, setContributorRoleLabel] = useState(null);
+    const [contributorRole, setContributorRole] = useState(null);
+    const [contributorEditorialBrand, setContributorEditorialBrand] = useState('');
     const [autocompleteIsLoading, setAutocompleteIsLoading] = useState(false);
     const [options, setOptions] = useState([])
 
@@ -59,19 +59,19 @@ export function ContributionEdition({contributorId, roles}) {
     const updateContributorRoleLabel = (roles, value) => {
         let option = roles.find((role) => role[0] === value);
         if (!option) return;
-        setEditorRoleLabel(option[1])
+        setContributorRoleLabel(option[1])
     };
 
     useEffect(() => {
-        setEditorName(contributor.editorName);
+        setContributorName(contributor.contributorName);
         setContributorPhoneNumber(contributor.contributorPhoneNumber);
-        setEditorialBrand(contributor.editorialBrand);
+        setContributorEditorialBrand(contributor.editorialBrand);
         setSelectedSirenInfo(contributor.selectedSirenInfo);
         setSelectedIsniInfo(contributor.selectedIsniInfo);
         setCustomIsni(contributor.customIsni);
         setCustomSiren(contributor.customSiren);
-        setEditorRole(contributor.editorRole || roles[0][0]);
-        updateContributorRoleLabel(roles, contributor.editorRole);
+        setContributorRole(contributor.contributorRole || roles[0][0]);
+        updateContributorRoleLabel(roles, contributor.contributorRole);
     }, [])
 
     useEffect(() => {
@@ -83,14 +83,14 @@ export function ContributionEdition({contributorId, roles}) {
                 selectedIsniInfo,
                 customSiren,
                 customIsni,
-                editorName,
+                contributorName,
                 contributorPhoneNumber,
-                editorialBrand,
-                editorRole,
-                editorRoleLabel
+                editorialBrand: contributorEditorialBrand,
+                contributorRole: contributorRole,
+                contributorRoleLabel: contributorRoleLabel
             }
         }))
-    }, [selectedSirenInfo, selectedIsniInfo, customIsni, customSiren, editorialBrand, editorName, contributorPhoneNumber, editorRole, editorRoleLabel])
+    }, [selectedSirenInfo, selectedIsniInfo, customIsni, customSiren, contributorEditorialBrand, contributorName, contributorPhoneNumber, contributorRole, contributorRoleLabel])
 
     useEffect(() => {
         if (!submittedName) {
@@ -125,13 +125,13 @@ export function ContributionEdition({contributorId, roles}) {
         }
         if (siren) {
             setCustomSiren(null)
-            setEditorName(siren.name);
-            setEditorialBrand(siren.name);
+            setContributorName(siren.name);
+            setContributorEditorialBrand(siren.name);
         }
     }
 
     const roleChoosed = useCallback((value, roles) => {
-        setEditorRole(value);
+        setContributorRole(value);
         updateContributorRoleLabel(roles, value);
     }, [roles])
 
@@ -179,7 +179,7 @@ export function ContributionEdition({contributorId, roles}) {
                             labelId="educational-resource-type-select-label"
                             id="educational-resource-type-select"
                             label='Type de ressource'
-                            value={editorRole}
+                            value={contributorRole}
                             onChange={(e) => roleChoosed(e.target.value, roles)}
                         >
                             {roles.map((entry) => (
@@ -292,23 +292,23 @@ export function ContributionEdition({contributorId, roles}) {
                     </Grid>
 
                     <Grid item md={12} sx={{marginTop: theme.spacing(3)}}>
-                        <TextField id="editor-name" label="Nom éditeur" value={editorName}
+                        <TextField id="contributor-name" label="Nom éditeur" value={contributorName}
                                    variant="outlined"
                                    fullWidth
                                    required
-                                   InputLabelProps={{shrink: !!editorName}}
-                                   onChange={(event) => setEditorName(event.target.value)}
-                                   color={editorName ? "success" : "error"}/>
+                                   InputLabelProps={{shrink: !!contributorName}}
+                                   onChange={(event) => setContributorName(event.target.value)}
+                                   color={contributorName ? "success" : "error"}/>
                     </Grid>
 
                     <Grid item md={12} sx={{marginTop: theme.spacing(3)}}>
-                        <TextField id="editorial-brand" label="Marque éditoriale" value={editorialBrand}
+                        <TextField id="contributor-editorial-brand" label="Marque éditoriale" value={contributorEditorialBrand}
                                    variant="outlined"
                                    fullWidth
                                    required
-                                   InputLabelProps={{shrink: !!editorialBrand}}
-                                   onChange={(event) => setEditorialBrand(event.target.value)}
-                                   color={editorialBrand ? "success" : "error"}/>
+                                   InputLabelProps={{shrink: !!contributorEditorialBrand}}
+                                   onChange={(event) => setContributorEditorialBrand(event.target.value)}
+                                   color={contributorEditorialBrand ? "success" : "error"}/>
                     </Grid>
 
                     <Grid item md={12} sx={{marginTop: theme.spacing(3), marginLeft: theme.spacing(1)}}>

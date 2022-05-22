@@ -32,15 +32,15 @@ export const contributorsSlice = createSlice({
         }, createContributor: (state, action) => {
             state.list = state.list.concat({
                 id: state.count,
-                editorName: '',
-                editorialBrand: '',
+                contributorName: '',
+                contributorEditorialBrand: '',
                 contributorPhoneNumber: '',
                 selectedSirenInfo: null,
                 selectedIsniInfo: null,
                 customIsni: undefined,
                 customSiren: undefined,
-                editorRole: null,
-                editorRoleLabel: '',
+                contributorRole: null,
+                contributorRoleLabel: '',
                 edited: true,
             })
             setEditedState(state, state.count);
