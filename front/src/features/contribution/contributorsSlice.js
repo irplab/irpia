@@ -34,6 +34,7 @@ export const contributorsSlice = createSlice({
                 id: state.count,
                 editorName: '',
                 editorialBrand: '',
+                contributorPhoneNumber: '',
                 selectedSirenInfo: null,
                 selectedIsniInfo: null,
                 customIsni: undefined,

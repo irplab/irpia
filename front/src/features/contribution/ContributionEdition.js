@@ -19,6 +19,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {deleteContributorById, selectContributorById, updateContributorById} from "./contributorsSlice";
 import "./ContributionEdition.module.css"
 import {useConfirm} from "material-ui-confirm";
+import MuiPhoneNumber from "material-ui-phone-number";
 
 const SIRENE_IDENTIFIER = "Sirène";
 
@@ -46,6 +47,7 @@ export function ContributionEdition({contributorId, roles}) {
     const [autocompleteSelectedOptions, setAutocompleteSelectedOptions] = useState([]);
     const [customIsni, setCustomIsni] = useState(null);
     const [editorName, setEditorName] = useState('');
+    const [contributorPhoneNumber, setContributorPhoneNumber] = useState('');
     const [editorRoleLabel, setEditorRoleLabel] = useState(null);
     const [editorRole, setEditorRole] = useState(null);
     const [editorialBrand, setEditorialBrand] = useState('');
@@ -62,6 +64,7 @@ export function ContributionEdition({contributorId, roles}) {
 
     useEffect(() => {
         setEditorName(contributor.editorName);
+        setContributorPhoneNumber(contributor.contributorPhoneNumber);
         setEditorialBrand(contributor.editorialBrand);
         setSelectedSirenInfo(contributor.selectedSirenInfo);
         setSelectedIsniInfo(contributor.selectedIsniInfo);
@@ -81,12 +84,13 @@ export function ContributionEdition({contributorId, roles}) {
                 customSiren,
                 customIsni,
                 editorName,
+                contributorPhoneNumber,
                 editorialBrand,
                 editorRole,
                 editorRoleLabel
             }
         }))
-    }, [selectedSirenInfo, selectedIsniInfo, customIsni, customSiren, editorialBrand, editorName, editorRole, editorRoleLabel])
+    }, [selectedSirenInfo, selectedIsniInfo, customIsni, customSiren, editorialBrand, editorName, contributorPhoneNumber, editorRole, editorRoleLabel])
 
     useEffect(() => {
         if (!submittedName) {
@@ -170,7 +174,7 @@ export function ContributionEdition({contributorId, roles}) {
         <Card sx={{marginTop: theme.spacing(2)}}>
             <CardContent>
                 <Grid container direction='column'>
-                    <Grid item md={12} sx={{marginTop: theme.spacing(5)}}>
+                    <Grid item md={12} sx={{marginTop: theme.spacing(1)}}>
                         <Select
                             labelId="educational-resource-type-select-label"
                             id="educational-resource-type-select"
@@ -305,6 +309,10 @@ export function ContributionEdition({contributorId, roles}) {
                                    InputLabelProps={{shrink: !!editorialBrand}}
                                    onChange={(event) => setEditorialBrand(event.target.value)}
                                    color={editorialBrand ? "success" : "error"}/>
+                    </Grid>
+
+                    <Grid item md={12} sx={{marginTop: theme.spacing(3), marginLeft: theme.spacing(1)}}>
+                        <MuiPhoneNumber defaultCountry={'fr'} value={contributorPhoneNumber} onChange={(value) => setContributorPhoneNumber(value)} />
                     </Grid>
                 </Grid></CardContent>
             <CardActions sx={{

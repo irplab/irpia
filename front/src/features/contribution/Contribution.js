@@ -35,6 +35,8 @@ export function Contribution({contributorId}) {
                 ISNI : {contributor.customIsni || contributor.selectedIsniInfo?.identifier}
                 <br/>
                 SIREN : {contributor.customSiren || contributor.selectedSirenInfo?.identifier}
+                <br/>
+                {contributor.contributorPhoneNumber}
             </Typography>
         </CardContent>
         <CardActions sx={{
