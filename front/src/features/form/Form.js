@@ -3,7 +3,7 @@ import {Button, Container, Grid, Step, StepButton, Stepper, Typography, useTheme
 import BgFormLeft from '../../graphics/bg_form_left.svg';
 import {useLocation, useNavigate} from "react-router-dom";
 import {Notice} from "../notice/Notice";
-import {Contribution} from "../contribution/Contribution";
+import {Contributions} from "../contribution/Contributions";
 import {End} from "../end/End";
 
 
@@ -111,7 +111,7 @@ export function Form() {
                 <Typography pt={theme.spacing(5)}>Formulaire/{stepLabels[activeStep]}</Typography>
             </Grid>
             <Container sx={{backgroundColor: "#FFFFFF", mt: theme.spacing(5), p: theme.spacing(5)}}>
-                {activeStep === 0 && <Contribution/>}
+                {activeStep === 0 && <Contributions/>}
                 {activeStep === 1 && <Notice/>}
                 {activeStep === 2 && <End/>}
             </Container>

@@ -10,10 +10,11 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import {Form} from "./features/form/Form";
+import {ConfirmProvider} from "material-ui-confirm";
 
 
 function App() {
-    const theme = createTheme( {
+    const theme = createTheme({
         palette: {
             type: 'light',
             primary: {
@@ -57,15 +58,17 @@ function App() {
         }
     });
     return (
-        <ThemeProvider theme={theme} >
-            <CssBaseline/>
-            <Navigation/>
-            <Routes>
-                <Route index element={<Home/>}/>
-                <Route exact path="form/contribution" element={<Form />}/>
-                <Route exact path="form/notice" element={<Form />}/>
-                <Route exact path="form/end" element={<Form />}/>
-            </Routes>
+        <ThemeProvider theme={theme}>
+            <ConfirmProvider>
+                <CssBaseline/>
+                <Navigation/>
+                <Routes>
+                    <Route index element={<Home/>}/>
+                    <Route exact path="form/contribution" element={<Form/>}/>
+                    <Route exact path="form/notice" element={<Form/>}/>
+                    <Route exact path="form/end" element={<Form/>}/>
+                </Routes>
+            </ConfirmProvider>
         </ThemeProvider>
 
     );
