@@ -41,6 +41,7 @@ export function ContributionEdition({contributorId, roles}) {
 
     const [openAutoComplete, setOpenAutoComplete] = useState(false);
     const [submittedName, setSubmittedName] = useState('');
+    const [submittedNameChangeFlag, setSubmittedNameChangeFlag] = useState(undefined);
     const [selectedSirenInfo, setSelectedSirenInfo] = useState(null);
     const [customSiren, setCustomSiren] = useState(null);
     const [selectedIsniInfo, setSelectedIsniInfo] = useState(null);
@@ -101,11 +102,13 @@ export function ContributionEdition({contributorId, roles}) {
         }).finally(() => {
             setAutocompleteIsLoading(false);
         })
-    }, [submittedName])
+    }, [submittedNameChangeFlag])
 
     const handleSubmittedNameChange = (name) => {
-        setAutocompleteIsLoading(true);
         setSubmittedName(name);
+        if (name.match(/^\s*$/)) return;
+        setAutocompleteIsLoading(true);
+        setSubmittedNameChangeFlag(new Date().valueOf());
     };
 
     const debouncedChangeHandler = useMemo(() => debounce(handleSubmittedNameChange, 1500), []);
