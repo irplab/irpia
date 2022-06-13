@@ -202,4 +202,21 @@ HEREDOC
     puts levels_hash.to_json
   end
 
+  task create_labels_map: :environment do
+    sparql_client = MetadataProcessor.new({}).send(:sparql_client)
+
+    labels_query = <<HEREDOC
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT * WHERE 
+  {?concept skos:inScheme <http://data.education.fr/voc/scolomfr/scolomfr-voc-022> .
+  ?concept skos:prefLabel ?prefLabel}
+HEREDOC
+
+    levels_result = sparql_client.query(labels_query);
+    hash = levels_result.each_with_object ({}) {|result, hash| hash[result[:concept].to_s] = result[:prefLabel].to_s}
+    puts hash.to_json
+  end
+
 end
