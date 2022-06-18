@@ -32,6 +32,10 @@ div.controls-container .tag {
     font-size: 1.2rem;
 }
 
+.mdl-demo div.dropdown {
+    display: block;
+}
+
 .mdl-demo div.dropdown div.dropdown-content {
     z-index: 10000;
     background-color: white;
@@ -41,13 +45,19 @@ div.controls-container .tag {
     font-size: 12px;
     color: #555;
 }
-.mdl-demo .dropdown .dropdown-trigger.arrow.top:after {
-    font: normal normal normal 18px/1 "Material Icons";
-    content: "\E5CF";
+.mdl-demo .dropdown .dropdown-trigger {
+    border: none;
+    max-height: none;
 }
-.mdl-demo .dropdown .dropdown-trigger.arrow.bottom:after {
-    font: normal normal normal 18px/1 "Material Icons";
-    content: "\E5CB";
+.mdl-demo .dropdown .dropdown-trigger  .tag-item {
+    min-width: 0%;
+    display: inline-block;
+    margin: 4px;
+}
+
+.mdl-demo .dropdown .dropdown-trigger  .tag-item:last-child {
+    min-width: 95%;
+    margin-right: 4px;
 }
 
 .mdl-demo .toggle {

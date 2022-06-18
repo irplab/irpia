@@ -65,7 +65,7 @@ export function Notice() {
     };
     const handleUserSelectionChange = (field) => {
         setNotice({...notice, ...field});
-        handleSubmittedNoticeChange(field)
+        debouncedChangeHandler(field)
     };
 
     const isValueSelected = useCallback((field, value) => {
@@ -255,7 +255,9 @@ export function Notice() {
 
                 <FormControl fullWidth margin='normal'>
                     <OutlinedDiv label="Domaines d'enseignement">
-                        <Grid container direction='column' id='domain-controls-container' className="controls-container">
+                        <Grid container direction='column' id='domain-controls-container'
+                              className="controls-container">
+                            <Grid item>{domainsTree}</Grid>
                             <Grid item>
                                 {currentSuggestion && currentSuggestion.suggestions?.domain && <MultiSuggestionComponent
                                     field='domain'
@@ -267,7 +269,6 @@ export function Notice() {
                                         setDomainUpdateFlag(!domainUpdateFlag);
                                     }}
                                 />}</Grid>
-                            <Grid item>{domainsTree}</Grid>
                         </Grid>
                     </OutlinedDiv>
                 </FormControl>
@@ -275,6 +276,7 @@ export function Notice() {
                 <FormControl fullWidth margin='normal'>
                     <OutlinedDiv label="Niveaux educatifs">
                         <Grid container direction='column' id='level-controls-container' className="controls-container">
+                            <Grid item>{levelsTree}</Grid>
                             <Grid item>
                                 {currentSuggestion && currentSuggestion.suggestions?.level && <MultiSuggestionComponent
                                     field='level'
@@ -286,7 +288,6 @@ export function Notice() {
                                         setLevelUpdateFlag(!levelUpdateFlag);
                                     }}
                                 />}</Grid>
-                            <Grid item>{levelsTree}</Grid>
                         </Grid>
                     </OutlinedDiv>
                 </FormControl>
