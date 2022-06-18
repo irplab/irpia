@@ -1490,6 +1490,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@material-design-icons/font@^0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@material-design-icons/font/-/font-0.11.2.tgz#a3c14a2d5a7b0312e015a5c0b7ba4488d750fbaf"
+  integrity sha512-rQOvhpOCV41rmnYHEvfa+AfR9zF3AjDPho3ospEUPoK/4rrvSZ0dyBU/8u/41xpxHtZ8KNn+cspnQyxl4NVJow==
+
 "@mui/base@5.0.0-alpha.72":
   version "5.0.0-alpha.72"
   resolved "https://registry.yarnpkg.com/@mui/base/-/base-5.0.0-alpha.72.tgz#551d64402ee5065cf81fd1388a3e7ab8c426fe3e"
