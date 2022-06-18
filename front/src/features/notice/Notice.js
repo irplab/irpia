@@ -264,7 +264,7 @@ export function Notice() {
                                     rejectCallback={(value) => dispatchExcludedValues({field: 'domain', value: value})}
                                     acceptCallback={(values) => {
                                         handleUserSelectionChange({domain: (notice.domain || []).concat(values)});
-                                        setDomainUpdateFlag(true);
+                                        setDomainUpdateFlag(!domainUpdateFlag);
                                     }}
                                 />}</Grid>
                             <Grid item>{domainsTree}</Grid>
@@ -283,7 +283,7 @@ export function Notice() {
                                     rejectCallback={(value) => dispatchExcludedValues({field: 'level', value: value})}
                                     acceptCallback={(values) => {
                                         handleUserSelectionChange({level: (notice.level || []).concat(values)});
-                                        setLevelUpdateFlag(true);
+                                        setLevelUpdateFlag(!levelUpdateFlag);
                                     }}
                                 />}</Grid>
                             <Grid item>{levelsTree}</Grid>
