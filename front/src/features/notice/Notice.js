@@ -8,27 +8,31 @@ import {unwrapResult} from "@reduxjs/toolkit";
 import {fetchVocabularyById, selectVocabularies} from "./vocabulariesSlice";
 import {SuggestionComponent} from "./SuggestionComponent";
 import {
-    Box, Container,
-    FormControl, Grid,
+    Box,
+    Container,
+    FormControl,
+    Grid,
     InputLabel,
     LinearProgress,
     MenuItem,
     Paper,
     Select,
     TextField,
-    Typography, useTheme
+    Typography,
+    useTheme
 } from "@mui/material";
 import DropdownTreeSelect from "react-dropdown-tree-select";
 import {MultiSuggestionComponent} from "./MultiSuggestionComponent";
 import OutlinedDiv from "../../commons/OutlinedDiv";
+import {updateField} from "./submittedNoticeSlice";
 
 export function Notice() {
     const theme = useTheme();
     const suggestions = useSelector(selectSuggestions);
     const vocabularies = useSelector(selectVocabularies);
+    const submittedNotice = useSelector((state) => state.submittedNotice.value)
     const dispatch = useDispatch();
     const [notice, setNotice] = useState({title: '', description: '', url: '', domain: []});
-    const [submittedNotice, setSubmittedNotice] = useState({title: ''});
     const [suggestionId, setSuggestionId] = useState(undefined);
     const [pollingFlag, setPollingFlag] = useState(false);
     const [domainUpdateFlag, setDomainUpdateFlag] = useState(false);
@@ -54,7 +58,7 @@ export function Notice() {
 
 
     const handleSubmittedNoticeChange = (field) => {
-        setSubmittedNotice({...submittedNotice, ...field});
+        dispatch(updateField(field));
     };
 
     const debouncedChangeHandler = useMemo(() => debounce(handleSubmittedNoticeChange, 1500), []);
