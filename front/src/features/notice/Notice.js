@@ -34,6 +34,7 @@ export function Notice() {
     const dispatch = useDispatch();
     const [notice, setNotice] = useState({title: '', description: '', url: '', domain: []});
     const [suggestionId, setSuggestionId] = useState(undefined);
+    const [displayedSggestionId, setDisplayedSuggestionId] = useState(undefined);
     const [pollingFlag, setPollingFlag] = useState(false);
     const [domainUpdateFlag, setDomainUpdateFlag] = useState(false);
     const [levelUpdateFlag, setLevelUpdateFlag] = useState(false);
@@ -76,7 +77,7 @@ export function Notice() {
         return notice[field] && notice[field].indexOf(value) >= 0;
     }, [notice]);
 
-    const currentSuggestion = useMemo(() => suggestions.entities[suggestionId], [suggestions, suggestionId])
+    const currentSuggestion = useMemo(() => suggestions.entities[displayedSggestionId], [suggestions, displayedSggestionId])
 
     const formIsEmpty = useMemo(() => Object.values(submittedNotice).every(x => (x === null || x === undefined || x === '' || x?.length == 0)), [submittedNotice])
 
@@ -112,6 +113,7 @@ export function Notice() {
             suggestionId, suggestionTimeStamp: currentSuggestion?.updatedAt
         })).then(unwrapResult).then((data) => {
             if (data.id !== suggestionId) return;
+            if (displayedSggestionId !== suggestionId) setDisplayedSuggestionId(suggestionId);
             data.status === "running" && setPollingFlag(!pollingFlag)
         }).catch((error) => {
             console.log(error)
