@@ -1,10 +1,10 @@
 echo "************************"
 echo "Transpiling rails app..."
 
-export API_HOST=http://164.92.227.60/
-export WS_HOST=ws://164.92.227.60/
-export DEPLOY_HOST=164.92.227.60
-export DEPLOY_USER=irpia
+export API_HOST=http://host-name-or-ip/ # REST API host
+export WS_HOST=ws://host-name-or-ip/ # websocket host
+export DEPLOY_HOST=host-name-or-ip # deployment host
+export DEPLOY_USER=deployuser # deployment user
 export WORKSPACE=$(pwd)
 
 
