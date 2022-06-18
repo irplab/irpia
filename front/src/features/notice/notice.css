@@ -1,3 +1,5 @@
+@import '@material-design-icons/font';
+
 div.react-dropdown-tree-select {
     width: 100%;
 }
@@ -12,6 +14,9 @@ div.controls-container .suggestions-section {
     padding-bottom: 1em;
 }
 
+div.controls-container .tag .tag-remove {
+    font-size: 100%;
+}
 div.controls-container .tag {
     background-color: #b52168;
     border: 1px solid #e9e9e9;
@@ -46,12 +51,14 @@ div.controls-container .tag {
 
 .mdl-demo .toggle.collapsed::after {
     cursor: pointer;
-    vertical-align: middle;
+    vertical-align: sub;
+    content: "\E5CC";
 }
 
 .mdl-demo .toggle.expanded::after {
     cursor: pointer;
-    vertical-align: middle;
+    vertical-align: sub;
+    content: "\E5CF";
 }
 
 /* checkbox styles */
