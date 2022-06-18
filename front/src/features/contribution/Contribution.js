@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback} from 'react';
 import {Button, Card, CardActions, CardContent, Typography, useTheme} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteContributorById, selectContributorById, updateContributorById} from "./contributorsSlice";
@@ -43,13 +43,13 @@ export function Contribution({contributorId}) {
             display: "flex",
             justifyContent: "flex-end"
         }}>
-            <Button size="small" onClick={() => dispatch(updateContributorById({
+            <Button size="small" variant='text' color="error" onClick={handleDelete}>Supprimer</Button>
+            <Button size="small" variant='contained' onClick={() => dispatch(updateContributorById({
                 contributor: {
                     ...contributor,
                     edited: true
                 }
             }))}>Modifier</Button>
-            <Button size="small" onClick={handleDelete}>Supprimer</Button>
 
         </CardActions>
     </Card>);

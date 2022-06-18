@@ -173,7 +173,7 @@ export function ContributionEdition({contributorId, roles}) {
         return (<Popper {...props} placement='top-start'/>)
     }
     return (
-        <Card sx={{marginTop: theme.spacing(2)}}>
+        <Card sx={{marginTop: theme.spacing(2), border: 'none', boxShadow: 'none'}}>
             <CardContent>
                 <Grid container direction='column'>
                     <Grid item md={12} sx={{marginTop: theme.spacing(1)}}>
@@ -315,7 +315,9 @@ export function ContributionEdition({contributorId, roles}) {
                     </Grid>
 
                     <Grid item md={12} sx={{marginTop: theme.spacing(3), marginLeft: theme.spacing(1)}}>
-                        <MuiPhoneNumber sx={{
+                        <MuiPhoneNumber
+                            variant="outlined"
+                            sx={{
                             svg: {
                                 height: "20px",
                             },
@@ -327,13 +329,16 @@ export function ContributionEdition({contributorId, roles}) {
                 display: "flex",
                 justifyContent: "flex-end"
             }}>
-                <Button size="small" onClick={() => dispatch(updateContributorById({
-                    contributor: {
-                        ...contributor,
-                        edited: false
-                    }
-                }))}>Enregistrer</Button>
-                <Button size="small" onClick={handleDelete}>Supprimer</Button>
+                <Button size="small"
+                        color="error" variant="text" onClick={handleDelete}>Supprimer</Button>
+                <Button size="small"
+                        variant="contained"
+                        onClick={() => dispatch(updateContributorById({
+                            contributor: {
+                                ...contributor,
+                                edited: false
+                            }
+                        }))}>Enregistrer</Button>
             </CardActions>
         </Card>);
 }
