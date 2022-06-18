@@ -41,6 +41,14 @@ div.controls-container .tag {
     font-size: 12px;
     color: #555;
 }
+.mdl-demo .dropdown .dropdown-trigger.arrow.top:after {
+    font: normal normal normal 18px/1 "Material Icons";
+    content: "\E5CF";
+}
+.mdl-demo .dropdown .dropdown-trigger.arrow.bottom:after {
+    font: normal normal normal 18px/1 "Material Icons";
+    content: "\E5CB";
+}
 
 .mdl-demo .toggle {
     font: normal normal normal 18px/1 "Material Icons";
