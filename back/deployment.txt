@@ -1,0 +1,17 @@
+A. Application deployment
+
+1. ML models
+
+Configure and execute back/scripts.sh > transfer all ML files to server
+
+2. Front-end
+
+Configure and execute back/scripts.sh > transpile and transfer all React files to server
+
+3 Back-end
+
+Execute cap production deploy
+
+B. Models training and use
+
+1.
