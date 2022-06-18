@@ -18,6 +18,12 @@ default: &default
       args:
         - 'domain-predict-title.py'
       exec: 'bin/python'
+    level-predict:
+      type: 'cli'
+      dir: 'domain-predict'
+      args:
+        - 'level-predict-title.py'
+      exec: 'bin/python'
     webpage-extract:
       type: 'emb'
       service: 'Modules::WebPageExtractor'
@@ -37,6 +43,8 @@ default: &default
       - - webpage-extract
     domain:
       - - domain-predict
+    level:
+      - - level-predict
 
 development:
   <<: *default

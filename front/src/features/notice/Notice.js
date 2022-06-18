@@ -90,6 +90,8 @@ export function Notice() {
         dispatch(fetchVocabularyById({vocabularyId: '10'}))
         dispatch(fetchVocabularyById({vocabularyId: '15GTPX'}))
         dispatch(fetchVocabularyById({vocabularyId: '15GTPX', hierarchy: true}))
+        dispatch(fetchVocabularyById({vocabularyId: '22'}))
+        dispatch(fetchVocabularyById({vocabularyId: '22', hierarchy: true}))
     }, [])
 
 
@@ -124,6 +126,7 @@ export function Notice() {
             className="mdl-demo"
             keepTreeOnSearch
             showPartiallySelected
+            mode="hierarchical"
             inlineSearchInput
             inlineSearchPlaceholder={"Domaine d'enseignement"}
             texts={{
@@ -135,6 +138,29 @@ export function Notice() {
             }}
             onChange={(currentNode, selectedNodes) => {
                 handleUserSelectionChange({domain: selectedNodes.map((node) => node.value.split("/").pop())});
+            }}
+
+        />
+    }, [vocabularies, notice])
+
+    const levelsTree = useMemo(() => {
+        return <DropdownTreeSelect
+            data={markSelected(getVocabularyTerms('22-hierarchy'), 'level')}
+            className="mdl-demo"
+            keepTreeOnSearch
+            showPartiallySelected
+            mode="hierarchical"
+            inlineSearchInput
+            inlineSearchPlaceholder={"Niveau éducatif"}
+            texts={{
+                placeholder: "Liste complète des niveaux éducatifs",              // optional: The text to display as placeholder on the search box. Defaults to `Choose...`
+                inlineSearchPlaceholder: "Taper quelques lettres pour filtrer les niveaux",  // optional: The text to display as placeholder on the inline search box. Only applicable with the `inlineSearchInput` setting. Defaults to `Search...`
+                noMatches: "Aucune correspondance",                // optional: The text to display when the search does not find results in the content list. Defaults to `No matches found`
+                label: "Dom",                    // optional: Adds `aria-labelledby` to search input when input starts with `#`, adds `aria-label` to search input when label has value (not containing '#')
+                labelRemove: "Domdom",              // optional: The text to display for `aria-label` on tag delete buttons which is combined with `aria-labelledby` pointing to the node label. Defaults to `Remove`
+            }}
+            onChange={(currentNode, selectedNodes) => {
+                handleUserSelectionChange({level: selectedNodes.map((node) => node.value.split("/").pop())});
             }}
 
         />
@@ -227,7 +253,7 @@ export function Notice() {
 
                 <FormControl fullWidth margin='normal'>
                     <OutlinedDiv label="Domaines d'enseignement">
-                        <Grid container direction='column' id='domain-controls-container'>
+                        <Grid container direction='column' id='domain-controls-container' className="controls-container">
                             <Grid item>
                                 {currentSuggestion && currentSuggestion.suggestions?.domain && <MultiSuggestionComponent
                                     field='domain'
@@ -237,6 +263,22 @@ export function Notice() {
                                     acceptCallback={(values) => handleUserSelectionChange({domain: (notice.domain || []).concat(values)})}
                                 />}</Grid>
                             <Grid item>{domainsTree}</Grid>
+                        </Grid>
+                    </OutlinedDiv>
+                </FormControl>
+
+                <FormControl fullWidth margin='normal'>
+                    <OutlinedDiv label="Niveaux educatifs">
+                        <Grid container direction='column' id='level-controls-container' className="controls-container">
+                            <Grid item>
+                                {currentSuggestion && currentSuggestion.suggestions?.level && <MultiSuggestionComponent
+                                    field='level'
+                                    suggestions={currentSuggestion.suggestions?.level?.filter((x) => x !== notice.domain && !isValueSelected('level', x))}
+                                    titleProvider={id => getVocabularyTerms('22-flat')[id]}
+                                    rejectCallback={(value) => dispatchExcludedValues({field: 'level', value: value})}
+                                    acceptCallback={(values) => handleUserSelectionChange({level: (notice.level || []).concat(values)})}
+                                />}</Grid>
+                            <Grid item>{levelsTree}</Grid>
                         </Grid>
                     </OutlinedDiv>
                 </FormControl>
