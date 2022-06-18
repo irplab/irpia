@@ -31,6 +31,8 @@ export function Notice() {
     const [submittedNotice, setSubmittedNotice] = useState({title: ''});
     const [suggestionId, setSuggestionId] = useState(undefined);
     const [pollingFlag, setPollingFlag] = useState(false);
+    const [domainUpdateFlag, setDomainUpdateFlag] = useState(false);
+    const [levelUpdateFlag, setLevelUpdateFlag] = useState(false);
 
     const initiallyExcludedValues = {};
 
@@ -141,7 +143,7 @@ export function Notice() {
             }}
 
         />
-    }, [vocabularies, notice])
+    }, [vocabularies, domainUpdateFlag])
 
     const levelsTree = useMemo(() => {
         return <DropdownTreeSelect
@@ -164,7 +166,7 @@ export function Notice() {
             }}
 
         />
-    }, [vocabularies, notice])
+    }, [vocabularies, levelUpdateFlag])
 
     const statusText = useMemo(() => {
         const running = currentSuggestion?.status === 'running'
@@ -260,7 +262,10 @@ export function Notice() {
                                     suggestions={currentSuggestion.suggestions?.domain?.filter((x) => x !== notice.domain && !isValueSelected('domain', x))}
                                     titleProvider={id => getVocabularyTerms('15GTPX-flat')[id]}
                                     rejectCallback={(value) => dispatchExcludedValues({field: 'domain', value: value})}
-                                    acceptCallback={(values) => handleUserSelectionChange({domain: (notice.domain || []).concat(values)})}
+                                    acceptCallback={(values) => {
+                                        handleUserSelectionChange({domain: (notice.domain || []).concat(values)});
+                                        setDomainUpdateFlag(true);
+                                    }}
                                 />}</Grid>
                             <Grid item>{domainsTree}</Grid>
                         </Grid>
@@ -276,7 +281,10 @@ export function Notice() {
                                     suggestions={currentSuggestion.suggestions?.level?.filter((x) => x !== notice.domain && !isValueSelected('level', x))}
                                     titleProvider={id => getVocabularyTerms('22-flat')[id]}
                                     rejectCallback={(value) => dispatchExcludedValues({field: 'level', value: value})}
-                                    acceptCallback={(values) => handleUserSelectionChange({level: (notice.level || []).concat(values)})}
+                                    acceptCallback={(values) => {
+                                        handleUserSelectionChange({level: (notice.level || []).concat(values)});
+                                        setLevelUpdateFlag(true);
+                                    }}
                                 />}</Grid>
                             <Grid item>{levelsTree}</Grid>
                         </Grid>
