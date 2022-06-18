@@ -6,7 +6,14 @@ function DoneIcon() {
     return null;
 }
 
-export function MultiSuggestionComponent({label, field, suggestions, acceptCallback, rejectCallback, titleProvider = x => x}) {
+export function MultiSuggestionComponent({
+                                             label,
+                                             field,
+                                             suggestions,
+                                             acceptCallback,
+                                             rejectCallback,
+                                             titleProvider = x => x
+                                         }) {
     const theme = useTheme();
 
     const [selectedSuggestions, setSelectedSuggestions] = useState([])
@@ -43,6 +50,8 @@ export function MultiSuggestionComponent({label, field, suggestions, acceptCallb
         >
             <Box
                 sx={{
+                    fontStyle: 'italic',
+                    width: '100%',
                     paddingTop: 0.5,
                     paddingBottom: 0,
                     px: 2,
@@ -56,7 +65,8 @@ export function MultiSuggestionComponent({label, field, suggestions, acceptCallb
                 return (
                     <Grid component='li' item key={`suggestion-${field}-${suggestionId}`}>
                         <Chip
-                            color={selectedSuggestions.indexOf(suggestionId) >= 0 ? "primary" : "default"}
+                            variant={selectedSuggestions.indexOf(suggestionId) >= 0 ? "filled" : "outlined"}
+                            color='primary'
                             label={titleProvider(suggestionId) || suggestionId}
                             onClick={() => toggleSelection(suggestionId)}
                             icon={<DoneIcon/>}
@@ -69,7 +79,7 @@ export function MultiSuggestionComponent({label, field, suggestions, acceptCallb
                   paddingTop={2}
                   className="suggestions-buttons-container"
                   spacing={theme.spacing(2)}
-                  justifyContent="center">
+                  justifyContent="end">
                 <Grid item><Button variant='outlined' disabled={selectedSuggestions.length === 0}
                                    onClick={() => acceptCallback(selectedSuggestions)}>Accepter la
                     sélection</Button></Grid>
