@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import {Box, Button, Chip, Grid, ListItem, useTheme} from "@mui/material";
-import OutlinedDiv from "../../commons/OutlinedDiv";
+import {Box, Button, Chip, Grid, useTheme} from "@mui/material";
 
 function DoneIcon() {
     return null;
@@ -24,7 +23,7 @@ export function MultiSuggestionComponent({
     }
 
     const toggleSelection = (suggestionId) => {
-        const index = selectedSuggestions.findIndex(x => x == suggestionId)
+        const index = selectedSuggestions.findIndex(x => x === suggestionId)
         if (index === -1) {
             setSelectedSuggestions(selectedSuggestions.concat(suggestionId));
         } else {
@@ -65,11 +64,18 @@ export function MultiSuggestionComponent({
                 return (
                     <Grid component='li' item key={`suggestion-${field}-${suggestionId}`}>
                         <Chip
+                            size='small'
                             variant={selectedSuggestions.indexOf(suggestionId) >= 0 ? "filled" : "outlined"}
                             color='primary'
                             label={titleProvider(suggestionId) || suggestionId}
                             onClick={() => toggleSelection(suggestionId)}
                             icon={<DoneIcon/>}
+                            sx={{
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: {xs: '16rem', sm: '20rem', md: '100%'},
+                            }}
                         />
                     </Grid>
                 );

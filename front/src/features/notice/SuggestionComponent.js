@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Chip, Grid, ListItem, useTheme} from "@mui/material";
+import {Box, Chip, Grid, useTheme} from "@mui/material";
 
 function DoneIcon() {
     return null;
@@ -42,11 +42,18 @@ export function SuggestionComponent({field, suggestions, acceptCallback, rejectC
                         <Grid item component='li' key={`suggestion-${field}-${suggestionId}`}>
                             <Chip
                                 color="primary"
+                                size="small"
                                 variant="outlined"
                                 label={titleProvider(suggestionId) || suggestionId}
                                 onDelete={() => rejectCallback(suggestionId)}
                                 onClick={() => acceptCallback(suggestionId)}
                                 icon={<DoneIcon/>}
+                                sx={{
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    maxWidth: {xs: '16rem', sm: '20rem', md: '100%'},
+                                }}
                             />
                         </Grid>
                     );
