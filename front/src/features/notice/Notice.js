@@ -79,7 +79,7 @@ export function Notice() {
 
     const currentSuggestion = useMemo(() => suggestions.entities[displayedSggestionId], [suggestions, displayedSggestionId])
 
-    const formIsEmpty = useMemo(() => Object.values(submittedNotice).every(x => (x === null || x === undefined || x === '' || x?.length == 0)), [submittedNotice])
+    const formIsEmpty = useMemo(() => Object.values(submittedNotice).every(x => (x === null || x === undefined || x === '' || x?.length === 0)), [submittedNotice])
 
     useEffect(() => {
         if (formIsEmpty) {
@@ -99,7 +99,7 @@ export function Notice() {
         dispatch(fetchVocabularyById({vocabularyId: '15GTPX', hierarchy: true}))
         dispatch(fetchVocabularyById({vocabularyId: '22'}))
         dispatch(fetchVocabularyById({vocabularyId: '22', hierarchy: true}))
-    }, [])
+    }, [dispatch])
 
 
     const getVocabularyTerms = useCallback((vocId) => {
@@ -149,7 +149,7 @@ export function Notice() {
             }}
 
         />
-    }, [vocabularies, domainUpdateFlag])
+    }, [vocabularies, domainUpdateFlag, getVocabularyTerms])
 
     const levelsTree = useMemo(() => {
         return <DropdownTreeSelect
@@ -202,7 +202,6 @@ export function Notice() {
             }}>
                 <TextField
                     margin='normal' fullWidth
-                    id="outlined-adornment-url"
                     aria-describedby="outlined-url-helper-text"
                     inputProps={{
                         'aria-label': 'url',
@@ -220,17 +219,19 @@ export function Notice() {
                            placeholder="Titre de votre ressource"
                            onChange={(e) => handleUserInputChange({title: e.target.value})}/>
                 {currentSuggestion && !notice.title && <SuggestionComponent
-                    field='title' suggestions={currentSuggestion.suggestions?.title}
+                    field='title'
+                    suggestions={(currentSuggestion.suggestions?.title || []).filter((t) => t !== notice.title)}
                     acceptCallback={(value) => handleUserSelectionChange({title: value})}/>}
                 <TextField margin='normal' fullWidth id="grid-title" label="Description" variant="outlined"
                            multiline
+                           inputProps={{type: "search"}}
                            placeholder="Description de votre ressource"
                            InputLabelProps={{shrink: !!notice.description}}
                            value={notice.description}
                            onChange={(e) => handleUserInputChange({description: e.target.value})}/>
                 {currentSuggestion && <SuggestionComponent
                     field='description'
-                    suggestions={currentSuggestion.suggestions?.description}
+                    suggestions={(currentSuggestion.suggestions?.description || []).filter((t) => t !== notice.description)}
                     acceptCallback={(value) => handleUserSelectionChange({description: value})}/>}
                 <FormControl fullWidth margin='normal'>
                     <InputLabel id="educational-resource-type-select-label"> Type de ressource</InputLabel>
