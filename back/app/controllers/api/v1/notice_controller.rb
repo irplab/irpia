@@ -13,7 +13,7 @@ class Api::V1::NoticeController < ApplicationController
   end
 
   def permitted_params
-    params.require(:notice).permit(:title, :url)
+    params.require(:notice).permit(:title, :url, :description, { domain: [] }, { level: [] }, { contributors: { list: [[:contributor_name, :custom_siren, :custom_isni, :contributor_phone_number, :editorial_brand, :contributor_role, { selected_siren_info: [:identifier, :name] }, { selected_isni_info: [:identifier, :name] }]] } })
   end
 
 end
