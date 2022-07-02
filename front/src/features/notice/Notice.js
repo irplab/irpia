@@ -24,15 +24,15 @@ import {
 import DropdownTreeSelect from "react-dropdown-tree-select";
 import {MultiSuggestionComponent} from "./MultiSuggestionComponent";
 import OutlinedDiv from "../../commons/OutlinedDiv";
-import {updateField} from "./submittedNoticeSlice";
+import {updateField} from "./noticeSlice";
 
 export function Notice() {
     const theme = useTheme();
     const suggestions = useSelector(selectSuggestions);
     const vocabularies = useSelector(selectVocabularies);
-    const submittedNotice = useSelector((state) => state.submittedNotice.value)
+    const submittedNotice = useSelector((state) => state.notice.value);
     const dispatch = useDispatch();
-    const [notice, setNotice] = useState({title: '', description: '', url: '', domain: []});
+    const [notice, setNotice] = useState(submittedNotice);
     const [suggestionId, setSuggestionId] = useState(undefined);
     const [displayedSggestionId, setDisplayedSuggestionId] = useState(undefined);
     const [pollingFlag, setPollingFlag] = useState(false);

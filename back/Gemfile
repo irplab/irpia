@@ -54,6 +54,11 @@ gem 'metainspector', '~> 5.11', '>= 5.11.2'
 
 gem 'parallel', '~> 1.22', '>= 1.22.1'
 
+# language detection
+gem 'cld', '~> 0.11.0'
+# convert to iso 639-2
+gem 'iso-639', '~> 0.3.5'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]

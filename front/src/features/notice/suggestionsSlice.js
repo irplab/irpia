@@ -1,5 +1,5 @@
 import {createAsyncThunk, createEntityAdapter, createSlice} from '@reduxjs/toolkit';
-import {createSuggestion, fetchSuggestion} from './noticeAPI';
+import {createSuggestion, fetchSuggestion} from './suggestionAPI';
 
 
 export const initSuggestion = createAsyncThunk(

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lom:lom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:lom="http://ltsc.ieee.org/xsd/LOM"
+         xmlns:lomfr="http://www.lom-fr.fr/xsd/LOMFR"
+         xmlns:scolomfr="http://www.lom-fr.fr/xsd/SCOLOMFR"
+         xsi:schemaLocation="http://ltsc.ieee.org/xsd/LOM http://www.reseau-canope.fr/scolomfr/xsd/7.0/lax/scolomfr.xsd">
+
+  <lom:general>
+    <lom:title>
+      <lom:string/>
+    </lom:title>
+    <lom:description>
+      <lom:string/>
+    </lom:description>
+  </lom:general>
+</lom:lom>
