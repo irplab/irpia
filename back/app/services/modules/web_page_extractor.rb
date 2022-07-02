@@ -15,7 +15,7 @@ class Modules::WebPageExtractor
     @result = {
       title: ([extraction.title, extraction.best_title] + extraction.h1 + extraction.h2).uniq.compact,
       description: extraction.description,
-      thumbnails: extraction.images
+      images: extraction.images
     }.to_json
     @status = "success"
   rescue StandardError => e
