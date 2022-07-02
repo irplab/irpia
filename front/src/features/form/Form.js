@@ -5,10 +5,11 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {Notice} from "../notice/Notice";
 import {Contributions} from "../contribution/Contributions";
 import {End} from "../end/End";
+import {Images} from "../images/Images";
 
 
-const steps = ['contribution', 'notice', 'end'];
-const stepLabels = ['Contribution', 'Notice', 'Terminé !'];
+const steps = ['contribution', 'notice', 'images', 'end'];
+const stepLabels = ['Contribution', 'Notice', 'Illustrations', 'Terminé !'];
 
 export function Form() {
     const theme = useTheme();
@@ -113,7 +114,8 @@ export function Form() {
             <Container sx={{backgroundColor: "#FFFFFF", mt: theme.spacing(5), p: theme.spacing(5)}}>
                 {activeStep === 0 && <Contributions/>}
                 {activeStep === 1 && <Notice/>}
-                {activeStep === 2 && <End/>}
+                {activeStep === 2 && <Images/>}
+                {activeStep === 3 && <End/>}
             </Container>
         </Grid>
         <Grid item md={3} xs={12} textAlign='center' sx={{display: {md: 'block', sm: 'none', xs: 'none'}}}>
