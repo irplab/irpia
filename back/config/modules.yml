@@ -45,6 +45,8 @@ default: &default
       - - domain-predict
     level:
       - - level-predict
+    images:
+      - - webpage-extract
 
 development:
   <<: *default

@@ -14,8 +14,8 @@ class SuggestionsAggregator
       threads = module_keys.map do |module_key|
         thread_by_module_key(module_key, threads)
       end.compact
-      content = threads.map do |thread|
-        thread_result_for_field(field, thread)
+      threads.each do |thread|
+        content.push(*thread_result_for_field(field, thread))
       end.flatten
       break unless content.blank?
     end
