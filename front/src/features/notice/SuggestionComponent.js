@@ -45,6 +45,7 @@ export function SuggestionComponent({field, suggestions, acceptCallback, rejectC
                                 size="small"
                                 variant="outlined"
                                 label={titleProvider(suggestionId) || suggestionId}
+                                title={titleProvider(suggestionId) || suggestionId}
                                 onDelete={() => rejectCallback(suggestionId)}
                                 onClick={() => acceptCallback(suggestionId)}
                                 icon={<DoneIcon/>}
@@ -52,7 +53,7 @@ export function SuggestionComponent({field, suggestions, acceptCallback, rejectC
                                     whiteSpace: 'nowrap',
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
-                                    maxWidth: {xs: '16rem', sm: '20rem', md: '100%'},
+                                    maxWidth: {xs: '16rem', sm: '20rem', md: '30rem'},
                                 }}
                             />
                         </Grid>
