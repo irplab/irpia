@@ -52,4 +52,6 @@ export const suggestionsSlice = createSlice({
 
 export const selectSuggestions = (state) => state.suggestions;
 
+export const suggestionsSelectors = suggestionsAdapter.getSelectors();
+
 export default suggestionsSlice.reducer;

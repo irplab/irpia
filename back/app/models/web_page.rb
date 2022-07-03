@@ -18,6 +18,8 @@ class WebPage < Ohm::Model
 
   attribute :h2, Type::Array
 
+  attribute :images, Type::Array
+
   attribute :description
 
 end

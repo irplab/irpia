@@ -14,7 +14,8 @@ class Modules::WebPageExtractor
 
     @result = {
       title: ([extraction.title, extraction.best_title] + extraction.h1 + extraction.h2).uniq.compact,
-      description: extraction.description
+      description: extraction.description,
+      images: extraction.images
     }.to_json
     @status = "success"
   rescue StandardError => e
@@ -36,6 +37,11 @@ class Modules::WebPageExtractor
     WebPage.create(mapping(MetaInspector.new(url), url))
   end
 
+  def format_images(images)
+    return [] if images.blank?
+    images.map { |image| { src: image[0], width: image[1], height: image[2] } }
+  end
+
   def mapping(inspection, url)
     { url_hash: key(url),
       url: url,
@@ -44,6 +50,7 @@ class Modules::WebPageExtractor
       h1: inspection.h1,
       h2: inspection.h2,
       description: inspection.description,
+      images: format_images(inspection.images.with_size)
     }
   end
 

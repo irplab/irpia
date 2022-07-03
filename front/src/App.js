@@ -66,6 +66,7 @@ function App() {
                     <Route index element={<Home/>}/>
                     <Route exact path="form/contribution" element={<Form/>}/>
                     <Route exact path="form/notice" element={<Form/>}/>
+                    <Route exact path="form/images" element={<Form/>}/>
                     <Route exact path="form/end" element={<Form/>}/>
                 </Routes>
             </ConfirmProvider>
