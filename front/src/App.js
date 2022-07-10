@@ -11,6 +11,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import {Form} from "./features/form/Form";
 import {ConfirmProvider} from "material-ui-confirm";
+import {About} from "./features/about/About";
 
 
 function App() {
@@ -68,6 +69,7 @@ function App() {
                     <Route exact path="form/notice" element={<Form/>}/>
                     <Route exact path="form/images" element={<Form/>}/>
                     <Route exact path="form/end" element={<Form/>}/>
+                    <Route exact path="about" element={<About/>}/>
                 </Routes>
             </ConfirmProvider>
         </ThemeProvider>

@@ -42,7 +42,11 @@ function ImagesInstructions(props) {
                     sx={{mt: props.theme.spacing(5), mx: props.theme.spacing(4)}}>Assistant
             d’indexation intelligent - Illustration</Typography>
         <Typography variant="subtitle2" align="center" sx={{mt: props.theme.spacing(2), mx: props.theme.spacing(4)}}>Choisissez
-            une image proposée par l’assistant IRPIA afin d’illustrer la ressource pédagogique.</Typography>
+            une image proposée par l’assistant IRPIA afin d’illustrer la ressource pédagogique. <br/>
+            <br/>
+            <br/>
+        </Typography>
+
     </>;
 }
 
@@ -52,7 +56,8 @@ function EndInstructions(props) {
                     sx={{mt: props.theme.spacing(5), mx: props.theme.spacing(4)}}>Assistant
             d’indexation intelligent - Téléchargement</Typography>
         <Typography variant="subtitle2" align="center" sx={{mt: props.theme.spacing(2), mx: props.theme.spacing(4)}}>
-            Vous avez terminé ! Maintenant, vous pouvez télécharger la notice que vous avez crée conforme au  ScoLOMFR au format XML.
+            Vous avez terminé ! Maintenant, vous pouvez télécharger la notice que vous avez crée conforme au ScoLOMFR au
+            format XML.
             Vous pouvez aussi initier une nouvelle notice avec les mêmes contributeurs ou réinitialiser le formulaire.
         </Typography>
     </>;
