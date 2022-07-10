@@ -39,7 +39,6 @@ export const suggestionsSlice = createSlice({
             })
             .addCase(initSuggestion.fulfilled, (state, action) => {
                 state.status = 'idle';
-                suggestionsAdapter.setOne(state, action.payload);
             }).addCase(pollSuggestionById.pending, (state) => {
             state.status = 'loading';
         })
