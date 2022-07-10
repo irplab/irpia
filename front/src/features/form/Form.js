@@ -11,6 +11,53 @@ import {Images} from "../images/Images";
 const steps = ['contribution', 'notice', 'images', 'end'];
 const stepLabels = ['Contribution', 'Notice', 'Illustrations', 'Terminé !'];
 
+function ContributionsInstructions(props) {
+    return <>
+        <Typography variant="h4" color="secondary" align="center"
+                    sx={{mt: props.theme.spacing(5), mx: props.theme.spacing(4)}}>Assistant
+            d’indexation intelligent - Contributeurs</Typography>
+        <Typography variant="subtitle2" align="center" sx={{mt: props.theme.spacing(2), mx: props.theme.spacing(4)}}>Munissez-vous
+            du nom des personnes morales ou physiques ayant contribué à la réalisation de la ressource pédagogique à
+            indexer.
+            L’assistant IRPIA, à partir du nom du contributeur, vous aidera à compléter le numéro de SIREN, le numéro
+            ISNI, le nom et la marque éditoriale.</Typography>
+    </>;
+}
+
+function NoticeInstructions(props) {
+    return <>
+        <Typography variant="h4" color="secondary" align="center"
+                    sx={{mt: props.theme.spacing(5), mx: props.theme.spacing(4)}}>Assistant
+            d’indexation intelligent - Notice</Typography>
+        <Typography variant="subtitle2" align="center" sx={{mt: props.theme.spacing(2), mx: props.theme.spacing(4)}}>Saisissez
+            l’adresse URL de la ressource pédagogique que vous souhaitez indexer.
+            L’assistant IRPIA, vous proposera des suggestions pour compléter le titre, la description, les domaines
+            d’enseignement et les niveaux éducatifs. Une fois sélectionnés, vous pourrez les modifier.</Typography>
+    </>;
+}
+
+function ImagesInstructions(props) {
+    return <>
+        <Typography variant="h4" color="secondary" align="center"
+                    sx={{mt: props.theme.spacing(5), mx: props.theme.spacing(4)}}>Assistant
+            d’indexation intelligent - Illustration</Typography>
+        <Typography variant="subtitle2" align="center" sx={{mt: props.theme.spacing(2), mx: props.theme.spacing(4)}}>Choisissez
+            une image proposée par l’assistant IRPIA afin d’illustrer la ressource pédagogique.</Typography>
+    </>;
+}
+
+function EndInstructions(props) {
+    return <>
+        <Typography variant="h4" color="secondary" align="center"
+                    sx={{mt: props.theme.spacing(5), mx: props.theme.spacing(4)}}>Assistant
+            d’indexation intelligent - Téléchargement</Typography>
+        <Typography variant="subtitle2" align="center" sx={{mt: props.theme.spacing(2), mx: props.theme.spacing(4)}}>
+            Vous avez terminé ! Maintenant, vous pouvez télécharger la notice que vous avez crée conforme au  ScoLOMFR au format XML.
+            Vous pouvez aussi initier une nouvelle notice avec les mêmes contributeurs ou réinitialiser le formulaire.
+        </Typography>
+    </>;
+}
+
 export function Form() {
     const theme = useTheme();
     const navigate = useNavigate();
@@ -27,7 +74,7 @@ export function Form() {
     useEffect(() => {
         if (activeStep === stepFromLocation()) return;
         setActiveStep(stepFromLocation());
-    }, [location]);
+    }, [location, activeStep, stepFromLocation]);
 
     useEffect(() => {
         if (!navigationFromSteps) return;
@@ -79,14 +126,13 @@ export function Form() {
 
     return (<Grid container sx={{backgroundColor: "#F8FBFF", height: "100%"}}>
         <Grid item md={3} xs={12} sx={{display: {md: 'block', sm: 'none', xs: 'none'}, pt: theme.spacing(6)}}>
-            <img src={BgFormLeft} width='100%' sx={{textAlign: 'center'}}/>
+            <img src={BgFormLeft} width='100%'/>
         </Grid>
         <Grid item md={6} xs={12}>
-            <Typography variant='h4' color="secondary" align='center' sx={{mt: theme.spacing(5), mx: theme.spacing(4)}}>Lorem
-                ipsum dolor sit amet</Typography>
-            <Typography variant='subtitle2' align='center' sx={{mt: theme.spacing(2), mx: theme.spacing(4)}}>Petite
-                introduction indiquant de quels documents l'utilisateur doit
-                se munir, etc.</Typography>
+            {activeStep === 0 && <ContributionsInstructions theme={theme}/>}
+            {activeStep === 1 && <NoticeInstructions theme={theme}/>}
+            {activeStep === 2 && <ImagesInstructions theme={theme}/>}
+            {activeStep === 3 && <EndInstructions theme={theme}/>}
             <Stepper activeStep={activeStep}
                      sx={{mt: {xs: theme.spacing(4), md: theme.spacing(10)}, mx: theme.spacing(4)}}>
                 {stepLabels.map((label, index) => (
