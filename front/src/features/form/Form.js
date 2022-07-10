@@ -138,7 +138,7 @@ export function Form() {
             {activeStep === 1 && <NoticeInstructions theme={theme}/>}
             {activeStep === 2 && <ImagesInstructions theme={theme}/>}
             {activeStep === 3 && <EndInstructions theme={theme}/>}
-            <Stepper activeStep={activeStep}
+            <Stepper activeStep={activeStep} alternativeLabel
                      sx={{mt: {xs: theme.spacing(4), md: theme.spacing(10)}, mx: theme.spacing(4)}}>
                 {stepLabels.map((label, index) => (
                     <Step key={label} completed={completed[index]}>
