@@ -212,11 +212,11 @@ export function Notice() {
                         >
                             <CardMedia
                                 component="img"
-                                alt="green iguana"
+                                alt="IRPI logo"
                                 src={Character}
                                 sx={{
-                                    maxWidth: 100,
-                                    maxHeight: 150,
+                                    width: 100,
+                                    height: 150,
                                     borderRadius: '50%',
                                     objectFit: 'cover'
                                 }
