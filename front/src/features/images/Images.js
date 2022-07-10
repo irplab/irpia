@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Alert, AlertTitle, Box, Grid, Paper, TextField, Typography, useTheme} from "@mui/material";
 import {useSelector} from "react-redux";
 import {suggestionsSelectors} from "../notice/suggestionsSlice";
@@ -13,8 +13,10 @@ export function Images() {
     const [invalidInputImageUrl, setInvalidInputImageUrl] = useState(false);
     const [inputImageUrlErrror, setInputImageUrlError] = useState(false);
 
-    const notice = useSelector((state) => state.notice.value)
-    const imageSuggestions = useSelector((state) => suggestionsSelectors.selectAll(state.suggestions)?.at(-1)?.suggestions?.images);
+    const imageSuggestions = useSelector((state) => {
+        console.log(state.suggestions);
+        return suggestionsSelectors.selectAll(state.suggestions)?.at(-1)?.suggestions?.images;
+    });
 
     const isValidUrl = (url) => {
         try {
@@ -60,6 +62,8 @@ export function Images() {
             return suggestion;
         })
     }, [imageSuggestions, gcd]);
+
+    useEffect(()=> console.log(imageSuggestions), [imageSuggestions])
 
     return (<Grid container spacing={4} direction="column" sx={{height: "100%", flexWrap: "nowrap"}}>
         <Grid item>

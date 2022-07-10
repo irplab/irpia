@@ -33,7 +33,7 @@ export const Navigation = () => {
             <SiteBanner theme={theme}/>
             <AppBar elevation={0} position='sticky' color='primary' sx={{
                 marginBottom: 0,
-                marginTop: {xs: 0, lg: theme.spacing(4)},
+                marginTop: {xs: 0, lg: theme.spacing(1)},
             }}>
                 <Container>
                     <Toolbar disableGutters variant='dense' sx={{width: '100%', mx: 'auto', textAlign: 'right'}}>

@@ -7,16 +7,17 @@ import './notice.css'
 import {unwrapResult} from "@reduxjs/toolkit";
 import {fetchVocabularyById, selectVocabularies} from "./vocabulariesSlice";
 import {SuggestionComponent} from "./SuggestionComponent";
+import Character from '../../graphics/personnage.svg';
 import {
-    Box,
+    CardMedia,
     Container,
     FormControl,
     Grid,
     InputLabel,
-    LinearProgress,
+    lighten,
     MenuItem,
-    Paper,
     Select,
+    Slide,
     TextField,
     Typography,
     useTheme
@@ -25,6 +26,7 @@ import DropdownTreeSelect from "react-dropdown-tree-select";
 import {MultiSuggestionComponent} from "./MultiSuggestionComponent";
 import OutlinedDiv from "../../commons/OutlinedDiv";
 import {updateField} from "./noticeSlice";
+import BouncingDotsLoader from "../../commons/BouncingDotsLoader";
 
 export function Notice() {
     const theme = useTheme();
@@ -183,16 +185,48 @@ export function Notice() {
             color = 'sky'
         }
         return (
-            <Paper p={5} xs={{margin: theme.spacing(5)}} elevation={4}>
-                <Box p={2}>
-                    <Typography fontSize='medium'>
-                        {text}
-                    </Typography><LinearProgress
-                    sx={{visibility: running ? 'visible' : 'hidden'}}
-                />
+            <Slide direction="left" mountOnEnter unmountOnExit in={running}><Grid xs={8} sm={4} md={3} lg={2} container
+                                                                                  direction="column" p={2}
+                                                                                  justifyContent="end"
+                                                                                  textAlign="center"
+                                                                                  position="fixed"
+                                                                                  sx={{
+                                                                                      zIndex: 'tooltip',
+                                                                                      backgroundColor: (theme) => lighten(theme.palette.secondary.light, 0.7),
+                                                                                      borderRadius: "50%",
+                                                                                      border: 0.5,
+                                                                                      borderColor: (theme) => theme.palette.secondary.main,
 
-                </Box>
-            </Paper>)
+                                                                                  }} top='30%' right='30%'>
+                <Grid item>
+                    <Typography fontSize='large' color="primary">
+                        {text}
+                    </Typography>
+                </Grid>
+                <Grid item>
+                    <Grid container direction="row" alignItems="center" justifyContent="end">
+                        <Grid item sx={{alignContent: "center"}}
+                              display="flex"
+                              minHeight="100"
+
+                        >
+                            <CardMedia
+                                component="img"
+                                alt="green iguana"
+                                src={Character}
+                                sx={{
+                                    maxWidth: 100,
+                                    maxHeight: 150,
+                                    borderRadius: '50%',
+                                    objectFit: 'cover'
+                                }
+                                }
+                            /></Grid>
+                        <Grid item>
+                            <BouncingDotsLoader bouncing={running}/></Grid>
+                    </Grid>
+                </Grid>
+            </Grid></Slide>)
     }, [suggestions])
 
     return (<Container><Grid container sx={{marginTop: theme.spacing(5)}} direction='column'>

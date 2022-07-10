@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Container, Grid, Typography, useTheme} from "@mui/material";
+import {Box, Grid, Typography, useTheme} from "@mui/material";
 import Character from '../../graphics/personnage.svg';
 import BgHome from "../../graphics/bg_home.svg";
 import Banner from "../../graphics/banner.svg";
@@ -15,11 +15,11 @@ export function Home() {
                     paddingTop: {xs: theme.spacing(8), sm: theme.spacing(8), lg: theme.spacing(8)}
                 }}>
                     <Grid item alignSelf='center' component={Box} sx={{display: {md: 'inline', xs: 'none'}}}>
-                        <img src={Character} height={200} sx={{textAlign: 'center'}}/>
+                        <img src={Character} height={200}/>
                     </Grid>
                     <Grid item alignSelf='center' component={Box}
                           sx={{mt: -4, mb: 2, display: {md: 'none', xs: 'inline'}}}>
-                        <img src={Banner} height={150} sx={{textAlign: 'center'}}/>
+                        <img src={Banner} height={150} />
                     </Grid>
                     <Grid item><Typography variant='h2' color='secondary' sx={{
                         fontSize: "3rem",
@@ -30,16 +30,15 @@ export function Home() {
                         pédagogiques</Typography> </Grid>
                     <Grid item sx={{marginTop: theme.spacing(6)}}><Typography variant='subtitle2'
                                                                               sx={{lineHeight: 1.2}}>
-                        Saisir les informations qui permettront aux utilisateurs de trouver les ressources que vous
-                        proposez
-                        est difficile.<br/>
-                        En mobilisant des technologies d'assistances mues par l'intelligence artificielle, IRPIA vous
-                        facilite la tâche.
+                        Vous souhaitez indexer une ressource pédagogique afin que vos utilisateurs la trouvent ? Essayez
+                        l’assistant IRPIA ! <br/>En mobilisant des technologies d'assistance mues par l'intelligence
+                        artificielle, IRPIA vous facilite la tâche.
+
                     </Typography></Grid>
                 </Grid>
             </Grid>
             <Grid item sm={6} md={7} sx={{display: {md: 'block', sm: 'none', xs: 'none'}}}>
-                <img src={BgHome} width='100%' sx={{textAlign: 'center'}}/>
+                <img src={BgHome} width='100%'/>
             </Grid>
 
         </Grid>
