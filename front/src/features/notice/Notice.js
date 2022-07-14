@@ -12,11 +12,9 @@ import {
     CardMedia,
     Container,
     FormControl,
+    FormHelperText,
     Grid,
-    InputLabel,
     lighten,
-    MenuItem,
-    Select,
     Slide,
     TextField,
     Typography,
@@ -96,6 +94,7 @@ export function Notice() {
     }, [submittedNotice, dispatch])
 
     useEffect(() => {
+        dispatch(fetchVocabularyById({vocabularyId: '04'}))
         dispatch(fetchVocabularyById({vocabularyId: '10'}))
         dispatch(fetchVocabularyById({vocabularyId: '15GTPX'}))
         dispatch(fetchVocabularyById({vocabularyId: '15GTPX', hierarchy: true}))
@@ -122,13 +121,15 @@ export function Notice() {
         });
     }, [dispatch, pollingFlag])
 
-    const markSelected = (vocabulary, field) => vocabulary.map((term) => {
-        if (notice[field]?.indexOf(term.value.split("/").pop()) >= 0) {
-            return {...term, checked: true, children: markSelected(term.children, field)};
-        } else {
-            return {...term, checked: false, children: markSelected(term.children, field)};
-        }
-    });
+    const markSelected = (vocabulary, field) => {
+        return (vocabulary || []).map((term) => {
+            if (notice[field]?.indexOf(term.value.split("/").pop()) >= 0) {
+                return {...term, checked: true, children: markSelected(term.children, field)};
+            } else {
+                return {...term, checked: false, children: markSelected(term.children, field)};
+            }
+        });
+    };
 
     const domainsTree = useMemo(() => {
         return <DropdownTreeSelect
@@ -164,7 +165,7 @@ export function Notice() {
             inlineSearchPlaceholder={"Niveau éducatif"}
             texts={{
                 placeholder: "Liste complète des niveaux éducatifs",              // optional: The text to display as placeholder on the search box. Defaults to `Choose...`
-                inlineSearchPlaceholder: "Taper quelques lettres pour filtrer les niveaux",  // optional: The text to display as placeholder on the inline search box. Only applicable with the `inlineSearchInput` setting. Defaults to `Search...`
+                inlineSearchPlaceholder: "Taper quelques lettres",  // optional: The text to display as placeholder on the inline search box. Only applicable with the `inlineSearchInput` setting. Defaults to `Search...`
                 noMatches: "Aucune correspondance",                // optional: The text to display when the search does not find results in the content list. Defaults to `No matches found`
                 label: "Dom",                    // optional: Adds `aria-labelledby` to search input when input starts with `#`, adds `aria-label` to search input when label has value (not containing '#')
                 labelRemove: "Domdom",              // optional: The text to display for `aria-label` on tag delete buttons which is combined with `aria-labelledby` pointing to the node label. Defaults to `Remove`
@@ -185,7 +186,8 @@ export function Notice() {
             color = 'sky'
         }
         return (
-            <Slide direction="left" mountOnEnter unmountOnExit in={running}><Grid xs={8} sm={4} md={3} lg={2} container
+            <Slide direction="left" mountOnEnter unmountOnExit in={running} xs={6} sm={3} md={2} lg={1.2}><Grid
+                                                                                  container
                                                                                   direction="column" p={2}
                                                                                   justifyContent="end"
                                                                                   textAlign="center"
@@ -199,7 +201,7 @@ export function Notice() {
 
                                                                                   }} top='30%' right='30%'>
                 <Grid item>
-                    <Typography fontSize='large' color="primary">
+                    <Typography fontSize='small' color="primary">
                         {text}
                     </Typography>
                 </Grid>
@@ -207,16 +209,15 @@ export function Notice() {
                     <Grid container direction="row" alignItems="center" justifyContent="end">
                         <Grid item sx={{alignContent: "center"}}
                               display="flex"
-                              minHeight="100"
-
+                              minHeight="80"
                         >
                             <CardMedia
                                 component="img"
                                 alt="IRPI logo"
                                 src={Character}
                                 sx={{
-                                    width: 100,
-                                    height: 150,
+                                    width: 60,
+                                    height: 100,
                                     borderRadius: '50%',
                                     objectFit: 'cover'
                                 }
@@ -228,6 +229,12 @@ export function Notice() {
                 </Grid>
             </Grid></Slide>)
     }, [suggestions])
+
+    const flatVocabularyMenuEntries = (vocId) => Object.keys(getVocabularyTerms(vocId)).map(v => {
+        return {value: v, label: getVocabularyTerms(vocId)[v]};
+    });
+
+    const sortmenuEntries = (a, b) => a.label.localeCompare(b.label);
 
     return (<Container><Grid container sx={{marginTop: theme.spacing(5)}} direction='column'>
             {statusText}
@@ -267,32 +274,6 @@ export function Notice() {
                     field='description'
                     suggestions={(currentSuggestion.suggestions?.description || []).filter((t) => t !== notice.description)}
                     acceptCallback={(value) => handleUserSelectionChange({description: value})}/>}
-                <FormControl fullWidth margin='normal'>
-                    <InputLabel id="educational-resource-type-select-label"> Type de ressource</InputLabel>
-                    <Select
-                        labelId="educational-resource-type-select-label"
-                        id="educational-resource-type-select"
-                        label='Type de ressource'
-                        onChange={(e) => handleUserSelectionChange({educationalResourceType: e.target.value})}
-                        value={notice.educationalResourceType}
-                    >
-                        <MenuItem>Choisissez un type de ressource</MenuItem>
-                        {Object.entries(getVocabularyTerms(10)).map((entry) => (
-                            <MenuItem key={`option-educational-resource-type-${entry[0]}`}
-                                      value={entry[0]}>{entry[1]}</MenuItem>
-                        ))}
-                    </Select>
-                    {currentSuggestion && currentSuggestion.suggestions?.educationalResourceType && <SuggestionComponent
-                        field='domain'
-                        suggestions={currentSuggestion.suggestions.educationalResourceType?.filter((x) => x !== notice.domain && !isValueSelected('educationalResourceType', x))}
-                        titleProvider={id => getVocabularyTerms('10')[id]}
-                        rejectCallback={(value) => dispatchExcludedValues({
-                            field: 'educationalResourceType',
-                            value: value
-                        })}
-                        acceptCallback={(value) => handleUserSelectionChange({educationalResourceType: value})}
-                    />}
-                </FormControl>
 
                 <FormControl fullWidth margin='normal'>
                     <OutlinedDiv label="Domaines d'enseignement">
@@ -332,9 +313,69 @@ export function Notice() {
                         </Grid>
                     </OutlinedDiv>
                 </FormControl>
+                <FormControl fullWidth margin='normal'>
+                    <OutlinedDiv label="Type de ressource" sx={{width: "100%"}}>
+                        <Grid container direction='column' id='type-controls-container'
+                              className="controls-container"><Grid item>
+                            <DropdownTreeSelect
+                                sx={{width: "100%"}}
+                                data={markSelected(flatVocabularyMenuEntries('04-flat').sort(sortmenuEntries), 'documentType')}
+                                className="mdl-demo"
+                                mode="multiSelect"
+                                inlineSearchInput
+                                texts={{
+                                    placeholder: "Type documentaire",
+                                    inlineSearchPlaceholder: "Taper quelques lettres",
+                                    noMatches: "Aucune correspondance",                // optional: The text to display when the search does not find results in the content list. Defaults to `No matches found`
+                                    label: "Dom",                    // optional: Adds `aria-labelledby` to search input when input starts with `#`, adds `aria-label` to search input when label has value (not containing '#')
+                                    labelRemove: "Domdom",              // optional: The text to display for `aria-label` on tag delete buttons which is combined with `aria-labelledby` pointing to the node label. Defaults to `Remove`
+                                }}
+                                onChange={(currentNode, selectedNodes) => {
+                                    handleUserSelectionChange({documentType: selectedNodes.map((node) => node.value.split("/").pop())});
+                                }}
+
+                            />
+                            <FormHelperText>Lorem ipsum expliquer le sens de cette typologie</FormHelperText>
+                        </Grid> <Grid item>
+                            <DropdownTreeSelect
+                                sx={{width: "100%"}}
+                                data={markSelected(flatVocabularyMenuEntries('10-flat').sort(sortmenuEntries), 'educationalResourceType')}
+                                className="mdl-demo"
+                                mode="multiSelect"
+                                inlineSearchInput
+                                texts={{
+                                    placeholder: "Type pédagogique",
+                                    inlineSearchPlaceholder: "Taper quelques lettres",
+                                    noMatches: "Aucune correspondance",                // optional: The text to display when the search does not find results in the content list. Defaults to `No matches found`
+                                    label: "Dom",                    // optional: Adds `aria-labelledby` to search input when input starts with `#`, adds `aria-label` to search input when label has value (not containing '#')
+                                    labelRemove: "Domdom",              // optional: The text to display for `aria-label` on tag delete buttons which is combined with `aria-labelledby` pointing to the node label. Defaults to `Remove`
+                                }}
+                                onChange={(currentNode, selectedNodes) => {
+                                    handleUserSelectionChange({educationalResourceType: selectedNodes.map((node) => node.value.split("/").pop())});
+                                }}
+
+                            />
+                            <FormHelperText>Lorem ipsum expliquer le sens de cette typologie</FormHelperText>
+                        </Grid> <Grid item>
+                            {currentSuggestion && currentSuggestion.suggestions?.educationalResourceType &&
+                                <SuggestionComponent
+                                    field='domain'
+                                    suggestions={currentSuggestion.suggestions.educationalResourceType?.filter((x) => x !== notice.domain && !isValueSelected('educationalResourceType', x))}
+                                    titleProvider={id => getVocabularyTerms('10')[id]}
+                                    rejectCallback={(value) => dispatchExcludedValues({
+                                        field: 'educationalResourceType',
+                                        value: value
+                                    })}
+                                    acceptCallback={(value) => handleUserSelectionChange({educationalResourceType: value})}
+                                />}
+                        </Grid>
+                        </Grid>
+                    </OutlinedDiv>
+                </FormControl>
 
             </form>
         </Grid>
         </Container>
-    );
+    )
+        ;
 }

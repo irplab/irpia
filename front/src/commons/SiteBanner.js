@@ -10,7 +10,7 @@ export function SiteBanner(props) {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
     }}>
-        <Grid item xs={6} md={2} component={Icon} sx={{
+        <Grid item xs={6} sm={4} md={3} lg={1} component={Icon} sx={{
             height: "100%",
             textAlign: "left",
             alignSelf: "center"
@@ -28,8 +28,9 @@ export function SiteBanner(props) {
               }}>
             <img src={Banner} height={100}/>
         </Grid>
-        <Grid item xs={6} md={3} sx={{alignSelf: "center"}}>
-            <Typography sx={{fontWeight: 600, color: theme.palette.secondary.main, fontSize: "18px"}}>
+        <Grid item xs={6} sm={8} md={5} sx={{alignSelf: "center"}}>
+            <Typography
+                sx={{fontWeight: 600, color: theme.palette.secondary.main, fontSize: {xs: "1.2rem", sm: "2rem", md: "1.6rem", lg: "1.4rem"}}}>
                 Indexation de Ressources Pédagogiques<br/>
                 Intelligente et Assistée
             </Typography>
