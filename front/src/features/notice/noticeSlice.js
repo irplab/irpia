@@ -21,6 +21,8 @@ export const noticeSlice = createSlice({
             title: '',
             description: '',
             url: '',
+            documentType: [],
+            educationalResourceType: [],
         }
     },
     reducers: {
