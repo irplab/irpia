@@ -186,7 +186,7 @@ export function Notice() {
             color = 'sky'
         }
         return (
-            <Slide direction="left" mountOnEnter unmountOnExit in={running}><Grid xs={6} sm={3} md={2} lg={1.2}
+            <Slide direction="left" mountOnEnter unmountOnExit in={running} xs={6} sm={3} md={2} lg={1.2}><Grid
                                                                                   container
                                                                                   direction="column" p={2}
                                                                                   justifyContent="end"
