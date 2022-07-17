@@ -13,4 +13,21 @@
       <lom:string/>
     </lom:description>
   </lom:general>
+  <lom:lifeCycle uniqueElementName="lifeCycle">
+    <lom:contribute>
+      <lom:role uniqueElementName="role">
+        <lom:source uniqueElementName="source">LOMv1.0</lom:source>
+        <lom:value uniqueElementName="value">http://data.education.fr/voc/scolomfr/concept/publisher</lom:value>
+        <lom:label>Éditeur</lom:label>
+      </lom:role>
+      <lom:entity>
+      </lom:entity>
+      <lom:date uniqueElementName="date">
+        <lom:dateTime uniqueElementName="dateTime"></lom:dateTime>
+      </lom:date>
+    </lom:contribute>
+  </lom:lifeCycle>
+  <lom:technical uniqueElementName="technical">
+    <lom:location></lom:location>
+  </lom:technical>
 </lom:lom>
