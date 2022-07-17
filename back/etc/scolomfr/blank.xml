@@ -12,13 +12,25 @@
     <lom:description>
       <lom:string/>
     </lom:description>
+    <lomfr:documentType>
+      <lomfr:source uniqueElementName="source">SCOLOMFRv8.0</lomfr:source>
+      <lomfr:value uniqueElementName="value"></lomfr:value>
+      <lomfr:label></lomfr:label>
+    </lomfr:documentType>
   </lom:general>
+  <lom:educational>
+    <lom:learningResourceType>
+      <lom:source uniqueElementName="source">SCOLOMFRv8.0</lom:source>
+      <lom:value uniqueElementName="value"></lom:value>
+      <lom:label></lom:label>
+    </lom:learningResourceType>
+  </lom:educational>
   <lom:lifeCycle uniqueElementName="lifeCycle">
     <lom:contribute>
       <lom:role uniqueElementName="role">
-        <lom:source uniqueElementName="source">LOMv1.0</lom:source>
-        <lom:value uniqueElementName="value">http://data.education.fr/voc/scolomfr/concept/publisher</lom:value>
-        <lom:label>Éditeur</lom:label>
+        <lom:source uniqueElementName="source">SCOLOMFRv8.0</lom:source>
+        <lom:value uniqueElementName="value"></lom:value>
+        <lom:label></lom:label>
       </lom:role>
       <lom:entity>
       </lom:entity>

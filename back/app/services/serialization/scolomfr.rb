@@ -12,6 +12,8 @@ class Serialization::Scolomfr
     fillDescription
     fillContributors
     fillTechnicalLocation
+    fillDocumentType
+    fillEducationalResourceType
     self
   end
 
@@ -56,6 +58,34 @@ class Serialization::Scolomfr
       cdata = @doc.create_cdata(vcard.to_s.strip)
       entity_node.add_child(cdata)
       life_cycle_node.add_child(contributor_node)
+    end
+  end
+
+  def fillDocumentType
+    generalNode = @doc.at_xpath 'lom:lom/lom:general'
+    document_type_node_template = @doc.at_xpath 'lom:lom/lom:general/lomfr:documentType'
+    document_type_node_template.remove
+    (@notice['document_type_id'] || []).each_with_index do |document_type_id, index|
+      document_type_node = document_type_node_template.dup(1)
+      document_type_value_node = document_type_node.at_xpath 'lomfr:value'
+      document_type_value_node.content = document_type_id
+      document_type_label_node = document_type_node.at_xpath 'lomfr:label'
+      document_type_label_node.content = @notice['document_type_label'][index] if @notice['document_type_label'][index]
+      generalNode.add_child(document_type_node)
+    end
+  end
+
+  def fillEducationalResourceType
+    educationalNode = @doc.at_xpath 'lom:lom/lom:educational'
+    learning_resource_type_node_template = @doc.at_xpath 'lom:lom/lom:educational/lom:learningResourceType'
+    learning_resource_type_node_template.remove
+    (@notice['educational_resource_type_id'] || []).each_with_index do |learning_resource_type_id, index|
+      learning_resource_type_node = learning_resource_type_node_template.dup(1)
+      learning_resource_type_value_node = learning_resource_type_node.at_xpath 'lom:value'
+      learning_resource_type_value_node.content = "http://data.education.fr/voc/scolomfr/concept/#{learning_resource_type_id}"
+      learning_resource_type_label_node = learning_resource_type_node.at_xpath 'lom:label'
+      learning_resource_type_label_node.content = @notice['educational_resource_type_label'][index] if @notice['educational_resource_type_label'][index]
+      educationalNode.add_child(learning_resource_type_node)
     end
   end
 

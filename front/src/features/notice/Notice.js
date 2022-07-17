@@ -123,7 +123,7 @@ export function Notice() {
 
     const markSelected = (vocabulary, field) => {
         return (vocabulary || []).map((term) => {
-            if (notice[field]?.indexOf(term.value.split("/").pop()) >= 0) {
+            if (notice[field]?.indexOf(term.value.split("/").pop()) >= 0 || notice[field]?.indexOf(term.value) >= 0) {
                 return {...term, checked: true, children: markSelected(term.children, field)};
             } else {
                 return {...term, checked: false, children: markSelected(term.children, field)};
@@ -187,19 +187,19 @@ export function Notice() {
         }
         return (
             <Slide direction="left" mountOnEnter unmountOnExit in={running} xs={6} sm={3} md={2} lg={1.2}><Grid
-                                                                                  container
-                                                                                  direction="column" p={2}
-                                                                                  justifyContent="end"
-                                                                                  textAlign="center"
-                                                                                  position="fixed"
-                                                                                  sx={{
-                                                                                      zIndex: 'tooltip',
-                                                                                      backgroundColor: (theme) => lighten(theme.palette.secondary.light, 0.7),
-                                                                                      borderRadius: "50%",
-                                                                                      border: 0.5,
-                                                                                      borderColor: (theme) => theme.palette.secondary.main,
+                container
+                direction="column" p={2}
+                justifyContent="end"
+                textAlign="center"
+                position="fixed"
+                sx={{
+                    zIndex: 'tooltip',
+                    backgroundColor: (theme) => lighten(theme.palette.secondary.light, 0.7),
+                    borderRadius: "50%",
+                    border: 0.5,
+                    borderColor: (theme) => theme.palette.secondary.main,
 
-                                                                                  }} top='30%' right='30%'>
+                }} top='30%' right='30%'>
                 <Grid item>
                     <Typography fontSize='small' color="primary">
                         {text}
@@ -319,7 +319,7 @@ export function Notice() {
                               className="controls-container"><Grid item>
                             <DropdownTreeSelect
                                 sx={{width: "100%"}}
-                                data={markSelected(flatVocabularyMenuEntries('04-flat').sort(sortmenuEntries), 'documentType')}
+                                data={markSelected(flatVocabularyMenuEntries('04-flat').sort(sortmenuEntries), 'documentTypeId')}
                                 className="mdl-demo"
                                 mode="multiSelect"
                                 inlineSearchInput
@@ -331,7 +331,10 @@ export function Notice() {
                                     labelRemove: "Domdom",              // optional: The text to display for `aria-label` on tag delete buttons which is combined with `aria-labelledby` pointing to the node label. Defaults to `Remove`
                                 }}
                                 onChange={(currentNode, selectedNodes) => {
-                                    handleUserSelectionChange({documentType: selectedNodes.map((node) => node.value.split("/").pop())});
+                                    handleUserSelectionChange({
+                                        documentTypeId: selectedNodes.map((node) => node.value),
+                                        documentTypeLabel: selectedNodes.map((node) => node.label)
+                                    });
                                 }}
 
                             />
@@ -339,7 +342,7 @@ export function Notice() {
                         </Grid> <Grid item>
                             <DropdownTreeSelect
                                 sx={{width: "100%"}}
-                                data={markSelected(flatVocabularyMenuEntries('10-flat').sort(sortmenuEntries), 'educationalResourceType')}
+                                data={markSelected(flatVocabularyMenuEntries('10-flat').sort(sortmenuEntries), 'educationalResourceTypeId')}
                                 className="mdl-demo"
                                 mode="multiSelect"
                                 inlineSearchInput
@@ -351,7 +354,11 @@ export function Notice() {
                                     labelRemove: "Domdom",              // optional: The text to display for `aria-label` on tag delete buttons which is combined with `aria-labelledby` pointing to the node label. Defaults to `Remove`
                                 }}
                                 onChange={(currentNode, selectedNodes) => {
-                                    handleUserSelectionChange({educationalResourceType: selectedNodes.map((node) => node.value.split("/").pop())});
+                                    handleUserSelectionChange({
+                                        educationalResourceTypeId: selectedNodes.map((node) => node.value),
+                                        educationalResourceTypeLabel: selectedNodes.map((node) => node.label),
+
+                                    });
                                 }}
 
                             />
