@@ -25,6 +25,8 @@ const SIRENE_IDENTIFIER = "Sirène";
 
 const ISNI_IDENTIFIER = "ISNI";
 
+const DEFAULT_ISNI = "0000000000000000";
+
 export function ContributionEdition({contributorId, roles}) {
     const theme = useTheme();
     const dispatch = useDispatch();
@@ -46,7 +48,7 @@ export function ContributionEdition({contributorId, roles}) {
     const [customSiren, setCustomSiren] = useState(null);
     const [selectedIsniInfo, setSelectedIsniInfo] = useState(null);
     const [autocompleteSelectedOptions, setAutocompleteSelectedOptions] = useState([]);
-    const [customIsni, setCustomIsni] = useState(null);
+    const [customIsni, setCustomIsni] = useState(DEFAULT_ISNI);
     const [contributorName, setContributorName] = useState('');
     const [contributorPhoneNumber, setContributorPhoneNumber] = useState('');
     const [contributorRoleLabel, setContributorRoleLabel] = useState(null);
@@ -73,6 +75,10 @@ export function ContributionEdition({contributorId, roles}) {
         setContributorRole(contributor.contributorRole || roles[0][0]);
         updateContributorRoleLabel(roles, contributor.contributorRole);
     }, [])
+
+    useEffect(() => {
+        if (!customIsni && !selectedIsniInfo?.identifier) setCustomIsni(DEFAULT_ISNI)
+    }, [selectedIsniInfo, customIsni])
 
     useEffect(() => {
         dispatch(updateContributorById({
@@ -318,11 +324,11 @@ export function ContributionEdition({contributorId, roles}) {
                         <MuiPhoneNumber
                             variant="outlined"
                             sx={{
-                            svg: {
-                                height: "20px",
-                            },
-                        }} defaultCountry={'fr'} value={contributorPhoneNumber}
-                                        onChange={(value) => setContributorPhoneNumber(value)}/>
+                                svg: {
+                                    height: "20px",
+                                },
+                            }} defaultCountry={'fr'} value={contributorPhoneNumber}
+                            onChange={(value) => setContributorPhoneNumber(value)}/>
                     </Grid>
                 </Grid></CardContent>
             <CardActions sx={{

@@ -46,7 +46,6 @@ export const noticeSlice = createSlice({
 })
 
 
-// Action creators are generated for each case reducer function
 export const {updateField} = noticeSlice.actions
 
 export default noticeSlice.reducer
