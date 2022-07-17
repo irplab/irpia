@@ -1,20 +1,22 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Alert, AlertTitle, Box, Grid, Paper, TextField, Typography, useTheme} from "@mui/material";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {suggestionsSelectors} from "../notice/suggestionsSlice";
 import Gallery from "react-photo-gallery";
 import SelectedImage from "./SelectedImage";
 import Image from "mui-image";
+import {updateField} from "../notice/noticeSlice";
 
 export function Images() {
     const theme = useTheme();
+    const dispatch = useDispatch();
+    const notice = useSelector((state) => state.notice.value);
     const [selectedImageUrl, setSelectedImageUrl] = useState(undefined);
     const [inputImageUrl, setInputImageUrl] = useState(undefined);
     const [invalidInputImageUrl, setInvalidInputImageUrl] = useState(false);
     const [inputImageUrlErrror, setInputImageUrlError] = useState(false);
 
     const imageSuggestions = useSelector((state) => {
-        console.log(state.suggestions);
         return suggestionsSelectors.selectAll(state.suggestions)?.at(-1)?.suggestions?.images;
     });
 
@@ -27,6 +29,10 @@ export function Images() {
         return true;
     };
 
+    useEffect(() => {
+        if (!inputImageUrl && !selectedImageUrl) return;
+        dispatch(updateField({thumbnailUrl: inputImageUrl || selectedImageUrl}));
+    }, [selectedImageUrl, inputImageUrl, dispatch])
 
     const imageRenderer = useCallback(({index, left, top, key, photo}) => {
         return <SelectedImage
@@ -63,7 +69,7 @@ export function Images() {
         })
     }, [imageSuggestions, gcd]);
 
-    useEffect(()=> console.log(imageSuggestions), [imageSuggestions])
+    useEffect(() => console.log(imageSuggestions), [imageSuggestions])
 
     return (<Grid container spacing={4} direction="column" sx={{height: "100%", flexWrap: "nowrap"}}>
         <Grid item>
@@ -79,8 +85,8 @@ export function Images() {
                     setInputImageUrl(url);
                     setSelectedImageUrl(undefined);
                 }}
-                value={inputImageUrl || selectedImageUrl}
-                InputLabelProps={{shrink: !!selectedImageUrl || !!inputImageUrl}}
+                value={notice.thumbnailUrl}
+                InputLabelProps={{shrink: !!notice.thumbnailUrl}}
                 helperText={invalidInputImageUrl ? "Veuillez vérifier votre URL" : (selectedImageUrl ? "URL de la vignette que vous avez sélectionnée" : (inputImageUrl ? "URL de votre vignette personnalisée" : "Veuillez saisir une URL valide commençant par http:// ou https://"))}
             /></Grid>
         <Grid item sx={{flexWrap: "no-wrap"}}>

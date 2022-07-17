@@ -14,6 +14,7 @@ class Serialization::Scolomfr
     fillTechnicalLocation
     fillDocumentType
     fillEducationalResourceType
+    fillThumbnail
     self
   end
 
@@ -21,7 +22,7 @@ class Serialization::Scolomfr
 
   def fillTitle
     title_str = @notice['title']
-    title_elem  = @doc.at_xpath "lom:lom/lom:general/lom:title/lom:string"
+    title_elem = @doc.at_xpath "lom:lom/lom:general/lom:title/lom:string"
     title_elem.content = title_str
     language = detect_language(title_str)
     title_elem['language'] = language if language
@@ -29,7 +30,7 @@ class Serialization::Scolomfr
 
   def fillDescription
     description_str = @notice['description']
-    description_elem  = @doc.at_xpath "lom:lom/lom:general/lom:description/lom:string"
+    description_elem = @doc.at_xpath "lom:lom/lom:general/lom:description/lom:string"
     description_elem.content = description_str
     language = detect_language(description_str)
     description_elem['language'] = language if language
@@ -37,7 +38,7 @@ class Serialization::Scolomfr
 
   def fillTechnicalLocation
     url = @notice['url']
-    location_elem  = @doc.at_xpath "lom:lom/lom:technical/lom:location"
+    location_elem = @doc.at_xpath "lom:lom/lom:technical/lom:location"
     location_elem.content = url
   end
 
@@ -95,7 +96,9 @@ class Serialization::Scolomfr
     vcard.revision Date.today
     if contributor.has_key?('contributor_name')
       vcard.fullname(contributor['contributor_name'])
-      vcard.org(contributor['contributor_name'])
+    end
+    if contributor.has_key?('editorial_brand')
+      vcard.org(contributor['editorial_brand'])
     end
     siren = contributor["custom_siren"] || contributor&.dig("selected_siren_info")&.dig("identifier")
     vcard.note "SIREN=#{siren}" if siren.present?
@@ -107,6 +110,17 @@ class Serialization::Scolomfr
       vcard.tel phone_number
     end
     vcard
+  end
+
+  def fillThumbnail
+    thumbnail_url = @notice['thumbnail_url']
+    relation_elem = @doc.at_xpath "lom:lom/lom:relation"
+    thumbnail_url_elem = @doc.at_xpath "lom:lom/lom:relation/lom:resource/lom:identifier/lom:entry"
+    if thumbnail_url.present?
+      thumbnail_url_elem.content = thumbnail_url
+    else
+      relation_elem.remove
+    end
   end
 
   def detect_language str

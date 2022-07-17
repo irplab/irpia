@@ -39,6 +39,22 @@
       </lom:date>
     </lom:contribute>
   </lom:lifeCycle>
+  <lom:relation>
+    <lom:kind>
+      <lom:source>SCOLOMFRv8.0</lom:source>
+      <lom:value>http://data.education.fr/voc/scolomfr/concept/scolomfr-voc-009-num-021</lom:value>
+      <lom:label>a pour vignette</lom:label>
+    </lom:kind>
+    <lom:resource>
+      <lom:identifier>
+        <lom:catalog>URI</lom:catalog>
+        <lom:entry uniqueElementName="entry"></lom:entry>
+      </lom:identifier>
+      <lom:description uniqueElementName="description">
+        <lom:string>Vignette</lom:string>
+      </lom:description>
+    </lom:resource>
+  </lom:relation>
   <lom:technical uniqueElementName="technical">
     <lom:location></lom:location>
   </lom:technical>
