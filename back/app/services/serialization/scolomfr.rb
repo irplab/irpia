@@ -144,11 +144,13 @@ class Serialization::Scolomfr
     parents = Hash.new
     found_in_hierarchy = []
     @notice[field].map do |concept|
+      parents[concept] = []
       child_concept = "http://data.education.fr/voc/scolomfr/concept/#{concept}"
       while child_concept
         result = sparql_client.query(broader_extension_query.gsub('[value]', child_concept))
         break if result.count == 0
         concept_hash ||= { uri: result.first[:concept].to_s, label: result.first[:concept_label].to_s }
+        break unless result.first[:parent_concept]
         found_in_hierarchy << result.first[:parent_concept].to_s
         (parents[concept] ||= []).unshift(uri: result.first[:parent_concept].to_s, label: result.first[:parent_concept_label].to_s)
         child_concept = result.first[:parent_concept].to_s

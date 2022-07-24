@@ -30,10 +30,12 @@ HEREDOC
     VALUES (?concept) 
       { ( <[value]>) }
   ?concept skos:prefLabel ?concept_label. 
+  OPTIONAL {
   ?concept skos:broader ?parent_concept.
   ?parent_concept isothes:status ?status_parent_concept.
   filter(regex(?status_parent_concept, "Actuel", "i" ))
-  ?parent_concept skos:prefLabel ?parent_concept_label.       
+  ?parent_concept skos:prefLabel ?parent_concept_label.     
+  }
   } order by ?parent_concept_label
 HEREDOC
   end

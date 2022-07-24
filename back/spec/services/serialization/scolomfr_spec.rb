@@ -69,11 +69,20 @@ RSpec.describe Serialization::Scolomfr, type: :model do
     it 'builds domain taxonPaths from received domain data' do
       service = Serialization::Scolomfr.new(notice)
       service.call
-      level_classification_node = service.doc.at_xpath "lom:lom/lom:classification[./lom:purpose[.//lom:value[contains(text(),'http://data.education.fr/voc/scolomfr/concept/scolomfr-voc-028-num-003')]]]"
-      expect(level_classification_node.xpath("lom:taxonPath").count).to eq(1)
-      etudeArchitecturalePath = level_classification_node.xpath("lom:taxonPath").first
+      domain_classification_node = service.doc.at_xpath "lom:lom/lom:classification[./lom:purpose[.//lom:value[contains(text(),'http://data.education.fr/voc/scolomfr/concept/scolomfr-voc-028-num-003')]]]"
+      expect(domain_classification_node.xpath("lom:taxonPath").count).to eq(1)
+      etudeArchitecturalePath = domain_classification_node.xpath("lom:taxonPath").first
       expect(etudeArchitecturalePath.xpath('lom:taxon/lom:entry/lom:string/text()').to_a.map(&:to_s).first).to eq("systèmes constructifs bois et habitat (BTS)")
       expect(etudeArchitecturalePath.xpath('lom:taxon/lom:entry/lom:string/text()').to_a.map(&:to_s).last).to eq("étude architecturale")
+    end
+    it 'builds a one level path from généric domain data' do
+      service = Serialization::Scolomfr.new(notice.merge({"domain" => ["scolomfr-voc-015-num-919"]}))
+      service.call
+      domain_classification_node = service.doc.at_xpath "lom:lom/lom:classification[./lom:purpose[.//lom:value[contains(text(),'http://data.education.fr/voc/scolomfr/concept/scolomfr-voc-028-num-003')]]]"
+      expect(domain_classification_node.xpath("lom:taxonPath").count).to eq(1)
+      mathematiquesPath  = domain_classification_node.xpath("lom:taxonPath").first
+      expect(mathematiquesPath.xpath('lom:taxon').count).to eq(1)
+      expect(mathematiquesPath.xpath('lom:taxon/lom:entry/lom:string/text()').to_a.map(&:to_s).first).to eq("mathématiques (discipline)")
     end
   end
 
