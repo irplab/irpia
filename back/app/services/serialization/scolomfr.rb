@@ -128,15 +128,19 @@ class Serialization::Scolomfr
   end
 
   def fillEducationalLevel
-    fillClassification(:level, 'http://data.education.fr/voc/scolomfr/concept/educational_level')
+    fillClassification("level", 'http://data.education.fr/voc/scolomfr/concept/educational_level')
   end
 
   def fillDomain
-    fillClassification(:domain, 'http://data.education.fr/voc/scolomfr/concept/scolomfr-voc-028-num-003')
+    fillClassification("domain", 'http://data.education.fr/voc/scolomfr/concept/scolomfr-voc-028-num-003')
   end
 
   def fillClassification(field, classification_uri)
-    return unless @notice[field].present?
+    classification_node = @doc.at_xpath "lom:lom/lom:classification[./lom:purpose[.//lom:value[contains(text(),'#{classification_uri}')]]]"
+    unless @notice[field].present?
+      classification_node.remove
+      return
+    end
     parents = Hash.new
     found_in_hierarchy = []
     @notice[field].map do |concept|
@@ -146,13 +150,12 @@ class Serialization::Scolomfr
         break if result.count == 0
         concept_hash ||= { uri: result.first[:concept].to_s, label: result.first[:concept_label].to_s }
         found_in_hierarchy << result.first[:parent_concept].to_s
-        (parents[concept] ||= []).unshift( uri: result.first[:parent_concept].to_s, label: result.first[:parent_concept_label].to_s )
+        (parents[concept] ||= []).unshift(uri: result.first[:parent_concept].to_s, label: result.first[:parent_concept_label].to_s)
         child_concept = result.first[:parent_concept].to_s
       end
       parents[concept] << concept_hash if parents[concept]
     end
     found_in_hierarchy.flatten.uniq.each { |key| parents.delete(key.to_s.split("/").last) }
-    classification_node = @doc.at_xpath "lom:lom/lom:classification[./lom:purpose[.//lom:value[contains(text(),'#{classification_uri}')]]]"
     taxon_path_node_template = classification_node.at_xpath 'lom:taxonPath'
     taxon_path_node_template.remove
     taxon_node_template = taxon_path_node_template.at_xpath 'lom:taxon'
