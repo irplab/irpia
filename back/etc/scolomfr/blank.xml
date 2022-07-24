@@ -58,4 +58,40 @@
   <lom:technical uniqueElementName="technical">
     <lom:location></lom:location>
   </lom:technical>
+  <lom:classification>
+    <lom:purpose uniqueElementName="purpose">
+      <lom:source uniqueElementName="source">SCOLOMFRv8.0</lom:source>
+      <lom:value uniqueElementName="value">http://data.education.fr/voc/scolomfr/concept/scolomfr-voc-028-num-003</lom:value>
+      <lom:label>domaine d'enseignement</lom:label>
+    </lom:purpose>
+    <lom:taxonPath>
+      <lom:source uniqueElementName="source">
+        <lom:string>SCOLOMFRv8.0</lom:string>
+      </lom:source>
+      <lom:taxon>
+        <lom:id uniqueElementName="id"></lom:id>
+        <lom:entry uniqueElementName="entry">
+          <lom:string></lom:string>
+        </lom:entry>
+      </lom:taxon>
+    </lom:taxonPath>
+  </lom:classification>
+  <lom:classification>
+    <lom:purpose uniqueElementName="purpose">
+      <lom:source uniqueElementName="source">SCOLOMFRv8.0</lom:source>
+      <lom:value uniqueElementName="value">http://data.education.fr/voc/scolomfr/concept/educational_level</lom:value>
+      <lom:label>niveau éducatif détaillé </lom:label>
+    </lom:purpose>
+    <lom:taxonPath>
+      <lom:source uniqueElementName="source">
+        <lom:string>SCOLOMFRv8.0</lom:string>
+      </lom:source>
+      <lom:taxon>
+        <lom:id uniqueElementName="id"></lom:id>
+        <lom:entry uniqueElementName="entry">
+          <lom:string></lom:string>
+        </lom:entry>
+      </lom:taxon>
+    </lom:taxonPath>
+  </lom:classification>
 </lom:lom>
