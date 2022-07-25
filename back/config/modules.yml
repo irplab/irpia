@@ -27,6 +27,9 @@ default: &default
     webpage-extract:
       type: 'emb'
       service: 'Modules::WebPageExtractor'
+    level-deduce:
+      type: 'emb'
+      service: 'Modules::LevelDeducer'
   rules:
 #    title:
 #      - - dummy_1
@@ -45,6 +48,7 @@ default: &default
       - - domain-predict
     level:
       - - level-predict
+        - level-deduce
     images:
       - - webpage-extract
 
