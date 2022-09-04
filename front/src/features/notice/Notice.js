@@ -13,7 +13,7 @@ import {
     Container,
     FormControl,
     FormHelperText,
-    Grid,
+    Grid, IconButton,
     lighten,
     Slide,
     TextField,
@@ -25,6 +25,7 @@ import {MultiSuggestionComponent} from "./MultiSuggestionComponent";
 import OutlinedDiv from "../../commons/OutlinedDiv";
 import {updateField} from "./noticeSlice";
 import BouncingDotsLoader from "../../commons/BouncingDotsLoader";
+import ClearIcon from "@mui/icons-material/Clear";
 
 export function Notice() {
     const theme = useTheme();
@@ -251,6 +252,16 @@ export function Notice() {
                     id="grid-url"
                     value={notice.url}
                     onChange={(e) => handleUserInputChange({url: e.target.value})}
+                    InputProps={{
+                        endAdornment: (
+                            <IconButton
+                                sx={{visibility: notice.url ? "visible" : "hidden"}}
+                                onClick={() => handleUserInputChange({url: ''})}
+                            >
+                                <ClearIcon/>
+                            </IconButton>
+                        ),
+                    }}
                 />
                 <TextField margin='normal' fullWidth id="grid-title"
                            label="Titre"
@@ -258,7 +269,17 @@ export function Notice() {
                            InputLabelProps={{shrink: !!notice.title}}
                            value={notice.title}
                            placeholder="Titre de votre ressource"
-                           onChange={(e) => handleUserInputChange({title: e.target.value})}/>
+                           onChange={(e) => handleUserInputChange({title: e.target.value})}
+                           InputProps={{
+                               endAdornment: (
+                                   <IconButton
+                                       sx={{visibility: notice.title ? "visible" : "hidden"}}
+                                       onClick={() => handleUserInputChange({title: ''})}
+                                   >
+                                       <ClearIcon/>
+                                   </IconButton>
+                               ),
+                           }}/>
                 {currentSuggestion && !notice.title && <SuggestionComponent
                     field='title'
                     suggestions={(currentSuggestion.suggestions?.title || []).filter((t) => t !== notice.title)}
@@ -269,7 +290,17 @@ export function Notice() {
                            placeholder="Description de votre ressource"
                            InputLabelProps={{shrink: !!notice.description}}
                            value={notice.description}
-                           onChange={(e) => handleUserInputChange({description: e.target.value})}/>
+                           onChange={(e) => handleUserInputChange({description: e.target.value})}
+                           InputProps={{
+                               endAdornment: (
+                                   <IconButton
+                                       sx={{visibility: notice.description ? "visible" : "hidden"}}
+                                       onClick={() => handleUserInputChange({description: ''})}
+                                   >
+                                       <ClearIcon/>
+                                   </IconButton>
+                               ),
+                           }}/>
                 {currentSuggestion && <SuggestionComponent
                     field='description'
                     suggestions={(currentSuggestion.suggestions?.description || []).filter((t) => t !== notice.description)}
