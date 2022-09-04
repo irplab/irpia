@@ -25,7 +25,7 @@ div.controls-container .tag {
     line-height: 8px;
     font-size: 0.8125rem;
     padding: 10px 12px;
-    border-radius: 16px;
+    border-radius: 20px;
     display: inline-block;
 }
 
@@ -51,7 +51,7 @@ div.controls-container .tag {
     max-height: none;
 }
 .mdl-demo .dropdown .dropdown-trigger  .tag-item {
-    min-width: 0%;
+    min-width: 0;
     display: inline-block;
     margin: 4px;
 }
@@ -108,7 +108,6 @@ div.controls-container .tag {
 
 .mdl-demo .partial .checkbox-item:not(:checked):before {
     height: 50%;
-    -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     border-top-style: none;
     border-right-style: none;
@@ -117,7 +116,6 @@ div.controls-container .tag {
 
 .mdl-demo .checkbox-item:checked:before {
     height: 50%;
-    -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     border-top-style: none;
     border-right-style: none;
