@@ -121,3 +121,11 @@ div.controls-container .tag {
     border-right-style: none;
     border-color: #2196f3;
 }
+
+.mdl-demo .dropdown .dropdown-trigger.arrow.bottom:after {
+    content: "\25BE";
+}
+
+.mdl-demo .dropdown .dropdown-trigger.arrow.top:after {
+    content: "\25B4";
+}
