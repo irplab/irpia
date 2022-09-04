@@ -335,7 +335,7 @@ export function ContributionEdition({contributorId, roles}) {
                 display: "flex",
                 justifyContent: "flex-end"
             }}>
-                <Button size="small"
+                <Button size="small" sx={{color: theme.palette.primary.main}}
                         color="error" variant="text" onClick={handleDelete}>Supprimer</Button>
                 <Button size="small"
                         variant="contained"

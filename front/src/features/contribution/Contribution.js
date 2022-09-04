@@ -43,7 +43,8 @@ export function Contribution({contributorId}) {
             display: "flex",
             justifyContent: "flex-end"
         }}>
-            <Button size="small" variant='text' color="error" onClick={handleDelete}>Supprimer</Button>
+            <Button size="small" variant='text' color="error" onClick={handleDelete}
+                    sx={{color: theme.palette.primary.main}}>Supprimer</Button>
             <Button size="small" variant='contained' onClick={() => dispatch(updateContributorById({
                 contributor: {
                     ...contributor,
