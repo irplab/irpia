@@ -88,22 +88,33 @@ export function End() {
                 </Box>
             </Grid>
         </Grid>
-            <Box width="100%" ml={-5} minWidth="120%" height={theme.spacing(8)} sx={{backgroundColor: "#F8FBFF"}}></Box>
-            <Grid container direction="column" mt={theme.spacing(3)}>
-                <Grid item>
-                    <Typography fontSize='1rem' sx={{fontWeight: "bold"}} textAlign="center" width="100%">Nouvelle notice avec les mêmes
-                        contributeurs</Typography>
+            <Box width="100%" ml={-5} minWidth="120%" height={theme.spacing(2)} sx={{backgroundColor: "#F8FBFF"}}></Box>
+            <Grid container direction="row" mt={theme.spacing(3)}>
+                <Grid item md={6} xs={12}>
+                    <Grid container  direction='column'>
+                        <Grid item>
+                            <Typography fontSize='1rem' sx={{fontWeight: "bold"}} textAlign="center" width="100%">Nouvelle
+                                notice avec les mêmes
+                                contributeurs</Typography>
+                        </Grid>
+                        <Grid item sx={{justifyContent: "center", display: "flex"}} mt={theme.spacing(2)}>
+                            <Button variant="outlined" onClick={() => navigate('/form/notice')}>Nouvelle notice</Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item sx={{justifyContent: "center", display: "flex"}}  mt={theme.spacing(2)} >
-                    <Button variant="outlined" onClick={() => navigate('/form/notice')}>Nouvelle notice</Button>
+                <Grid item md={6} xs={12} sx={{marginTop:{xs: theme.spacing(4), sm: 0}}}>
+                    <Grid container direction='column'>
+                        <Grid item>
+                            <Typography fontSize='1rem' sx={{fontWeight: "bold"}} textAlign="center" width="100%">Modifier
+                                les
+                                contributeurs</Typography>
+                        </Grid>
+                        <Grid item sx={{justifyContent: "center", display: "flex"}} mt={theme.spacing(2)}>
+                            <Button variant="outlined"
+                                    onClick={() => navigate('/form/contribution')}>Contributeurs</Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item  mt={theme.spacing(2)}>
-                    <Typography fontSize='1rem' sx={{fontWeight: "bold"}} textAlign="center" width="100%">Modifier les contributeurs</Typography>
-                </Grid>
-                <Grid item sx={{justifyContent: "center", display: "flex"}}  mt={theme.spacing(2)} >
-                    <Button variant="outlined" onClick={() => navigate('/form/contribution')}>Contributeurs</Button>
-                </Grid>
-
             </Grid>
         </>
     )
