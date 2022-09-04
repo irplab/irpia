@@ -5,6 +5,7 @@ import {createContributor} from "./contributorsSlice";
 import {ContributionEdition} from "./ContributionEdition";
 import {Contribution} from "./Contribution";
 import {fetchVocabularyById, selectVocabularies} from "../notice/vocabulariesSlice";
+import AddIcon from '@mui/icons-material/Add';
 
 const SIRENE_IDENTIFIER = "Sirène";
 
@@ -33,7 +34,7 @@ export function Contributions() {
                 <ContributionEdition contributorId={contributor.id} key={contributor.id} roles={roles}/> :
                 <Contribution contributorId={contributor.id} key={contributor.id}/>;
         })}
-        <Button sx={{marginTop: theme.spacing(3)}} variant='outlined' onClick={() => dispatch(createContributor())}>Ajouter
+        <Button startIcon={<AddIcon />} sx={{marginTop: theme.spacing(3)}} variant='outlined' onClick={() => dispatch(createContributor())}>Ajouter
             une contribution</Button>
     </>);
 }
