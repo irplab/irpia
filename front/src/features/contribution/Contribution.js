@@ -13,12 +13,12 @@ export function Contribution({contributorId}) {
 
     const contributor = useSelector(state => selectContributorById(state, contributorId))
 
-    const handleDelete = useCallback((e, t) => {
+    const handleDelete = useCallback(() => {
         confirm({title: 'Confirmation', description: 'Voulez-vous supprimer cette contribution ?'})
             .then(() => {
                 dispatch(deleteContributorById({contributor}))
             });
-    }, [contributor]);
+    }, [contributor, confirm, dispatch]);
 
     return (<Card sx={{marginTop: theme.spacing(2), bgcolor: theme.palette.primary.main}} >
         <CardContent sx={{background: theme.palette.primary}}>
