@@ -1,5 +1,12 @@
 @import '@material-design-icons/font';
 
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: 100 700;
+    src: url(https://fonts.gstatic.com/s/materialsymbolsoutlined/v51/kJEhBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oFsI.woff2) format('woff2');
+}
+
 div.react-dropdown-tree-select {
     width: 100%;
 }
@@ -120,4 +127,16 @@ div.controls-container .tag {
     border-top-style: none;
     border-right-style: none;
     border-color: #2196f3;
+}
+
+.mdl-demo .dropdown .dropdown-trigger.arrow.bottom:after {
+    font-family: 'Material Symbols Outlined';
+    font-size: 26px;
+    content: "\E5C5";
+}
+
+.mdl-demo .dropdown .dropdown-trigger.arrow.top:after {
+    font-family: 'Material Symbols Outlined';
+    font-size: 26px;
+    content: "\E5C7";
 }
