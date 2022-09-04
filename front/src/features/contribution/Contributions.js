@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {Button, Typography, useTheme} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {createContributor} from "./contributorsSlice";
@@ -6,10 +6,6 @@ import {ContributionEdition} from "./ContributionEdition";
 import {Contribution} from "./Contribution";
 import {fetchVocabularyById, selectVocabularies} from "../notice/vocabulariesSlice";
 import AddIcon from '@mui/icons-material/Add';
-
-const SIRENE_IDENTIFIER = "Sirène";
-
-const ISNI_IDENTIFIER = "ISNI";
 
 export function Contributions() {
     const theme = useTheme();
@@ -19,7 +15,7 @@ export function Contributions() {
 
     useEffect(() => {
         dispatch(fetchVocabularyById({vocabularyId: '03'}))
-    }, [])
+    }, [dispatch])
 
     const roles = useMemo(() => {
         if (!vocabularies.entities['03-flat']) return []
