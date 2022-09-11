@@ -74,7 +74,7 @@ export function ContributionEdition({contributorId, roles}) {
         setCustomSiren(contributor.customSiren);
         setContributorRole(contributor.contributorRole || roles[0][0]);
         updateContributorRoleLabel(roles, contributor.contributorRole);
-    }, [contributor, roles])
+    }, [roles])
 
     useEffect(() => {
         if (!customIsni && !selectedIsniInfo?.identifier) setCustomIsni(DEFAULT_ISNI)
