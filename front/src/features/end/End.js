@@ -7,6 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {submitNotice} from "../notice/noticeSlice";
 import {unwrapResult} from "@reduxjs/toolkit";
 import {selectContributors} from "../contribution/contributorsSlice";
+import DownloadIcon from '@mui/icons-material/Download';
 
 
 export function End() {
@@ -57,6 +58,7 @@ export function End() {
                     <Button
                         variant="contained"
                         sx={buttonSx}
+                        startIcon={<DownloadIcon />}
                         disabled={pending}
                         onClick={() => {
                             dispatch(submitNotice({...notice, contributors})).then(unwrapResult).then((data) => {
