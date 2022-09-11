@@ -56,14 +56,14 @@ export function Notice() {
         }
     }
 
-    const [excludedValues, dispatchExcludedValues] = useReducer(excludedValuesReducer, initiallyExcludedValues);
+    const [, dispatchExcludedValues] = useReducer(excludedValuesReducer, initiallyExcludedValues);
 
 
     const handleSubmittedNoticeChange = (field) => {
         dispatch(updateField(field));
     };
 
-    const debouncedChangeHandler = useMemo(() => debounce(handleSubmittedNoticeChange, 1500), []);
+    const debouncedChangeHandler = useMemo(() => debounce(handleSubmittedNoticeChange, 1500), [handleSubmittedNoticeChange]);
 
     const handleUserInputChange = (field) => {
         setNotice({...notice, ...field});
@@ -92,7 +92,7 @@ export function Notice() {
         }).catch((error) => {
             console.log(error)
         });
-    }, [submittedNotice, dispatch])
+    }, [submittedNotice, dispatch, formIsEmpty])
 
     useEffect(() => {
         dispatch(fetchVocabularyById({vocabularyId: '04'}))
@@ -176,33 +176,31 @@ export function Notice() {
             }}
 
         />
-    }, [vocabularies, levelUpdateFlag])
+    }, [vocabularies, levelUpdateFlag, getVocabularyTerms])
 
     const statusText = useMemo(() => {
         const running = currentSuggestion?.status === 'running'
         let text = 'Irpia attend'
-        let color = 'teal'
         if (running) {
             text = `Irpia réfléchit ${currentSuggestion?.terminated} / ${currentSuggestion?.total}`
-            color = 'sky'
         }
         return (
-            <Slide direction="left" mountOnEnter unmountOnExit in={running} xs={6} sm={3} md={2} lg={1.2}><Grid
+            <Slide direction="left" mountOnEnter unmountOnExit in={running}><Grid
                 container
+                width={200}
                 direction="column" p={2}
                 justifyContent="end"
                 textAlign="center"
                 position="fixed"
                 sx={{
+                    p: (theme) => theme.spacing(4),
                     zIndex: 'tooltip',
                     backgroundColor: (theme) => lighten(theme.palette.secondary.light, 0.7),
                     borderRadius: "50%",
-                    border: 0.5,
-                    borderColor: (theme) => theme.palette.secondary.main,
 
                 }} top='30%' right='30%'>
                 <Grid item>
-                    <Typography fontSize='small' color="primary">
+                    <Typography fontSize='medium' color={theme.palette.secondary.main} fontWeight='bold'>
                         {text}
                     </Typography>
                 </Grid>
