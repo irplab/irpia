@@ -7,6 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {submitNotice} from "../notice/noticeSlice";
 import {unwrapResult} from "@reduxjs/toolkit";
 import {selectContributors} from "../contribution/contributorsSlice";
+import DownloadIcon from '@mui/icons-material/Download';
 
 
 export function End() {
@@ -57,6 +58,7 @@ export function End() {
                     <Button
                         variant="contained"
                         sx={buttonSx}
+                        startIcon={<DownloadIcon />}
                         disabled={pending}
                         onClick={() => {
                             dispatch(submitNotice({...notice, contributors})).then(unwrapResult).then((data) => {
@@ -89,11 +91,11 @@ export function End() {
             </Grid>
         </Grid>
             <Box width="100%" ml={-5} minWidth="120%" height={theme.spacing(2)} sx={{backgroundColor: "#F8FBFF"}}></Box>
-            <Grid container direction="row" mt={theme.spacing(3)}>
+            <Grid container direction="row" mt={theme.spacing(3)} sx={{backgroundColor: "#F8FBFF"}}>
                 <Grid item md={6} xs={12}>
                     <Grid container  direction='column'>
                         <Grid item>
-                            <Typography fontSize='1rem' sx={{fontWeight: "bold"}} textAlign="center" width="100%">Nouvelle
+                            <Typography fontSize='1rem' textAlign="center" width="100%">Nouvelle
                                 notice avec les mêmes
                                 contributeurs</Typography>
                         </Grid>
@@ -105,7 +107,7 @@ export function End() {
                 <Grid item md={6} xs={12} sx={{marginTop:{xs: theme.spacing(4), sm: 0}}}>
                     <Grid container direction='column'>
                         <Grid item>
-                            <Typography fontSize='1rem' sx={{fontWeight: "bold"}} textAlign="center" width="100%">Modifier
+                            <Typography fontSize='1rem' textAlign="center" width="100%">Modifier
                                 les
                                 contributeurs</Typography>
                         </Grid>
