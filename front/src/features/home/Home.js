@@ -15,13 +15,14 @@ export function Home() {
                     paddingTop: {xs: theme.spacing(8), sm: theme.spacing(8), lg: theme.spacing(8)}
                 }}>
                     <Grid item alignSelf='center' component={Box} sx={{display: {md: 'inline', xs: 'none'}}}>
-                        <img src={Character} height={200}/>
+                        <img src={Character} height={200} alt="Personnage IRPIA"/>
                     </Grid>
                     <Grid item alignSelf='center' component={Box}
                           sx={{mt: -4, mb: 2, display: {md: 'none', xs: 'inline'}}}>
-                        <img src={Banner} height={150} />
+                        <img src={Banner} height={150} alt="Bannière IPIA"/>
                     </Grid>
                     <Grid item><Typography variant='h2' color='secondary' sx={{
+                        lineHeight: 1.1,
                         fontSize: "3rem",
                         [theme.breakpoints.down("sm")]: {
                             fontSize: "2rem"
@@ -29,7 +30,7 @@ export function Home() {
                     }}>Prototype d'assistant intelligent pour la description de vos ressources
                         pédagogiques</Typography> </Grid>
                     <Grid item sx={{marginTop: theme.spacing(6)}}><Typography variant='subtitle2'
-                                                                              sx={{lineHeight: 1.2}}>
+                                                                              sx={{lineHeight: 1.4}}>
                         Vous souhaitez indexer une ressource pédagogique afin que vos utilisateurs la trouvent ? Essayez
                         l’assistant IRPIA ! <br/>En mobilisant des technologies d'assistance mues par l'intelligence
                         artificielle, IRPIA vous facilite la tâche.
@@ -38,7 +39,7 @@ export function Home() {
                 </Grid>
             </Grid>
             <Grid item sm={6} md={7} sx={{display: {md: 'block', sm: 'none', xs: 'none'}}}>
-                <img src={BgHome} width='100%'/>
+                <img src={BgHome} width='100%' alt="Fond de page"/>
             </Grid>
 
         </Grid>
