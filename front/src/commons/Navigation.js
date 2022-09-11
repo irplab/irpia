@@ -12,22 +12,15 @@ export const Navigation = () => {
         'about': {path: 'about', label: 'À propos'},
     };
     const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
     };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
     return (
         <>
             <SiteBanner theme={theme}/>
@@ -81,8 +74,12 @@ export const Navigation = () => {
                                 }}
                                 open={Boolean(anchorElNav)}
                                 onClose={handleCloseNavMenu}
+
                                 sx={{
                                     display: {xs: 'block', md: 'none'},
+                                    "& .MuiPaper-root": {
+                                        backgroundColor: theme.palette.primary.main,
+                                    }
                                 }}
                             >
                                 <div>
@@ -91,7 +88,7 @@ export const Navigation = () => {
                                             <NavLink style={{
                                                 textDecoration: 'none',
                                                 fontWeight: '300',
-                                                color: theme.palette.secondary.contrastText,
+                                                color: theme.palette.primary.contrastText,
                                                 marginLeft: theme.spacing(2)
                                             }} to={`/${pages[page].path}`}>{pages[page].label}</NavLink>
                                         </MenuItem>
