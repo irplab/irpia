@@ -34,12 +34,12 @@ export function ContributionEdition({contributorId, roles}) {
     const contributor = useSelector(state => selectContributorById(state, contributorId));
 
 
-    const handleDelete = useCallback((e, t) => {
+    const handleDelete = useCallback(() => {
         confirm({title: 'Confirmation', description: 'Voulez-vous supprimer cette contribution ?'})
             .then(() => {
                 dispatch(deleteContributorById({contributor}))
             });
-    }, [contributor]);
+    }, [contributor, confirm, dispatch]);
 
     const [openAutoComplete, setOpenAutoComplete] = useState(false);
     const [submittedName, setSubmittedName] = useState('');
@@ -74,7 +74,7 @@ export function ContributionEdition({contributorId, roles}) {
         setCustomSiren(contributor.customSiren);
         setContributorRole(contributor.contributorRole || roles[0][0]);
         updateContributorRoleLabel(roles, contributor.contributorRole);
-    }, [])
+    }, [contributor, roles])
 
     useEffect(() => {
         if (!customIsni && !selectedIsniInfo?.identifier) setCustomIsni(DEFAULT_ISNI)
@@ -96,7 +96,7 @@ export function ContributionEdition({contributorId, roles}) {
                 contributorRoleLabel: contributorRoleLabel
             }
         }))
-    }, [selectedSirenInfo, selectedIsniInfo, customIsni, customSiren, contributorEditorialBrand, contributorName, contributorPhoneNumber, contributorRole, contributorRoleLabel])
+    }, [selectedSirenInfo, selectedIsniInfo, customIsni, customSiren, contributorEditorialBrand, contributorName, contributorPhoneNumber, contributorRole, contributorRoleLabel, contributorId, dispatch])
 
     useEffect(() => {
         if (!submittedName) {
@@ -108,7 +108,7 @@ export function ContributionEdition({contributorId, roles}) {
         }).finally(() => {
             setAutocompleteIsLoading(false);
         })
-    }, [submittedNameChangeFlag])
+    }, [submittedNameChangeFlag, submittedName])
 
     const handleSubmittedNameChange = (name) => {
         setSubmittedName(name);
@@ -141,7 +141,7 @@ export function ContributionEdition({contributorId, roles}) {
     const roleChoosed = useCallback((value, roles) => {
         setContributorRole(value);
         updateContributorRoleLabel(roles, value);
-    }, [roles])
+    }, [])
 
     useEffect(() => {
             if (selectedIsniInfo && selectedSirenInfo) {
@@ -167,7 +167,7 @@ export function ContributionEdition({contributorId, roles}) {
             filtered = filtered.filter((option) => option.identifier === currentIsni || option.source !== ISNI_IDENTIFIER)
         }
         return filtered
-    }, [options, selectedSirenInfo, selectedIsniInfo])
+    }, [options, selectedSirenInfo, selectedIsniInfo, currentIsni, currentSiren])
 
     useEffect(() => {
         setAutocompleteSelectedOptions([selectedIsniInfo, selectedSirenInfo].filter(function (el) {
@@ -324,6 +324,7 @@ export function ContributionEdition({contributorId, roles}) {
                         <MuiPhoneNumber
                             variant="outlined"
                             sx={{
+                                ml: -1,
                                 svg: {
                                     height: "20px",
                                 },
