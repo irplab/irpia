@@ -1,11 +1,13 @@
 import React from 'react';
-import {Box, Grid, Typography, useTheme} from "@mui/material";
+import {Box, Button, Grid, Typography, useTheme} from "@mui/material";
+import {useNavigate} from "react-router-dom";
 import Character from '../../graphics/personnage.svg';
 import BgHome from "../../graphics/bg_home.svg";
 import Banner from "../../graphics/banner.svg";
 
 export function Home() {
     const theme = useTheme();
+    const navigate = useNavigate();
     return (
         <Grid container>
             <Grid item md={5} xs={12}>
@@ -36,6 +38,10 @@ export function Home() {
                         artificielle, IRPIA vous facilite la tâche.
 
                     </Typography></Grid>
+                    <Grid item my={4}>
+                        <Button variant="contained"
+                                onClick={() => navigate('/form/contribution')}>Commencez</Button>
+                    </Grid>
                 </Grid>
             </Grid>
             <Grid item sm={6} md={7} sx={{display: {md: 'block', sm: 'none', xs: 'none'}}}>
