@@ -340,6 +340,7 @@ export function ContributionEdition({contributorId, roles}) {
                         color="error" variant="text" onClick={handleDelete}>Supprimer</Button>
                 <Button size="small"
                         variant="contained"
+                        sx={{mr: 1}}
                         onClick={() => dispatch(updateContributorById({
                             contributor: {
                                 ...contributor,
