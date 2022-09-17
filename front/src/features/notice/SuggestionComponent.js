@@ -28,13 +28,14 @@ export function SuggestionComponent({field, suggestions, acceptCallback, rejectC
                 spacing={theme.spacing(1)}
             ><Box
                 sx={{
-                    paddingTop: 0.5,
-                    paddingBottom: 0,
+                    fontSize: "14px",
+                    paddingTop: 1,
+                    paddingBottom: 0.5,
                     px: 2,
                     color: '#ffffff',
-                    lineHeight: 2.2,
+                    lineHeight: 1,
                     backgroundColor: 'primary.main',
-                    margin: -0.5
+                    // margin: -0.5
                 }}
             >Suggestions Irpia</Box>
                 {suggestions.map((suggestionId) => {

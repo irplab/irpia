@@ -6,11 +6,9 @@ function DoneIcon() {
 }
 
 export function MultiSuggestionComponent({
-                                             label,
                                              field,
                                              suggestions,
                                              acceptCallback,
-                                             rejectCallback,
                                              titleProvider = x => x
                                          }) {
     const theme = useTheme();
@@ -18,7 +16,7 @@ export function MultiSuggestionComponent({
     const [selectedSuggestions, setSelectedSuggestions] = useState([])
 
 
-    if (!suggestions || suggestions.length===0) {
+    if (!suggestions || suggestions.length === 0) {
         return '';
     }
 
@@ -40,6 +38,7 @@ export function MultiSuggestionComponent({
                 listStyle: 'none',
                 p: 0.5,
                 m: 0,
+                mt: 2
             }}
             className="suggestions-container"
             justify="space-between"
@@ -49,9 +48,10 @@ export function MultiSuggestionComponent({
         >
             <Box
                 sx={{
-                    fontStyle: 'italic',
+
+                    fontSize: "14px",
                     width: '100%',
-                    paddingTop: 0.5,
+                    paddingTop: 0,
                     paddingBottom: 0,
                     px: 2,
                     color: '#ffffff',
@@ -87,9 +87,11 @@ export function MultiSuggestionComponent({
                   spacing={theme.spacing(2)}
                   justifyContent="end">
                 <Grid item><Button variant='outlined' disabled={selectedSuggestions.length === 0}
+                                   size="small"
                                    onClick={() => acceptCallback(selectedSuggestions)}>Accepter la
                     sélection</Button></Grid>
                 <Grid item><Button variant='contained'
+                                   size="small"
                                    disabled={suggestions.length === 0}
                                    onClick={() => acceptCallback(suggestions)}>Accepter tout</Button></Grid>
             </Grid>
