@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from "react";
+import {useTheme} from "@mui/material";
 
 const Checkmark = ({selected}) => (
     <div
@@ -49,6 +50,7 @@ const SelectedImage = ({
                            handleOnClick,
                            selected
                        }) => {
+    const theme = useTheme();
     const [isSelected, setIsSelected] = useState(selected);
     //calculate x,y scale
     const sx = (100 - (30 / image.width) * 100) / 100;
@@ -79,7 +81,7 @@ const SelectedImage = ({
                 {...image}
                 onClick={() => handleOnClick(image.src)}
             />
-            <style>{`.not-selected:hover{outline:2px solid #06befa}`}</style>
+            <style>{`.not-selected:hover{outline:2px solid ${theme.palette.primary.main}`}</style>
         </div>
     );
 };
