@@ -59,7 +59,7 @@ export function MultiSuggestionComponent({
                     backgroundColor: 'primary.main',
                     margin: -0.5
                 }}
-            >Suggestions Irpia</Box>
+            >Suggestions Irpia </Box>
             {suggestions?.map((suggestionId) => {
                 return (
                     <Grid component='li' item key={`suggestion-${field}-${suggestionId}`}>
