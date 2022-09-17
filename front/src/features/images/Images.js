@@ -73,6 +73,9 @@ export function Images() {
 
     return (<Grid container spacing={4} direction="column" sx={{height: "100%", flexWrap: "nowrap"}}>
         <Grid item>
+            <Typography color="primary" variant="h4" marginBottom={theme.spacing(3)}>Illustration</Typography>
+        </Grid>
+        <Grid item>
             <TextField
                 error={invalidInputImageUrl}
                 fullWidth

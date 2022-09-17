@@ -9,7 +9,7 @@ import {Images} from "../images/Images";
 
 
 const steps = ['contribution', 'notice', 'images', 'end'];
-const stepLabels = ['Contribution', 'Notice', 'Illustrations', 'Terminé !'];
+const stepLabels = ['Contributions', 'Description', 'Illustration', 'Terminé !'];
 
 function ContributionsInstructions(props) {
     return <>
@@ -72,7 +72,7 @@ export function Form() {
 
     const [navigationFromSteps, setNavigationFromSteps] = React.useState(false);
 
-    const [completed, setCompleted] = React.useState({});
+    const [completed, ] = React.useState({});
 
     const stepFromLocation = () => steps.indexOf(location.pathname.split("/").pop());
 
