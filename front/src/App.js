@@ -70,6 +70,7 @@ function App() {
                     <Route exact path="form/notice" element={<Form/>}/>
                     <Route exact path="form/images" element={<Form/>}/>
                     <Route exact path="form/end" element={<Form/>}/>
+                    <Route exact path="form" element={<Form/>}/>
                     <Route exact path="about" element={<About/>}/>
                 </Routes>
             </ConfirmProvider>

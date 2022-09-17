@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Button, Container, Grid, Step, StepButton, Stepper, Typography, useTheme} from "@mui/material";
 import BgFormLeft from '../../graphics/bg_form_left.svg';
 import {useLocation, useNavigate} from "react-router-dom";
@@ -72,9 +72,13 @@ export function Form() {
 
     const [navigationFromSteps, setNavigationFromSteps] = React.useState(false);
 
-    const [completed, ] = React.useState({});
+    const [completed,] = React.useState({});
 
-    const stepFromLocation = () => steps.indexOf(location.pathname.split("/").pop());
+    const stepFromLocation = useCallback(() => {
+        const lastPathSegment = location.pathname.split("/").pop();
+        if (lastPathSegment === 'form') return 0;
+        return steps.indexOf(lastPathSegment);
+    }, [location]);
 
     useEffect(() => {
         if (activeStep === stepFromLocation()) return;
@@ -84,9 +88,9 @@ export function Form() {
     useEffect(() => {
         if (!navigationFromSteps) return;
         if (activeStep === stepFromLocation()) return;
-        setNavigationFromSteps(false);
+        navigationFromSteps && setNavigationFromSteps(false);
         navigate(`/form/${steps[activeStep]}`);
-    }, [activeStep]);
+    }, [activeStep, navigate, navigationFromSteps, stepFromLocation]);
 
     const totalSteps = () => {
         return stepLabels.length;
@@ -131,7 +135,7 @@ export function Form() {
 
     return (<Grid container sx={{backgroundColor: "#F8FBFF", height: "100%"}}>
         <Grid item md={3} xs={12} sx={{display: {md: 'block', sm: 'none', xs: 'none'}, pt: theme.spacing(6)}}>
-            <img src={BgFormLeft} width='100%'/>
+            <img src={BgFormLeft} width='100%' alt=""/>
         </Grid>
         <Grid item md={6} xs={12}>
             {activeStep === 0 && <ContributionsInstructions theme={theme}/>}
