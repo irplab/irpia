@@ -40,7 +40,7 @@ export const Navigation = () => {
                                     <NavLink exact='true'
                                              style={{
                                                  textDecoration: 'none',
-                                                 fontWeight: '300',
+                                                 fontWeight: 'normal',
                                                  textAlign: 'center',
                                                  color: theme.palette.primary.contrastText,
                                                  marginLeft: theme.spacing(2)
