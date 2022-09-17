@@ -102,7 +102,8 @@ export function Images() {
                             vignette ou
                             retournez à l'étape 2 et entrez l'URL de votre ressource</Alert>}
                     {imageSuggestions && !selectedImageUrl && !inputImageUrl &&
-                        <Alert variant="outlined" severity="info" sx={{mb: theme.spacing(1)}}>
+                        <Alert variant="outlined" severity="info"
+                               sx={{mb: theme.spacing(1), borderColor: theme.palette.primary.main}}>
                             <AlertTitle>Veuillez choisir une vignette</AlertTitle>Sélectionnez une
                             vignette
                             parmi les
