@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
+import {useTheme} from "@mui/material";
 
-const Checkmark = ({selected}) => (
+const Checkmark = ({selected, theme}) => (
     <div
         style={
             selected
@@ -16,7 +17,7 @@ const Checkmark = ({selected}) => (
             <circle cx="12.5" cy="12.2" r="8.292"/>
         </svg>
         <svg
-            style={{fill: "#06befa", position: "absolute"}}
+            style={{fill: theme.palette.primary.main, position: "absolute"}}
             width="24px"
             height="24px"
         >
@@ -49,6 +50,7 @@ const SelectedImage = ({
                            handleOnClick,
                            selected
                        }) => {
+    const theme = useTheme();
     const [isSelected, setIsSelected] = useState(selected);
     //calculate x,y scale
     const sx = (100 - (30 / image.width) * 100) / 100;
@@ -70,7 +72,7 @@ const SelectedImage = ({
             style={{margin, height: image.height, width: image.width, ...cont}}
             className={!isSelected ? "not-selected" : ""}
         >
-            <Checkmark selected={!!isSelected}/>
+            <Checkmark selected={!!isSelected} theme={theme}/>
             <img
                 alt={image.title}
                 style={
@@ -79,7 +81,7 @@ const SelectedImage = ({
                 {...image}
                 onClick={() => handleOnClick(image.src)}
             />
-            <style>{`.not-selected:hover{outline:2px solid #06befa}`}</style>
+            <style>{`.not-selected:hover{outline:2px solid ${theme.palette.primary.main}`}</style>
         </div>
     );
 };

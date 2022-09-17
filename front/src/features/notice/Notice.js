@@ -9,16 +9,7 @@ import {fetchVocabularyById, selectVocabularies} from "./vocabulariesSlice";
 import {SuggestionComponent} from "./SuggestionComponent";
 import Character from '../../graphics/personnage.svg';
 import {
-    CardMedia,
-    Container,
-    FormControl,
-    FormHelperText,
-    Grid, IconButton,
-    lighten,
-    Slide,
-    TextField,
-    Typography,
-    useTheme
+    CardMedia, FormControl, FormHelperText, Grid, IconButton, lighten, Slide, TextField, Typography, useTheme
 } from "@mui/material";
 import DropdownTreeSelect from "react-dropdown-tree-select";
 import {MultiSuggestionComponent} from "./MultiSuggestionComponent";
@@ -59,11 +50,12 @@ export function Notice() {
     const [, dispatchExcludedValues] = useReducer(excludedValuesReducer, initiallyExcludedValues);
 
 
-    const handleSubmittedNoticeChange = (field) => {
-        dispatch(updateField(field));
-    };
-
-    const debouncedChangeHandler = useMemo(() => debounce(handleSubmittedNoticeChange, 1500), [handleSubmittedNoticeChange]);
+    const debouncedChangeHandler = useMemo(() => {
+        const handleSubmittedNoticeChange = (field) => {
+            dispatch(updateField(field));
+        };
+        return debounce(handleSubmittedNoticeChange, 1500);
+    }, [dispatch]);
 
     const handleUserInputChange = (field) => {
         setNotice({...notice, ...field});
@@ -184,49 +176,44 @@ export function Notice() {
         if (running) {
             text = `Irpia réfléchit ${currentSuggestion?.terminated} / ${currentSuggestion?.total}`
         }
-        return (
-            <Slide direction="left" mountOnEnter unmountOnExit in={running}><Grid
-                container
-                width={200}
-                direction="column" p={2}
-                justifyContent="end"
-                textAlign="center"
-                position="fixed"
-                sx={{
-                    p: (theme) => theme.spacing(4),
-                    zIndex: 'tooltip',
-                    backgroundColor: (theme) => lighten(theme.palette.secondary.light, 0.7),
-                    borderRadius: "50%",
+        return (<Slide direction="left" mountOnEnter unmountOnExit in={running}><Grid
+            container
+            width={200}
+            direction="column" p={2}
+            justifyContent="end"
+            textAlign="center"
+            position="fixed"
+            sx={{
+                p: (theme) => theme.spacing(4),
+                zIndex: 'tooltip',
+                backgroundColor: (theme) => lighten(theme.palette.secondary.light, 0.7),
+                borderRadius: "50%",
 
-                }} top='30%' right='30%'>
-                <Grid item>
-                    <Typography fontSize='medium' color={theme.palette.secondary.main} fontWeight='bold'>
-                        {text}
-                    </Typography>
+            }} top='30%' right='30%'>
+            <Grid item>
+                <Typography fontSize='medium' color={theme.palette.secondary.main} fontWeight='bold'>
+                    {text}
+                </Typography>
+            </Grid>
+            <Grid item>
+                <Grid container direction="row" alignItems="center" justifyContent="end">
+                    <Grid item sx={{alignContent: "center"}}
+                          display="flex"
+                          minHeight="80"
+                    >
+                        <CardMedia
+                            component="img"
+                            alt="IRPI logo"
+                            src={Character}
+                            sx={{
+                                width: 60, height: 100, borderRadius: '50%', objectFit: 'cover'
+                            }}
+                        /></Grid>
+                    <Grid item>
+                        <BouncingDotsLoader bouncing={running}/></Grid>
                 </Grid>
-                <Grid item>
-                    <Grid container direction="row" alignItems="center" justifyContent="end">
-                        <Grid item sx={{alignContent: "center"}}
-                              display="flex"
-                              minHeight="80"
-                        >
-                            <CardMedia
-                                component="img"
-                                alt="IRPI logo"
-                                src={Character}
-                                sx={{
-                                    width: 60,
-                                    height: 100,
-                                    borderRadius: '50%',
-                                    objectFit: 'cover'
-                                }
-                                }
-                            /></Grid>
-                        <Grid item>
-                            <BouncingDotsLoader bouncing={running}/></Grid>
-                    </Grid>
-                </Grid>
-            </Grid></Slide>)
+            </Grid>
+        </Grid></Slide>)
     }, [suggestions])
 
     const flatVocabularyMenuEntries = (vocId) => Object.keys(getVocabularyTerms(vocId)).map(v => {
@@ -235,8 +222,9 @@ export function Notice() {
 
     const sortmenuEntries = (a, b) => a.label.localeCompare(b.label);
 
-    return (<Container><Grid container sx={{marginTop: theme.spacing(5)}} direction='column'>
+    return (<Grid container direction='column'>
             {statusText}
+            <Typography color="primary" variant="h4" marginBottom={theme.spacing(3)}>Description</Typography>
             <form onSubmit={e => {
                 e.preventDefault();
             }}>
@@ -251,14 +239,12 @@ export function Notice() {
                     value={notice.url}
                     onChange={(e) => handleUserInputChange({url: e.target.value})}
                     InputProps={{
-                        endAdornment: (
-                            <IconButton
+                        endAdornment: (<IconButton
                                 sx={{visibility: notice.url ? "visible" : "hidden"}}
                                 onClick={() => handleUserInputChange({url: ''})}
                             >
                                 <ClearIcon/>
-                            </IconButton>
-                        ),
+                            </IconButton>),
                     }}
                 />
                 <TextField margin='normal' fullWidth id="grid-title"
@@ -269,14 +255,12 @@ export function Notice() {
                            placeholder="Titre de votre ressource"
                            onChange={(e) => handleUserInputChange({title: e.target.value})}
                            InputProps={{
-                               endAdornment: (
-                                   <IconButton
+                               endAdornment: (<IconButton
                                        sx={{visibility: notice.title ? "visible" : "hidden"}}
                                        onClick={() => handleUserInputChange({title: ''})}
                                    >
                                        <ClearIcon/>
-                                   </IconButton>
-                               ),
+                                   </IconButton>),
                            }}/>
                 {currentSuggestion && !notice.title && <SuggestionComponent
                     field='title'
@@ -290,14 +274,12 @@ export function Notice() {
                            value={notice.description}
                            onChange={(e) => handleUserInputChange({description: e.target.value})}
                            InputProps={{
-                               endAdornment: (
-                                   <IconButton
+                               endAdornment: (<IconButton
                                        sx={{visibility: notice.description ? "visible" : "hidden"}}
                                        onClick={() => handleUserInputChange({description: ''})}
                                    >
                                        <ClearIcon/>
-                                   </IconButton>
-                               ),
+                                   </IconButton>),
                            }}/>
                 {currentSuggestion && <SuggestionComponent
                     field='description'
@@ -399,8 +381,7 @@ export function Notice() {
                                     suggestions={currentSuggestion.suggestions.educationalResourceType?.filter((x) => x !== notice.domain && !isValueSelected('educationalResourceType', x))}
                                     titleProvider={id => getVocabularyTerms('10')[id]}
                                     rejectCallback={(value) => dispatchExcludedValues({
-                                        field: 'educationalResourceType',
-                                        value: value
+                                        field: 'educationalResourceType', value: value
                                     })}
                                     acceptCallback={(value) => handleUserSelectionChange({educationalResourceType: value})}
                                 />}
@@ -410,8 +391,5 @@ export function Notice() {
                 </FormControl>
 
             </form>
-        </Grid>
-        </Container>
-    )
-        ;
+        </Grid>);
 }
