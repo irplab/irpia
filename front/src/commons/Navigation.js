@@ -8,7 +8,7 @@ export const Navigation = () => {
     const theme = useTheme();
     const pages = {
         'home': {path: '', label: 'Accueil'},
-        'form': {path: 'form/contribution', label: 'Formulaire'},
+        'form': {path: 'form', label: 'Formulaire'},
         'about': {path: 'about', label: 'À propos'},
     };
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -37,7 +37,7 @@ export const Navigation = () => {
                                       flexGrow={0.2}
                                       textAlign='center'
                                       key={`${page}-xs`}>
-                                    <NavLink exact='true'
+                                    <NavLink exact='false'
                                              style={{
                                                  textDecoration: 'none',
                                                  fontWeight: 'normal',
