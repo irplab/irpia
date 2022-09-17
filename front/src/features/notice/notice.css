@@ -133,10 +133,12 @@ div.controls-container .tag {
     font-family: 'Material Symbols Outlined';
     font-size: 26px;
     content: "\E5C5";
+    margin-left: -26px;
 }
 
 .mdl-demo .dropdown .dropdown-trigger.arrow.top:after {
     font-family: 'Material Symbols Outlined';
     font-size: 26px;
     content: "\E5C7";
+    margin-left: -26px;
 }
