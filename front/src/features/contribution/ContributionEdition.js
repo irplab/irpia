@@ -5,8 +5,8 @@ import {
     Box, Button,
     Card, CardActions,
     CardContent,
-    Chip,
-    Grid, LinearProgress, MenuItem,
+    Chip, FormControl,
+    Grid, InputLabel, LinearProgress, MenuItem,
     Popper, Select,
     Stack,
     TextField,
@@ -26,6 +26,10 @@ const SIRENE_IDENTIFIER = "Sirène";
 const ISNI_IDENTIFIER = "ISNI";
 
 const DEFAULT_ISNI = "0000000000000000";
+
+const capitalizeFirstLetter = string => string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
+
+const DEFAULT_ROLE = "publisher";
 
 export function ContributionEdition({contributorId, roles}) {
     const theme = useTheme();
@@ -72,9 +76,13 @@ export function ContributionEdition({contributorId, roles}) {
         setSelectedIsniInfo(contributor.selectedIsniInfo);
         setCustomIsni(contributor.customIsni);
         setCustomSiren(contributor.customSiren);
-        setContributorRole(contributor.contributorRole || roles[0][0]);
+        setContributorRole(contributor.contributorRole || DEFAULT_ROLE);
         updateContributorRoleLabel(roles, contributor.contributorRole);
-    }, [roles])
+    }, [])
+
+    useEffect(() => {
+        updateContributorRoleLabel(roles, contributor.contributorRole);
+    }, [roles, contributor.contributorRole])
 
     useEffect(() => {
         if (!customIsni && !selectedIsniInfo?.identifier) setCustomIsni(DEFAULT_ISNI)
@@ -183,18 +191,22 @@ export function ContributionEdition({contributorId, roles}) {
             <CardContent>
                 <Grid container direction='column'>
                     <Grid item md={12} sx={{marginTop: theme.spacing(1)}}>
-                        <Select
-                            labelId="educational-resource-type-select-label"
-                            id="educational-resource-type-select"
-                            label='Type de ressource'
-                            value={contributorRole}
-                            onChange={(e) => roleChoosed(e.target.value, roles)}
-                        >
-                            {roles.map((entry) => (
-                                <MenuItem key={`option-educational-resource-type-${entry[0]}`}
-                                          value={entry[0]}>{entry[1]}</MenuItem>
-                            ))}
-                        </Select>
+                        <FormControl>
+                            <InputLabel id="contribution-type-select-label" shrink>Rôle</InputLabel>
+                            <Select
+                                notched
+                                labelId="contribution-type-select-label"
+                                id="contribution-type-select"
+                                label='Type'
+                                value={contributorRole}
+                                onChange={(e) => roleChoosed(e.target.value, roles)}
+                            >
+                                {roles.map((entry) => (
+                                    <MenuItem key={`option-contribution-type-${entry[0]}`}
+                                              value={entry[0]}>{entry[1]}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item md={12} sx={{marginTop: theme.spacing(5)}}>
                         <Autocomplete
@@ -253,7 +265,8 @@ export function ContributionEdition({contributorId, roles}) {
                                     </Stack>
                                 </Box>)}
                             sx={{width: "100%"}}
-                            renderInput={(params) => <TextField {...params} label="Éditeur"
+                            renderInput={(params) => <TextField {...params}
+                                                                label={capitalizeFirstLetter(contributor.contributorRoleLabel)}
                                                                 onChange={(e) => handleUserInputChange(e.target.value)}/>}
                         />
                     </Grid>
