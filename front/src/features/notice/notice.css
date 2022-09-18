@@ -49,6 +49,10 @@ div.controls-container .tag {
     background-color: white;
 }
 
+.mdl-demo div.dropdown div.dropdown-content li:hover {
+    background-color: #b521681a;
+}
+
 .mdl-demo .dropdown-trigger > span:after {
     font-size: 12px;
     color: #555;
