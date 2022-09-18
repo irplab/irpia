@@ -48,6 +48,21 @@ const EndInstructions = props => <Instructions theme={props.theme} title="Télé
     Vous pouvez aussi initier une nouvelle notice avec les mêmes contributeurs ou réinitialiser le formulaire.
 </Instructions>;
 
+function StepControl(props) {
+    return <Grid container spacing={1} alignItems="center"
+                 sx={{mt: {md: props.theme.spacing(5), xs: props.theme.spacing(3)}}}>
+        <Grid item xs={6} md={6} textAlign="end">
+
+            <Button disabled={props.prevDisabled} aria-label="Precédent" variant="outlined"
+                    onClick={props.onClick}>Precédent</Button>
+        </Grid>
+        <Grid item xs={6} md={6} textAlign="start">
+            <Button disabled={props.nextDisabled} aria-label="Suivant" variant="contained"
+                    onClick={props.onClick1}>Suivant</Button>
+        </Grid>
+    </Grid>;
+}
+
 export function Form() {
     const theme = useTheme();
     const navigate = useNavigate();
@@ -137,17 +152,8 @@ export function Form() {
                     </Step>
                 ))}
             </Stepper>
-            <Grid container spacing={1} alignItems='center' sx={{mt: {md: theme.spacing(5), xs: theme.spacing(3)}}}>
-                <Grid item xs={6} md={6} textAlign='end'>
-
-                    <Button disabled={isFirstStep()} aria-label="Precédent" variant='outlined'
-                            onClick={handleBack}>Precédent</Button>
-                </Grid>
-                <Grid item xs={6} md={6} textAlign='start'>
-                    <Button disabled={isLastStep()} aria-label="Suivant" variant='contained'
-                            onClick={handleNext}>Suivant</Button>
-                </Grid>
-            </Grid>
+            <StepControl theme={theme} prevDisabled={isFirstStep()} onClick={handleBack} nextDisabled={isLastStep()}
+                         onClick1={handleNext}/>
             <Grid item xs={12} textAlign='center' sx={{display: {xs: 'block', sm: 'block', md: 'none'}}}>
                 <Typography pt={theme.spacing(5)}
                             fontSize="small">Formulaire&nbsp;/&nbsp;{stepLabels[activeStep]}</Typography>
@@ -157,6 +163,8 @@ export function Form() {
                 {activeStep === 1 && <Notice/>}
                 {activeStep === 2 && <Images/>}
                 {activeStep === 3 && <End/>}
+                <StepControl theme={theme} prevDisabled={isFirstStep()} onClick={handleBack} nextDisabled={isLastStep()}
+                             onClick1={handleNext}/>
             </Container>
         </Grid>
         <Grid item md={3} xs={12} textAlign='center' sx={{display: {md: 'block', sm: 'none', xs: 'none'}}}>
