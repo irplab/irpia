@@ -29,6 +29,8 @@ const DEFAULT_ISNI = "0000000000000000";
 
 const capitalizeFirstLetter = string => string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
 
+const DEFAULT_ROLE = "publisher";
+
 export function ContributionEdition({contributorId, roles}) {
     const theme = useTheme();
     const dispatch = useDispatch();
@@ -74,9 +76,13 @@ export function ContributionEdition({contributorId, roles}) {
         setSelectedIsniInfo(contributor.selectedIsniInfo);
         setCustomIsni(contributor.customIsni);
         setCustomSiren(contributor.customSiren);
-        setContributorRole(contributor.contributorRole || roles[0][0]);
+        setContributorRole(contributor.contributorRole || DEFAULT_ROLE);
         updateContributorRoleLabel(roles, contributor.contributorRole);
-    }, [roles])
+    }, [])
+
+    useEffect(() => {
+        updateContributorRoleLabel(roles, contributor.contributorRole);
+    }, [roles, contributor.contributorRole])
 
     useEffect(() => {
         if (!customIsni && !selectedIsniInfo?.identifier) setCustomIsni(DEFAULT_ISNI)
