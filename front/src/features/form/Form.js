@@ -164,7 +164,7 @@ export function Form() {
                 </Grid>
             </Grid>
             <Grid item xs={12} textAlign='center' sx={{display: {xs: 'block', sm: 'block', md: 'none'}}}>
-                <Typography pt={theme.spacing(5)}>Formulaire/{stepLabels[activeStep]}</Typography>
+                <Typography pt={theme.spacing(5)} fontSize="small">Formulaire&nbsp;/&nbsp;{stepLabels[activeStep]}</Typography>
             </Grid>
             <Container sx={{backgroundColor: "#FFFFFF", mt: theme.spacing(5), p: theme.spacing(5)}}>
                 {activeStep === 0 && <Contributions/>}
@@ -174,7 +174,7 @@ export function Form() {
             </Container>
         </Grid>
         <Grid item md={3} xs={12} textAlign='center' sx={{display: {md: 'block', sm: 'none', xs: 'none'}}}>
-            <Typography pt={theme.spacing(5)}>Formulaire/{stepLabels[activeStep]}</Typography>
+            <Typography pt={theme.spacing(5)} fontSize={14}>Formulaire&nbsp;/&nbsp;{stepLabels[activeStep]}</Typography>
         </Grid>
 
     </Grid>);
