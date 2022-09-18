@@ -135,7 +135,7 @@ export function Images() {
             <><Grid item>
                 <Typography>Pour gagner du temps, vous pouvez sélectionner une des vignettes qu'IRPIA a découvertes sur
                     la
-                    page de votre ressource :</Typography>
+                    page de votre ressource&nbsp;:</Typography>
             </Grid>
                 <Grid item>
                     <Gallery direction="row"
