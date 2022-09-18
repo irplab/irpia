@@ -18,6 +18,8 @@ import {updateField} from "./noticeSlice";
 import BouncingDotsLoader from "../../commons/BouncingDotsLoader";
 import ClearIcon from "@mui/icons-material/Clear";
 
+const DEBOUNCE_DELAY = 800;
+
 export function Notice() {
     const theme = useTheme();
     const suggestions = useSelector(selectSuggestions);
@@ -54,7 +56,7 @@ export function Notice() {
         const handleSubmittedNoticeChange = (field) => {
             dispatch(updateField(field));
         };
-        return debounce(handleSubmittedNoticeChange, 1500);
+        return debounce(handleSubmittedNoticeChange, DEBOUNCE_DELAY);
     }, [dispatch]);
 
     const handleUserInputChange = (field) => {
