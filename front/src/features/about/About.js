@@ -15,11 +15,11 @@ export function About() {
                         sx={{mt: theme.spacing(5), mx: theme.spacing(4)}}>Outil d’indexation de ressources pédagogiques
                 intelligent et assisté</Typography>
             <Typography variant="subtitle2" fontWeight="bold" align="center"
-                        sx={{mt: theme.spacing(6), mx: theme.spacing(4)}}>Le
+                        sx={{mt: theme.spacing(6), mx: theme.spacing(8), lineHeight: 1.3}}>Le
                 Ministère de l’Éducation Nationale et de la Jeunesse est engagé dans des projets innovants dans le
                 domaine de la description des ressources pédagogiques depuis de nombreuses années. IRPIA est une preuve
                 de concept (POC ou proof of concept) qui propose un prototype d’outil d’indexation de ressources
-                pédagogiques intelligent et assisté..</Typography>
+                pédagogiques intelligent et assisté.</Typography>
             <Container sx={{backgroundColor: "#FFFFFF", mt: theme.spacing(5), p: theme.spacing(5)}}>
                 <Typography variant='h3' color="primary" my={theme.spacing(1)} fontSize={36}> À propos
                     d'IRPIA</Typography>
