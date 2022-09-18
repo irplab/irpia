@@ -133,7 +133,7 @@ export function Form() {
     };
 
 
-    return (<Grid container sx={{backgroundColor: "#F8FBFF", height: "100%"}}>
+    return (<Grid container sx={{backgroundColor: "#F8FBFF", height: "100%", paddingBottom: theme.spacing(15)}}>
         <Grid item md={3} xs={12} sx={{display: {md: 'block', sm: 'none', xs: 'none'}, pt: theme.spacing(6)}}>
             <img src={BgFormLeft} width='100%' alt=""/>
         </Grid>
