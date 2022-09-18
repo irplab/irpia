@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import {sendNotice} from "./noticeAPI";
+import {emptyNotice} from "./emptyNotice";
 
 
 export const submitNotice = createAsyncThunk(
@@ -17,13 +18,7 @@ export const submitNotice = createAsyncThunk(
 export const noticeSlice = createSlice({
     name: 'notice',
     initialState: {
-        value: {
-            title: '',
-            description: '',
-            url: '',
-            documentType: [],
-            educationalResourceType: [],
-        }
+        value: emptyNotice
     },
     reducers: {
         updateField: (state, action) => {
@@ -35,7 +30,7 @@ export const noticeSlice = createSlice({
         [submitNotice.pending](state) {
             state.pending = true;
         },
-        [submitNotice.fulfilled](state, action) {
+        [submitNotice.fulfilled](state) {
             state.pending = false;
         },
         [submitNotice.rejected](state, action) {
