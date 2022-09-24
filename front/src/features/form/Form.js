@@ -8,8 +8,8 @@ import {End} from "../end/End";
 import {Images} from "../images/Images";
 
 
-const steps = ['contribution', 'notice', 'images', 'end'];
-const stepLabels = ['Contributions', 'Description', 'Illustration', 'Terminé !'];
+const steps = ['notice', 'contribution', 'images', 'end'];
+const stepLabels = ['Description', 'Contributions', 'Illustration', 'Terminé !'];
 
 const Instructions = props => <>
     <Typography variant="h2" color="secondary" align="center" fontSize={42}
@@ -159,8 +159,8 @@ export function Form() {
                             fontSize="small">Formulaire&nbsp;/&nbsp;{stepLabels[activeStep]}</Typography>
             </Grid>
             <Container sx={{backgroundColor: "#FFFFFF", mt: theme.spacing(5), p: theme.spacing(5)}}>
-                {activeStep === 0 && <Contributions/>}
-                {activeStep === 1 && <Notice/>}
+                {activeStep === 0 && <Notice/>}
+                {activeStep === 1 && <Contributions/>}
                 {activeStep === 2 && <Images/>}
                 {activeStep === 3 && <End/>}
                 <StepControl theme={theme} prevDisabled={isFirstStep()} onClick={handleBack} nextDisabled={isLastStep()}
