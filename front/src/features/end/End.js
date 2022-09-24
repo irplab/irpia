@@ -100,7 +100,7 @@ export function End() {
                                 contributeurs</Typography>
                         </Grid>
                         <Grid item sx={{justifyContent: "center", display: "flex"}} mt={theme.spacing(2)}>
-                            <Button variant="outlined" onClick={() => navigate('/form/notice')}>Nouvelle notice</Button>
+                            <Button variant="outlined" onClick={() => navigate('/wizard/description')}>Nouvelle notice</Button>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -113,7 +113,7 @@ export function End() {
                         </Grid>
                         <Grid item sx={{justifyContent: "center", display: "flex"}} mt={theme.spacing(2)}>
                             <Button variant="outlined"
-                                    onClick={() => navigate('/form/contribution')}>Contributeurs</Button>
+                                    onClick={() => navigate('/wizard/contribution')}>Contributeurs</Button>
                         </Grid>
                     </Grid>
                 </Grid>

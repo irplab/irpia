@@ -8,7 +8,7 @@ export const Navigation = () => {
     const theme = useTheme();
     const pages = {
         'home': {path: '', label: 'Accueil'},
-        'form': {path: 'form', label: 'Formulaire'},
+        'form': {path: 'wizard', label: 'Assistant'},
         'about': {path: 'about', label: 'À propos'},
     };
     const [anchorElNav, setAnchorElNav] = React.useState(null);
