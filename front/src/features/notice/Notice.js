@@ -21,6 +21,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 const DEBOUNCE_DELAY = 800;
 
+const FIELDS_TRIGGERING_SUGGESTIONS = ["url", "title", "domain"]
+
 export function Notice() {
     const theme = useTheme();
     const suggestions = useSelector(selectSuggestions);
@@ -28,6 +30,7 @@ export function Notice() {
     const submittedNotice = useSelector((state) => state.notice.value);
     const displayedNotice = useSelector((state) => state.displayedNotice.value);
     const dispatch = useDispatch();
+    const [updatedFieldsForSuggestion, setUpdatedFieldsForSuggestion] = useState([]);
     const [suggestionId, setSuggestionId] = useState(undefined);
     const [displayedSggestionId, setDisplayedSuggestionId] = useState(undefined);
     const [pollingFlag, setPollingFlag] = useState(false);
@@ -52,9 +55,13 @@ export function Notice() {
 
     const [, dispatchExcludedValues] = useReducer(excludedValuesReducer, initiallyExcludedValues);
 
+    const fieldTriggersSuggestion = useCallback((field) => FIELDS_TRIGGERING_SUGGESTIONS.indexOf(field) >= 0, [])
 
     const debouncedChangeHandler = useMemo(() => {
         const handleSubmittedNoticeChange = (field) => {
+            Object.keys(field).forEach((key) => {
+                if (fieldTriggersSuggestion(key) && !updatedFieldsForSuggestion.includes(key)) setUpdatedFieldsForSuggestion(updatedFieldsForSuggestion.concat([key]))
+            })
             dispatch(updateField(field));
         };
         return debounce(handleSubmittedNoticeChange, DEBOUNCE_DELAY);
@@ -81,6 +88,10 @@ export function Notice() {
         if (formIsEmpty) {
             return;
         }
+        if (updatedFieldsForSuggestion.length === 0) {
+            return;
+        }
+        setUpdatedFieldsForSuggestion([])
         dispatch(initSuggestion(submittedNotice)).then(unwrapResult).then((data) => {
             setSuggestionId(data.id);
             data.status === "running" && setPollingFlag(!pollingFlag)
