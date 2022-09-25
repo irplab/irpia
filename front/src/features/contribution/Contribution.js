@@ -14,13 +14,17 @@ export function Contribution({contributorId}) {
     const contributor = useSelector(state => selectContributorById(state, contributorId))
 
     const handleDelete = useCallback(() => {
-        confirm({title: 'Confirmation', description: 'Voulez-vous supprimer cette contribution ?'})
+        confirm({
+            title: 'Confirmation',
+            description: 'Voulez-vous supprimer cette contribution ?',
+            cancellationText: 'Annuler'
+        })
             .then(() => {
                 dispatch(deleteContributorById({contributor}))
             });
     }, [contributor, confirm, dispatch]);
 
-    return (<Card sx={{marginTop: theme.spacing(2), bgcolor: theme.palette.primary.main}} >
+    return (<Card sx={{marginTop: theme.spacing(2), bgcolor: theme.palette.primary.main}}>
         <CardContent sx={{background: theme.palette.primary}}>
             <Typography sx={{fontSize: 14}} color={theme.palette.primary.contrastText} gutterBottom>
                 {contributor.contributorRoleLabel}
@@ -44,23 +48,27 @@ export function Contribution({contributorId}) {
             justifyContent: "flex-end"
         }}>
             <Button size="small" variant='text' color="error" onClick={handleDelete}
-                    sx={{color: theme.palette.primary.contrastText,
+                    sx={{
+                        color: theme.palette.primary.contrastText,
                         '&:hover': {
                             backgroundColor: theme.palette.primary.dark,
                             color: theme.palette.primary.contrastText,
-                        }}}>Supprimer</Button>
+                        }
+                    }}>Supprimer</Button>
             <Button size="small" variant='outlined'
-                    sx={{bgcolor: theme.palette.primary.contrastText,
+                    sx={{
+                        bgcolor: theme.palette.primary.contrastText,
                         '&:hover': {
                             backgroundColor: theme.palette.primary.dark,
                             color: theme.palette.primary.contrastText,
-                        },}}
+                        },
+                    }}
                     onClick={() => dispatch(updateContributorById({
-                contributor: {
-                    ...contributor,
-                    edited: true
-                }
-            }))}>Modifier</Button>
+                        contributor: {
+                            ...contributor,
+                            edited: true
+                        }
+                    }))}>Modifier</Button>
 
         </CardActions>
     </Card>);
