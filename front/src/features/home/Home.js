@@ -40,7 +40,7 @@ export function Home() {
                     </Typography></Grid>
                     <Grid item my={4}>
                         <Button variant="contained"
-                                onClick={() => navigate('/wizard/description')}>Commencez</Button>
+                                onClick={() => navigate('/wizard/description')}>Commencer</Button>
                     </Grid>
                 </Grid>
             </Grid>
