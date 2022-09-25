@@ -18,26 +18,24 @@ class Api::SireneClient
     #56.30Z débits de boissons
     #86.21Z généralistes
     sectorExclusions = ["47.73Z", "68.20B", "56.10A", "56.10B", "56.10C", "56.30Z", "86.21Z"]
-    formattedQuery = "#{query.split(/\s/).map {|word| "raisonSociale:#{word}*"}.join(' AND ')} AND -periode(#{sectorExclusions.map { |code| "activitePrincipaleUniteLegale:#{code}" }.join(' OR ')})"
-
-    response = connection.get SUGGESTION_PATH, { q: formattedQuery } do |request|
-      request.headers["Authorization"] = "Bearer #{token}"
-    end
-    if response.status == 403
-      Rails.logger.error("Access to Sirene API denied.")
-      return []
-    end
-    if response.status == 401
-      if first_try
-        generate_token
-        return get_suggestions(query: query, first_try: false)
-      else
-        Rails.logger.error("Unable to get data from sirene api with current credentials")
-        return []
+    formattedQuery = "#{query.split(/\s/).map { |word| "raisonSociale:#{word}*" }.join(' AND ')} AND -periode(#{sectorExclusions.map { |code| "activitePrincipaleUniteLegale:#{code}" }.join(' OR ')})"
+    begin
+      results = []
+      response = connection.get SUGGESTION_PATH, { q: formattedQuery } do |request|
+        request.headers["Authorization"] = "Bearer #{token}"
       end
+      results = convert(JSON.parse(response.body)["unitesLegales"])
+      results << { name: 'Aucun résultat Sirène', disabled: true, source: SOURCE_IDENTIFIER } if results.blank?
+    rescue Faraday::ConnectionFailed => e
+      Rails.logger.error e.message
+      results << { name: 'Service Sirène indisponible' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER }
+    rescue JSON::ParserError => e
+      Rails.logger.error e.message
+      results << { name: 'Réponse Sirène illisible' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER }
+    rescue StandardError => e
+      Rails.logger.error e.message
+      results << { name: 'Erreur inconnue Sirène' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER }
     end
-    results = convert(JSON.parse(response.body)["unitesLegales"])
-    results << { name: 'Aucun résultat Sirène', disabled: true, source: SOURCE_IDENTIFIER } if results.blank?
     results
   end
 
@@ -69,6 +67,8 @@ class Api::SireneClient
       c.use Faraday::Request::UrlEncoded
       c.use Faraday::Response::Logger
       c.adapter Faraday::Adapter::NetHttp
+      c.options.timeout = 10
+      c.response :raise_error
     end
   end
 end
