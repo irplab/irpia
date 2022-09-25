@@ -123,7 +123,8 @@ export function End() {
                                     onClick={() => {
                                         confirm({
                                             title: 'Réinitialisation',
-                                            description: 'Êtes-vous sûre de vouloir effacer toutes vos données ?'
+                                            description: 'Êtes-vous sûre de vouloir effacer toutes vos données ?',
+                                            cancellationText: 'Annuler'
                                         }).then(
                                             () => {
                                                 Promise.all(
