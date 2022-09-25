@@ -42,6 +42,7 @@ div.controls-container .tag {
 
 .mdl-demo div.dropdown {
     display: block;
+    margin-right: -16px;
 }
 
 .mdl-demo div.dropdown div.dropdown-content {
