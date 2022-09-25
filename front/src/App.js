@@ -66,11 +66,11 @@ function App() {
                 <Navigation/>
                 <Routes>
                     <Route index element={<Home/>}/>
-                    <Route exact path="form/contribution" element={<Form/>}/>
-                    <Route exact path="form/notice" element={<Form/>}/>
-                    <Route exact path="form/images" element={<Form/>}/>
-                    <Route exact path="form/end" element={<Form/>}/>
-                    <Route exact path="form" element={<Form/>}/>
+                    <Route exact path="wizard/description" element={<Form/>}/>
+                    <Route exact path="wizard/contributions" element={<Form/>}/>
+                    <Route exact path="wizard/thumbnail" element={<Form/>}/>
+                    <Route exact path="wizard/end" element={<Form/>}/>
+                    <Route exact path="wizard" element={<Form/>}/>
                     <Route exact path="about" element={<About/>}/>
                 </Routes>
             </ConfirmProvider>

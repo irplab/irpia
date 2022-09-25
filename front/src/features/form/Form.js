@@ -8,8 +8,8 @@ import {End} from "../end/End";
 import {Images} from "../images/Images";
 
 
-const steps = ['contribution', 'notice', 'images', 'end'];
-const stepLabels = ['Contributions', 'Description', 'Illustration', 'Terminé !'];
+const steps = ['description', 'contributions', 'thumbnail', 'end'];
+const stepLabels = ['Description', 'Contributions', 'Illustration', 'Terminé !'];
 
 const Instructions = props => <>
     <Typography variant="h2" color="secondary" align="center" fontSize={42}
@@ -76,7 +76,7 @@ export function Form() {
 
     const stepFromLocation = useCallback(() => {
         const lastPathSegment = location.pathname.split("/").pop();
-        if (lastPathSegment === 'form') return 0;
+        if (lastPathSegment === 'wizard') return 0;
         return steps.indexOf(lastPathSegment);
     }, [location]);
 
@@ -89,7 +89,7 @@ export function Form() {
         if (!navigationFromSteps) return;
         if (activeStep === stepFromLocation()) return;
         navigationFromSteps && setNavigationFromSteps(false);
-        navigate(`/form/${steps[activeStep]}`);
+        navigate(`/wizard/${steps[activeStep]}`);
     }, [activeStep, navigate, navigationFromSteps, stepFromLocation]);
 
     const totalSteps = () => {
@@ -159,8 +159,8 @@ export function Form() {
                             fontSize="small">Formulaire&nbsp;/&nbsp;{stepLabels[activeStep]}</Typography>
             </Grid>
             <Container sx={{backgroundColor: "#FFFFFF", mt: theme.spacing(5), p: theme.spacing(5)}}>
-                {activeStep === 0 && <Contributions/>}
-                {activeStep === 1 && <Notice/>}
+                {activeStep === 0 && <Notice/>}
+                {activeStep === 1 && <Contributions/>}
                 {activeStep === 2 && <Images/>}
                 {activeStep === 3 && <End/>}
                 <StepControl theme={theme} prevDisabled={isFirstStep()} onClick={handleBack} nextDisabled={isLastStep()}
@@ -168,7 +168,7 @@ export function Form() {
             </Container>
         </Grid>
         <Grid item md={3} xs={12} textAlign='center' sx={{display: {md: 'block', sm: 'none', xs: 'none'}}}>
-            <Typography pt={theme.spacing(5)} fontSize={14}>Formulaire&nbsp;/&nbsp;{stepLabels[activeStep]}</Typography>
+            <Typography pt={theme.spacing(5)} fontSize={14}>Assistant&nbsp;/&nbsp;{stepLabels[activeStep]}</Typography>
         </Grid>
 
     </Grid>);
