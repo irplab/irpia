@@ -83,6 +83,7 @@ export function MultiSuggestionComponent({
         </Grid>
             <Grid container direction='row'
                   paddingTop={2}
+                  paddingRight={2}
                   className="suggestions-buttons-container"
                   spacing={theme.spacing(2)}
                   justifyContent="end">
