@@ -96,7 +96,7 @@ export function End() {
             </Grid>
         </Grid>
             <Box width="100%" ml={-5} minWidth="120%" height={theme.spacing(2)} sx={{backgroundColor: "#F8FBFF"}}></Box>
-            <Grid container direction="row" mt={theme.spacing(3)} sx={{backgroundColor: "#F8FBFF"}}>
+            <Grid container direction="row" mt={theme.spacing(3)} >
                 <Grid item md={6} xs={12}>
                     <Grid container direction='column'>
                         <Grid item>
