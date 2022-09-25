@@ -262,10 +262,10 @@ export function ContributionEdition({contributorId, roles}) {
                                                 fontSize: "0.8rem", color: "gray", ml: theme.spacing(2), pt: 0.5
                                             }}>{option.type}</Typography>}
                                         </Stack>
-                                        <Typography variant='body2'
-                                                    sx={{
-                                                        fontSize: "0.8rem", color: "gray"
-                                                    }}>{option.identifier}</Typography>
+                                        {!option.disabled && <Typography variant='body2'
+                                                                         sx={{
+                                                                             fontSize: "0.8rem", color: "gray"
+                                                                         }}>{option.identifier}</Typography>}
                                     </Stack>
                                 </Box>)}
                             sx={{width: "100%"}}
