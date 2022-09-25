@@ -16,7 +16,7 @@ export function Home() {
                     paddingRight: {xs: theme.spacing(2), md: theme.spacing(4)},
                     paddingTop: {xs: theme.spacing(8), sm: theme.spacing(8), lg: theme.spacing(8)}
                 }}>
-                    <Grid item alignSelf='center' component={Box} sx={{display: {md: 'inline', xs: 'none'}}}>
+                    <Grid item alignSelf='center' component={Box} sx={{display: {md: 'inline', xs: 'none'}, marginBottom: theme.spacing(4)}}>
                         <img src={Character} height={200} alt="Personnage IRPIA"/>
                     </Grid>
                     <Grid item alignSelf='center' component={Box}
