@@ -15,13 +15,13 @@ class Api::BnfClient
       results << { name: 'Aucun résultat ISNI', disabled: true, source: SOURCE_IDENTIFIER } if results.blank?
     rescue Faraday::ConnectionFailed => e
       Rails.logger.error e.message
-      results << { name: 'Service BNF indisponible' + ' : ' + e.message, identifier: 0, source: SOURCE_IDENTIFIER } if results.blank?
+      results << { name: 'Service BNF indisponible' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER } if results.blank?
     rescue JSON::ParserError => e
       Rails.logger.error e.message
-      results << { name: 'Réponse BNF illisible' + ' : ' + e.message, identifier: 0, source: SOURCE_IDENTIFIER } if results.blank?
+      results << { name: 'Réponse BNF illisible' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER } if results.blank?
     rescue StandardError => e
       Rails.logger.error e.message
-      results << { name: 'Erreur inconnue BNF' + ' : ' + e.message, identifier: 0, source: SOURCE_IDENTIFIER } if results.blank?
+      results << { name: 'Erreur inconnue BNF' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER } if results.blank?
     end
     results.compact
   end
@@ -49,6 +49,8 @@ class Api::BnfClient
   def isni_sru_connexion
     Faraday.new(:url => BNF_SRU_HOST) { |conn|
       conn.adapter :net_http
+      conn.options.timeout = 10
+      conn.response :raise_error
     }
   end
 
