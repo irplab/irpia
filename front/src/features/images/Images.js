@@ -52,8 +52,12 @@ export function Images() {
     const imageRenderer = useCallback(({index, left, top, key, photo}) => {
         return <SelectedImage
             handleOnClick={(imageUrl) => {
-                setSelectedImageUrl(imageUrl);
-                setInputImageUrl(undefined);
+                if(selectedImageUrl===imageUrl) {
+                    setSelectedImageUrl(undefined);
+                } else {
+                    setSelectedImageUrl(imageUrl);
+                    setInputImageUrl(undefined);
+                }
             }}
             key={key}
             selected={key === selectedImageUrl}
@@ -84,30 +88,13 @@ export function Images() {
         })
     }, [imageSuggestions, gcd]);
 
-    return (<Grid container spacing={4} direction="column" sx={{height: "100%", flexWrap: "nowrap"}}>
+    return (<Grid container spacing={4} direction="column" sx={{height: "100%", flexWrap: "nowrap"}} >
         <Grid item>
             <Typography color="primary" variant="h4" marginBottom={theme.spacing(3)}>Illustration</Typography>
         </Grid>
-        <Grid item>
-            <TextField
-                error={invalidInputImageUrl}
-                fullWidth
-                id="image-url-field"
-                label="URL de votre vignette"
-                onChange={(e) => {
-                    const url = e.target.value;
-                    setInvalidInputImageUrl(url && !isValidUrl(url))
-                    setInputImageUrlError(false);
-                    setInputImageUrl(url);
-                    setSelectedImageUrl(undefined);
-                }}
-                value={notice.thumbnailUrl}
-                InputLabelProps={{shrink: !!notice.thumbnailUrl}}
-                helperText={invalidInputImageUrl ? "Veuillez vérifier votre URL" : (selectedImageUrl ? "URL de la vignette que vous avez sélectionnée" : (inputImageUrl ? "URL de votre vignette personnalisée" : "Veuillez saisir une URL valide commençant par http:// ou https://"))}
-            /></Grid>
         <Grid item sx={{flexWrap: "no-wrap"}}>
             <Grid container direction='row' spacing={4}>
-                <Grid item md={8} xs={12}>
+                <Grid item md={(inputImageUrl || selectedImageUrl)?8:12} xs={12}>
                     {!imageSuggestions && !selectedImageUrl && !inputImageUrl &&
                         <Alert severity="warning">
                             <AlertTitle>Pas de suggestion</AlertTitle>Vous n'avez aucune suggestion d'image. Saisissez
@@ -144,6 +131,24 @@ export function Images() {
                 </Paper></Grid>
             </Grid>
         </Grid>
+
+        <Grid item>
+            <TextField
+                error={invalidInputImageUrl}
+                fullWidth
+                id="image-url-field"
+                label="URL de votre vignette"
+                onChange={(e) => {
+                    const url = e.target.value;
+                    setInvalidInputImageUrl(url && !isValidUrl(url))
+                    setInputImageUrlError(false);
+                    setInputImageUrl(url);
+                    setSelectedImageUrl(undefined);
+                }}
+                value={notice.thumbnailUrl}
+                InputLabelProps={{shrink: !!notice.thumbnailUrl}}
+                helperText={invalidInputImageUrl ? "Veuillez vérifier votre URL" : (selectedImageUrl ? "URL de la vignette que vous avez sélectionnée" : (inputImageUrl ? "URL de votre vignette personnalisée" : "Veuillez saisir une URL valide commençant par http:// ou https://"))}
+            /></Grid>
         {imageSuggestions &&
             <><Grid item>
                 <Typography>Pour gagner du temps, vous pouvez sélectionner une des vignettes qu'IRPIA a découvertes sur
