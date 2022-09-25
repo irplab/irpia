@@ -4,15 +4,20 @@ import {useNavigate} from "react-router-dom";
 import {green} from '@mui/material/colors';
 import {useDispatch, useSelector} from "react-redux";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import {submitNotice} from "../notice/noticeSlice";
+import {resetNotice, submitNotice} from "../notice/noticeSlice";
 import {unwrapResult} from "@reduxjs/toolkit";
-import {selectContributors} from "../contribution/contributorsSlice";
+import {resetContributors, selectContributors} from "../contribution/contributorsSlice";
 import DownloadIcon from '@mui/icons-material/Download';
+import {resetDisplayedNotice} from "../notice/displayedNoticeSlice";
+import {resetSuggestions} from "../notice/suggestionsSlice";
+import {Clear, RestartAlt} from "@mui/icons-material";
+import {useConfirm} from "material-ui-confirm";
 
 
 export function End() {
     const theme = useTheme();
     const dispatch = useDispatch();
+    const confirm = useConfirm();
 
     const notice = useSelector((state) => state.notice.value)
     const contributors = useSelector(state => selectContributors(state))
@@ -58,7 +63,7 @@ export function End() {
                     <Button
                         variant="contained"
                         sx={buttonSx}
-                        startIcon={<DownloadIcon />}
+                        startIcon={<DownloadIcon/>}
                         disabled={pending}
                         onClick={() => {
                             dispatch(submitNotice({...notice, contributors})).then(unwrapResult).then((data) => {
@@ -93,27 +98,43 @@ export function End() {
             <Box width="100%" ml={-5} minWidth="120%" height={theme.spacing(2)} sx={{backgroundColor: "#F8FBFF"}}></Box>
             <Grid container direction="row" mt={theme.spacing(3)} sx={{backgroundColor: "#F8FBFF"}}>
                 <Grid item md={6} xs={12}>
-                    <Grid container  direction='column'>
+                    <Grid container direction='column'>
                         <Grid item>
-                            <Typography fontSize='1rem' textAlign="center" width="100%">Nouvelle
-                                notice avec les mêmes
-                                contributeurs</Typography>
+                            <Typography fontSize='1rem' textAlign="center" width="100%">Reprendre au début sans remise à
+                                zero</Typography>
                         </Grid>
                         <Grid item sx={{justifyContent: "center", display: "flex"}} mt={theme.spacing(2)}>
-                            <Button variant="outlined" onClick={() => navigate('/wizard/description')}>Nouvelle notice</Button>
+                            <Button
+                                startIcon={<RestartAlt/>}
+                                variant="outlined" onClick={() => navigate('/wizard/description')}>Nouvelle
+                                notice</Button>
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item md={6} xs={12} sx={{marginTop:{xs: theme.spacing(4), sm: 0}}}>
+                <Grid item md={6} xs={12} sx={{marginTop: {xs: theme.spacing(4), sm: 0}}}>
                     <Grid container direction='column'>
                         <Grid item>
-                            <Typography fontSize='1rem' textAlign="center" width="100%">Modifier
-                                les
-                                contributeurs</Typography>
+                            <Typography fontSize='1rem' textAlign="center" width="100%">Nouvelle notice avec remize à
+                                zéro</Typography>
                         </Grid>
                         <Grid item sx={{justifyContent: "center", display: "flex"}} mt={theme.spacing(2)}>
                             <Button variant="outlined"
-                                    onClick={() => navigate('/wizard/contribution')}>Contributeurs</Button>
+                                    startIcon={<Clear/>}
+                                    onClick={() => {
+                                        confirm({
+                                            title: 'Réinitialisation',
+                                            description: 'Êtes-vous sûre de vouloir effacer toutes vos données ?'
+                                        }).then(
+                                            () => {
+                                                Promise.all(
+                                                    [dispatch(resetContributors()),
+                                                        dispatch(resetNotice()),
+                                                        dispatch(resetDisplayedNotice()),
+                                                        dispatch(resetSuggestions())]
+                                                ).then(() => navigate('/wizard/description'));
+                                            }
+                                        )
+                                    }}>Remize à zero</Button>
                         </Grid>
                     </Grid>
                 </Grid>

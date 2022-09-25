@@ -31,7 +31,7 @@ class Api::V1::SuggestionsController < ApplicationController
   end
 
   def permitted_params
-    params.require(:notice).permit(:title, :url, { domain: [] }, { level: [] })
+    params.require(:notice).permit(:title, :url, :description, :document_type_id, :document_type_label, :educational_resource_type_id, :educational_resource_type_label, { domain: [] }, { level: [] })
   end
 
 end

@@ -11,10 +11,15 @@ export const displayedNoticeSlice = createSlice({
         updateDisplayedField: (state, action) => {
             state.value = {...state.value, ...action.payload}
         },
+        resetDisplayedNotice: () => {
+            return {
+                value: emptyNotice
+            }
+        },
     },
 })
 
 
-export const {updateDisplayedField} = displayedNoticeSlice.actions
+export const {updateDisplayedField, resetDisplayedNotice} = displayedNoticeSlice.actions
 
 export default displayedNoticeSlice.reducer

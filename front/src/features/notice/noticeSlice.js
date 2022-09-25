@@ -24,6 +24,11 @@ export const noticeSlice = createSlice({
         updateField: (state, action) => {
             state.value = {...state.value, ...action.payload}
         },
+        resetNotice: () => {
+            return {
+                value: emptyNotice
+            }
+        },
     },
 
     extraReducers: {
@@ -41,6 +46,6 @@ export const noticeSlice = createSlice({
 })
 
 
-export const {updateField} = noticeSlice.actions
+export const {updateField, resetNotice} = noticeSlice.actions
 
 export default noticeSlice.reducer

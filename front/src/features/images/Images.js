@@ -30,9 +30,24 @@ export function Images() {
     };
 
     useEffect(() => {
-        if (!inputImageUrl && !selectedImageUrl) return;
-        dispatch(updateField({thumbnailUrl: inputImageUrl || selectedImageUrl}));
+        if (inputImageUrl) {
+            dispatch(updateField({thumbnailUrl: inputImageUrl, thumbnailSource: 'input'}));
+        }
+        if (selectedImageUrl) {
+            dispatch(updateField({thumbnailUrl: selectedImageUrl, thumbnailSource: 'selection'}));
+        }
     }, [selectedImageUrl, inputImageUrl, dispatch])
+
+
+    useEffect(() => {
+        if (inputImageUrl || selectedImageUrl) return;
+        if (!notice.thumbnailUrl) return;
+        if (notice.thumbnailSource === 'input') {
+            setInputImageUrl(notice.thumbnailUrl);
+        } else {
+            setSelectedImageUrl(notice.thumbnailUrl);
+        }
+    }, [])
 
     const imageRenderer = useCallback(({index, left, top, key, photo}) => {
         return <SelectedImage
@@ -68,8 +83,6 @@ export function Images() {
             return suggestion;
         })
     }, [imageSuggestions, gcd]);
-
-    useEffect(() => console.log(imageSuggestions), [imageSuggestions])
 
     return (<Grid container spacing={4} direction="column" sx={{height: "100%", flexWrap: "nowrap"}}>
         <Grid item>

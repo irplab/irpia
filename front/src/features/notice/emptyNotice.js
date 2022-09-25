@@ -8,4 +8,6 @@ export const emptyNotice = {
     documentTypeLabel: [],
     educationalResourceTypeId: [],
     educationalResourceTypeLabel: [],
+    thumbnailUrl: '',
+    thumbnailSource: undefined
 }
