@@ -9,7 +9,7 @@ import {fetchVocabularyById, selectVocabularies} from "./vocabulariesSlice";
 import {SuggestionComponent} from "./SuggestionComponent";
 import Character from '../../graphics/personnage.svg';
 import {
-    CardMedia, FormControl, FormHelperText, Grid, IconButton, lighten, Slide, TextField, Typography, useTheme
+    CardMedia, Divider, FormControl, FormHelperText, Grid, IconButton, lighten, Slide, TextField, Typography, useTheme
 } from "@mui/material";
 import DropdownTreeSelect from "react-dropdown-tree-select";
 import {MultiSuggestionComponent} from "./MultiSuggestionComponent";
@@ -364,7 +364,12 @@ export function Notice() {
 
                         />
                         <FormHelperText>Nature générique de la ressource</FormHelperText>
-                    </Grid> <Grid item>
+                    </Grid><Divider sx={{
+                        marginY: theme.spacing(4),
+                        marginX: -1,
+                        borderColor: theme.palette.primary.main,
+                        borderBottomWidth: 0.5
+                    }}/> <Grid item>
                         <DropdownTreeSelect
                             sx={{width: "100%"}}
                             data={markSelected(flatVocabularyMenuEntries('10-flat').sort(sortmenuEntries), 'educationalResourceTypeId')}
@@ -387,7 +392,8 @@ export function Notice() {
                             }}
 
                         />
-                        <FormHelperText>Nature permettant de caractériser la ressource dans son contexte pédagogique</FormHelperText>
+                        <FormHelperText>Nature permettant de caractériser la ressource dans son contexte
+                            pédagogique</FormHelperText>
                     </Grid> <Grid item>
                         {currentSuggestion && currentSuggestion.suggestions?.educationalResourceType &&
                             <SuggestionComponent
