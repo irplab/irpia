@@ -363,7 +363,7 @@ export function Notice() {
                             }}
 
                         />
-                        <FormHelperText>Lorem ipsum expliquer le sens de cette typologie</FormHelperText>
+                        <FormHelperText>Nature générique de la ressource</FormHelperText>
                     </Grid> <Grid item>
                         <DropdownTreeSelect
                             sx={{width: "100%"}}
@@ -387,7 +387,7 @@ export function Notice() {
                             }}
 
                         />
-                        <FormHelperText>Lorem ipsum expliquer le sens de cette typologie</FormHelperText>
+                        <FormHelperText>Nature permettant de caractériser la ressource dans son contexte pédagogique</FormHelperText>
                     </Grid> <Grid item>
                         {currentSuggestion && currentSuggestion.suggestions?.educationalResourceType &&
                             <SuggestionComponent
