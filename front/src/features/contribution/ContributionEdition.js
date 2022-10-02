@@ -245,7 +245,7 @@ export function ContributionEdition({contributorId, roles}) {
                                     return <Chip variant="outlined" label={label} {...getTagProps({index})} />
                                 })
                             }
-
+                            freeSolo
                             loadingText={<><i>Recherche en cours</i><LinearProgress/></>}
                             onChange={optionChoosed}
                             multiple
@@ -271,7 +271,10 @@ export function ContributionEdition({contributorId, roles}) {
                             sx={{width: "100%"}}
                             renderInput={(params) => <TextField {...params}
                                                                 label={capitalizeFirstLetter(contributor.contributorRoleLabel)}
-                                                                onChange={(e) => handleUserInputChange(e.target.value)}/>}
+                                                                onChange={(e) => {
+                                                                     currentSiren === '' && setContributorName(e.target.value)
+                                                                    handleUserInputChange(e.target.value);
+                                                                }}/>}
                         />
                     </Grid>
                     <Grid item md={12} sx={{marginTop: theme.spacing(3)}}>
