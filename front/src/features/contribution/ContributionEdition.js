@@ -245,7 +245,7 @@ export function ContributionEdition({contributorId, roles}) {
                                     return <Chip variant="outlined" label={label} {...getTagProps({index})} />
                                 })
                             }
-
+                            freeSolo
                             loadingText={<><i>Recherche en cours</i><LinearProgress/></>}
                             onChange={optionChoosed}
                             multiple
