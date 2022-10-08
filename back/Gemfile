@@ -42,6 +42,8 @@ gem 'capistrano-passenger', '~> 0.2.1'
 gem 'capistrano-rbenv', '~> 2.2'
 gem 'capistrano-dotenv', '~> 0.0.5'
 
+gem 'net-ssh', '>=7.0.0'
+
 gem 'sidekiq', '~> 6.4'
 gem 'sidekiq-status', '~> 2.1'
 
