@@ -14,7 +14,7 @@ export function About() {
             <Typography variant="h2" color="secondary" align="center" fontSize={42}
                         sx={{mt: theme.spacing(5), mx: theme.spacing(4)}}>Outil d’indexation de ressources pédagogiques
                 intelligent et assisté</Typography>
-            <Typography variant="subtitle2" fontWeight="bold" align="center"
+            <Typography variant="subtitle2" fontWeight="normal" align="center"
                         sx={{mt: theme.spacing(6), mx: theme.spacing(8), lineHeight: 1.3}}>Le
                 Ministère de l’Éducation Nationale et de la Jeunesse est engagé dans des projets innovants dans le
                 domaine de la description des ressources pédagogiques depuis de nombreuses années. IRPIA est une preuve
