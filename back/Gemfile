@@ -43,6 +43,8 @@ gem 'capistrano-rbenv', '~> 2.2'
 gem 'capistrano-dotenv', '~> 0.0.5'
 
 gem 'net-ssh', '>=7.0.0'
+gem 'ed25519', '>= 1.2', '< 2.0'
+gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 
 gem 'sidekiq', '~> 6.4'
 gem 'sidekiq-status', '~> 2.1'
