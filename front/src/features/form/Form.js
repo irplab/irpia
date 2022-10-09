@@ -138,8 +138,8 @@ export function Form() {
             <img src={BgFormLeft} width='100%' alt=""/>
         </Grid>
         <Grid item md={6} xs={12} mt={8}>
-            {activeStep === 0 && <ContributionsInstructions theme={theme}/>}
-            {activeStep === 1 && <NoticeInstructions theme={theme}/>}
+            {activeStep === 0 && <NoticeInstructions theme={theme}/>}
+            {activeStep === 1 && <ContributionsInstructions theme={theme}/>}
             {activeStep === 2 && <ImagesInstructions theme={theme}/>}
             {activeStep === 3 && <EndInstructions theme={theme}/>}
             <Stepper activeStep={activeStep} alternativeLabel
