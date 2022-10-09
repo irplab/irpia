@@ -320,7 +320,7 @@ export function ContributionEdition({contributorId, roles}) {
                     </Grid>
 
                     <Grid item md={12} sx={{marginTop: theme.spacing(3)}}>
-                        <TextField id="contributor-name" label="Nom éditeur" value={contributorName}
+                        <TextField id="contributor-name" label={`Nom ${contributor.contributorRoleLabel}`} value={contributorName}
                                    variant="outlined"
                                    fullWidth
                                    required
