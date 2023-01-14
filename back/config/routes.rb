@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :suggestions
       resources :notice, only: :create
+      resources :image, only: :create
       resources :contributors, only: :create
       resources :vocabularies, only: :show
     end
