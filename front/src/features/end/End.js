@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {Box, Button, CircularProgress, Divider, Grid, Icon, Typography, useTheme} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {green} from '@mui/material/colors';
@@ -8,17 +8,19 @@ import {resetNotice, submitNotice} from "../notice/noticeSlice";
 import {unwrapResult} from "@reduxjs/toolkit";
 import {resetContributors, selectContributors} from "../contribution/contributorsSlice";
 import DownloadIcon from '@mui/icons-material/Download';
+import PrintIcon from '@mui/icons-material/Print';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import {resetDisplayedNotice} from "../notice/displayedNoticeSlice";
 import {resetSuggestions} from "../notice/suggestionsSlice";
 import {Clear, RestartAlt} from "@mui/icons-material";
 import {useConfirm} from "material-ui-confirm";
 
 import FileSaver from "file-saver";
-import Image from "mui-image";
 import {apiV1} from "../../api/api";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import {capitalizeFirstLetter} from "../../commons/utils";
+import ScolomfrDocument from "./ScolomfrDocument";
+import ReactToPrint, {useReactToPrint} from 'react-to-print';
 
 export function End() {
     const theme = useTheme();
@@ -30,31 +32,26 @@ export function End() {
     const [success, setSuccess] = React.useState(false);
     const [base64Image, setBase64Image] = React.useState(null);
     const [base64Type, setBase64Type] = React.useState(false);
+    const [levelValues, setLevelValues] = React.useState([]);
+    const [domainValues, setDomainValues] = React.useState([]);
 
-    const [width, setWidth] = useState(0)
-    const [height, setHeight] = useState(0)
-    const useResize = (myRef) => {
+    const printNoticeRef = useRef()
+    const handlePrint = useReactToPrint({
+        content: () => printNoticeRef.current,
+    });
 
-        const handleResize = useCallback(() => {
-            setWidth(myRef.current.offsetWidth)
-            setHeight(myRef.current.offsetHeight)
-        }, [myRef])
+    const webScolomFrDocument = useMemo(() => <ScolomfrDocument notice={notice}
+                                                                base64Image={base64Image}
+                                                                base64Type={base64Type}
+                                                                levelValues={levelValues}
+                                                                domainValues={domainValues}/>, [notice, base64Type, base64Image, levelValues, domainValues])
 
-        useEffect(() => {
-            window.addEventListener('load', handleResize)
-            window.addEventListener('resize', handleResize)
-            handleResize();
-
-            return () => {
-                window.removeEventListener('load', handleResize)
-                window.removeEventListener('resize', handleResize)
-            }
-        }, [myRef, handleResize, notice])
-
-    }
-
-    const componentRef = useRef()
-    useResize(componentRef)
+    const printScolomfrDocument = useMemo(() => <ScolomfrDocument printMode notice={notice}
+                                                                  base64Image={base64Image}
+                                                                  base64Type={base64Type}
+                                                                  levelValues={levelValues}
+                                                                  domainValues={domainValues}
+                                                                  reference={printNoticeRef}/>, [notice, base64Type, base64Image, levelValues, domainValues])
 
 
     const buttonSx = {
@@ -74,6 +71,14 @@ export function End() {
         setBase64Type(response.data.type)
     }, [notice])
 
+
+    useEffect(async () => {
+        // if (!notice.thumbnailUrl) return;
+        const response = await apiV1.post(`/concepts`, {values: {domain: notice.domain, level: notice.level}})
+        if (response.data['domain']) setDomainValues(Object.values(response.data['domain']))
+        if (response.data['level']) setLevelValues(Object.values(response.data['level']))
+    }, [notice])
+
     return (
         <><Grid container direction="column" pb={theme.spacing(2)}>
 
@@ -88,7 +93,7 @@ export function End() {
                     ma notice ScoLomfr</Typography></Grid>
             <Grid item sx={{justifyContent: "center", display: "flex"}} mt={theme.spacing(1)}>
                 <Grid container direction="row">
-                    <Grid item md={6}>
+                    <Grid item md={4}>
                         <Box sx={{m: 1, mr: 4, position: 'relative'}} textAlign="right">
                             <Button
                                 variant="contained"
@@ -126,96 +131,55 @@ export function End() {
                             )}
                         </Box>
                     </Grid>
-                    <Grid item md={6}
+                    <Grid item md={4}
                           alignItems="center">
                         <Box sx={{m: 1, ml: 4, position: 'relative'}}>
                             <Button
                                 variant="contained"
                                 sx={buttonSx}
-                                startIcon={<DownloadIcon/>}
+                                startIcon={<PictureAsPdfIcon/>}
                                 disabled={pending}
                                 onClick={async () => {
-                                    console.log(width, height, 200,  height * 200 /width)
-                                    html2canvas(document.querySelector('#notice-display')
-                                    ).then(canvas => {
+                                    printNoticeRef.current.style.display = "block"
+                                    const w = printNoticeRef.current.offsetWidth
+                                    const h = printNoticeRef.current.offsetHeight
+                                    console.log(w, h, 200, h * 200 / w)
+                                    html2canvas(document.querySelector('#notice-print')).then(canvas => {
                                         const pdf = new jsPDF('p', 'mm', 'a4');
-                                        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, height * 210 /width);
+                                        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, h * 210 / w);
                                         pdf.save('report.pdf');
+                                        printNoticeRef.current.style.display = "none"
                                     });
                                 }}
                             >
-                                Mon résumé en PDF
+                                Mon résumé en PDF (test)
                             </Button>
-
+                        </Box>
+                    </Grid>
+                    <Grid item md={4}
+                          alignItems="center">
+                        <Box sx={{m: 1, ml: 4, position: 'relative'}}>
+                            <Button
+                                variant="contained"
+                                sx={buttonSx}
+                                startIcon={<PrintIcon/>}
+                                endIcon={<PictureAsPdfIcon/>}
+                                disabled={pending}
+                                onClick={() => {
+                                    printNoticeRef.current.style.display = "block"
+                                    handlePrint()
+                                    printNoticeRef.current.style.display = "none"
+                                }}
+                            >
+                                Imprimer mon résumé sur papier ou PDF
+                            </Button>
                         </Box>
                     </Grid>
                 </Grid>
             </Grid>
             <Divider sx={{paddingX: 0, marginBottom: 2}} color={"black"}/>
-            <Grid container direction="column" spacing={2} id="notice-display" ref={componentRef}>
-                <Grid item>
-                    <Grid container direction="row" spacing={2}>
-                        <Grid item md={3}><Image showLoading={false}
-                                                 src={`data:${base64Type};base64,${base64Image}`}/></Grid>
-                        <Grid item md={9}>
-                            <Grid container direction="column">
-                                <Grid item md={12}>
-                                    <Typography component="h3"
-                                                variant="h6">{capitalizeFirstLetter(notice.educationalResourceTypeLabel.join(", "))}</Typography>
-                                    <Typography component="h2" color="primary" variant="h4">{notice.title}</Typography>
-                                    <Typography>{notice.url}</Typography>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Grid component={Box} item width="100%" m={0} p={theme.spacing(1)} pt={0} mt={2}
-                      sx={{
-                          backgroundColor: theme.palette.primary.main,
-                          color: theme.palette.primary.contrastText
-                      }}><Typography component="h3"
-                                     variant="h5">Présentation</Typography></Grid>
-                <Grid component={Box} item width="100%" m={0} p={theme.spacing(1)} pt={0} mt={2}
-                      sx={{
-                          color: theme.palette.secondary.light
-                      }}><Typography component="h4"
-                                     variant="h6">Informations
-                    pratiques</Typography></Grid>
-                {notice.educationalResourceTypeLabel &&
-                    <Grid component={Box} item width="100%" m={0} p={theme.spacing(1)} pt={0} mt={2}>
-                        <Grid container direction="row" mt={0}>
-
-                            <Grid item component={Box} md={2} xs={12}>
-                                <Typography fullWidth component="p" sx={{
-                                    p: theme.spacing(1),
-                                    display: 'inline',
-                                    backgroundColor: theme.palette.secondary.light
-                                }}>Type</Typography>
-                            </Grid>
-                            <Grid item component={Box} md={10} xs={12}>
-                                <Typography component="p"
-                                            variant="p">{capitalizeFirstLetter(notice.educationalResourceTypeLabel.join(", "))}</Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>}
-                {notice.educationalResourceTypeLabel &&
-                    <Grid component={Box} item width="100%" m={0} p={theme.spacing(1)} pt={0} mt={0}>
-                        <Grid container direction="row" mt={0}>
-
-                            <Grid item component={Box} md={2} xs={12}>
-                                <Typography fullWidth component="p" sx={{
-                                    p: theme.spacing(1),
-                                    display: 'inline',
-                                    backgroundColor: theme.palette.secondary.light
-                                }}>Contenu</Typography>
-                            </Grid>
-                            <Grid item component={Box} md={10} xs={12}>
-                                <Typography component="p"
-                                            variant="p">{capitalizeFirstLetter(notice.documentTypeLabel.join(", "))}</Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>}
-            </Grid>
+            {webScolomFrDocument}
+            {printScolomfrDocument}
         </Grid>
             <Box width="100%" ml={-5} minWidth="120%" height={theme.spacing(2)} sx={{backgroundColor: "#F8FBFF"}}></Box>
             <Grid container direction="row" mt={theme.spacing(3)}>
@@ -245,7 +209,7 @@ export function End() {
                                     onClick={() => {
                                         confirm({
                                             title: 'Réinitialisation',
-                                            description: 'Êtes-vous sûre de vouloir effacer toutes vos données ?',
+                                            description: 'Êtes-vous sûr de vouloir effacer toutes vos données ?',
                                             cancellationText: 'Annuler'
                                         }).then(
                                             () => {
