@@ -4,9 +4,9 @@ class Serialization::Scolomfr
 
   include TripleStoreAccess
 
-  def initialize(notice)
+  def initialize(notice = nil)
     @notice = notice
-    @doc = File.open(Rails.root.join('etc', 'scolomfr', 'blank.xml')) { |f| Nokogiri::XML(f) }
+    @doc = File.open(Rails.root.join('etc', 'scolomfr', 'blank.xml')) { |f| Nokogiri::XML(f) } if notice
   end
 
   def call
@@ -20,6 +20,10 @@ class Serialization::Scolomfr
     fillDomain
     fillThumbnail
     self
+  end
+
+  def expand_values(values = {})
+    values.keys().each_with_object({}) { |key, object| object[key] = find_parents(values[key]) }
   end
 
   private
@@ -141,23 +145,7 @@ class Serialization::Scolomfr
       classification_node.remove
       return
     end
-    parents = Hash.new
-    found_in_hierarchy = []
-    @notice[field].map do |concept|
-      parents[concept] = []
-      child_concept = "http://data.education.fr/voc/scolomfr/concept/#{concept}"
-      while child_concept
-        result = sparql_client.query(broader_extension_query.gsub('[value]', child_concept))
-        break if result.count == 0
-        concept_hash ||= { uri: result.first[:concept].to_s, label: result.first[:concept_label].to_s }
-        break unless result.first[:parent_concept]
-        found_in_hierarchy << result.first[:parent_concept].to_s
-        (parents[concept] ||= []).unshift(uri: result.first[:parent_concept].to_s, label: result.first[:parent_concept_label].to_s)
-        child_concept = result.first[:parent_concept].to_s
-      end
-      parents[concept] << concept_hash if parents[concept]
-    end
-    found_in_hierarchy.flatten.uniq.each { |key| parents.delete(key.to_s.split("/").last) }
+    parents = find_parents(@notice[field])
     taxon_path_node_template = classification_node.at_xpath 'lom:taxonPath'
     taxon_path_node_template.remove
     taxon_node_template = taxon_path_node_template.at_xpath 'lom:taxon'
@@ -175,6 +163,27 @@ class Serialization::Scolomfr
       classification_node.add_child(taxon_path_node)
     end
     classification_node.remove if parents.keys.blank?
+  end
+
+  def find_parents(values)
+    parents = Hash.new
+    found_in_hierarchy = []
+    values.map do |concept|
+      parents[concept] = []
+      child_concept = "http://data.education.fr/voc/scolomfr/concept/#{concept}"
+      while child_concept
+        result = sparql_client.query(broader_extension_query.gsub('[value]', child_concept))
+        break if result.count == 0
+        concept_hash ||= { uri: result.first[:concept].to_s, label: result.first[:concept_label].to_s }
+        break unless result.first[:parent_concept]
+        found_in_hierarchy << result.first[:parent_concept].to_s
+        (parents[concept] ||= []).unshift(uri: result.first[:parent_concept].to_s, label: result.first[:parent_concept_label].to_s)
+        child_concept = result.first[:parent_concept].to_s
+      end
+      parents[concept] << concept_hash if parents[concept]
+    end
+    found_in_hierarchy.flatten.uniq.each { |key| parents.delete(key.to_s.split("/").last) }
+    parents
   end
 
   def detect_language str
