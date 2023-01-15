@@ -12,14 +12,13 @@ import {resetDisplayedNotice} from "../notice/displayedNoticeSlice";
 import {resetSuggestions} from "../notice/suggestionsSlice";
 import {Clear, RestartAlt} from "@mui/icons-material";
 import {useConfirm} from "material-ui-confirm";
-import JsPDF from 'jspdf';
-
 
 import FileSaver from "file-saver";
 import Image from "mui-image";
 import {apiV1} from "../../api/api";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import {capitalizeFirstLetter} from "../../commons/utils";
 
 export function End() {
     const theme = useTheme();
@@ -50,7 +49,7 @@ export function End() {
                 window.removeEventListener('load', handleResize)
                 window.removeEventListener('resize', handleResize)
             }
-        }, [myRef, handleResize])
+        }, [myRef, handleResize, notice])
 
     }
 
@@ -136,16 +135,11 @@ export function End() {
                                 startIcon={<DownloadIcon/>}
                                 disabled={pending}
                                 onClick={async () => {
-                                    // const report = new JsPDF('portrait', 'pt', 'a4');
-                                    // report.html(document.querySelector('#notice-display'), {margin: [10, 10, 10, 40]}).then(() => {
-                                    //     report.save('report.pdf');
-                                    // });
-                                    const quality = 1 // Higher the better but larger
-                                    console.log(width, height)
+                                    console.log(width, height, 200,  height * 200 /width)
                                     html2canvas(document.querySelector('#notice-display')
                                     ).then(canvas => {
                                         const pdf = new jsPDF('p', 'mm', 'a4');
-                                        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 200, 298 * 200 / width);
+                                        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, height * 210 /width);
                                         pdf.save('report.pdf');
                                     });
                                 }}
@@ -167,7 +161,7 @@ export function End() {
                             <Grid container direction="column">
                                 <Grid item md={12}>
                                     <Typography component="h3"
-                                                variant="h6">{notice.educationalResourceTypeLabel.join(", ")}</Typography>
+                                                variant="h6">{capitalizeFirstLetter(notice.educationalResourceTypeLabel.join(", "))}</Typography>
                                     <Typography component="h2" color="primary" variant="h4">{notice.title}</Typography>
                                     <Typography>{notice.url}</Typography>
                                 </Grid>
@@ -181,6 +175,46 @@ export function End() {
                           color: theme.palette.primary.contrastText
                       }}><Typography component="h3"
                                      variant="h5">Présentation</Typography></Grid>
+                <Grid component={Box} item width="100%" m={0} p={theme.spacing(1)} pt={0} mt={2}
+                      sx={{
+                          color: theme.palette.secondary.light
+                      }}><Typography component="h4"
+                                     variant="h6">Informations
+                    pratiques</Typography></Grid>
+                {notice.educationalResourceTypeLabel &&
+                    <Grid component={Box} item width="100%" m={0} p={theme.spacing(1)} pt={0} mt={2}>
+                        <Grid container direction="row" mt={0}>
+
+                            <Grid item component={Box} md={2} xs={12}>
+                                <Typography fullWidth component="p" sx={{
+                                    p: theme.spacing(1),
+                                    display: 'inline',
+                                    backgroundColor: theme.palette.secondary.light
+                                }}>Type</Typography>
+                            </Grid>
+                            <Grid item component={Box} md={10} xs={12}>
+                                <Typography component="p"
+                                            variant="p">{capitalizeFirstLetter(notice.educationalResourceTypeLabel.join(", "))}</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>}
+                {notice.educationalResourceTypeLabel &&
+                    <Grid component={Box} item width="100%" m={0} p={theme.spacing(1)} pt={0} mt={0}>
+                        <Grid container direction="row" mt={0}>
+
+                            <Grid item component={Box} md={2} xs={12}>
+                                <Typography fullWidth component="p" sx={{
+                                    p: theme.spacing(1),
+                                    display: 'inline',
+                                    backgroundColor: theme.palette.secondary.light
+                                }}>Contenu</Typography>
+                            </Grid>
+                            <Grid item component={Box} md={10} xs={12}>
+                                <Typography component="p"
+                                            variant="p">{capitalizeFirstLetter(notice.documentTypeLabel.join(", "))}</Typography>
+                            </Grid>
+                        </Grid>
+                    </Grid>}
             </Grid>
         </Grid>
             <Box width="100%" ml={-5} minWidth="120%" height={theme.spacing(2)} sx={{backgroundColor: "#F8FBFF"}}></Box>

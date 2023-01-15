@@ -2,12 +2,19 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import InputMask from "react-input-mask";
 import {
     Autocomplete,
-    Box, Button,
-    Card, CardActions,
+    Box,
+    Button,
+    Card,
+    CardActions,
     CardContent,
-    Chip, FormControl,
-    Grid, InputLabel, LinearProgress, MenuItem,
-    Popper, Select,
+    Chip,
+    FormControl,
+    Grid,
+    InputLabel,
+    LinearProgress,
+    MenuItem,
+    Popper,
+    Select,
     Stack,
     TextField,
     Typography,
@@ -20,14 +27,13 @@ import {deleteContributorById, selectContributorById, updateContributorById} fro
 import "./ContributionEdition.module.css"
 import {useConfirm} from "material-ui-confirm";
 import MuiPhoneNumber from "material-ui-phone-number";
+import {capitalizeFirstLetter} from "../../commons/utils";
 
 const SIRENE_IDENTIFIER = "Sirène";
 
 const ISNI_IDENTIFIER = "ISNI";
 
 const DEFAULT_ISNI = "0000000000000000";
-
-const capitalizeFirstLetter = string => string ? string.charAt(0).toUpperCase() + string.slice(1) : '';
 
 const DEFAULT_ROLE = "publisher";
 
