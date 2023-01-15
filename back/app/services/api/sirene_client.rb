@@ -12,11 +12,11 @@ class Api::SireneClient
   SOURCE_IDENTIFIER = "Sirène"
 
   def get_suggestions(query:, first_try: true)
-    #47.73 pharmacies
-    #68.20B SCI
-    #56.10 restaurants
-    #56.30Z débits de boissons
-    #86.21Z généralistes
+    # 47.73 pharmacies
+    # 68.20B SCI
+    # 56.10 restaurants
+    # 56.30Z débits de boissons
+    # 86.21Z généralistes
     sectorExclusions = ["47.73Z", "68.20B", "56.10A", "56.10B", "56.10C", "56.30Z", "86.21Z"]
     formattedQuery = "#{query.split(/\s/).map { |word| "raisonSociale:#{word}*" }.join(' AND ')} AND -periode(#{sectorExclusions.map { |code| "activitePrincipaleUniteLegale:#{code}" }.join(' OR ')})"
     begin
@@ -34,6 +34,10 @@ class Api::SireneClient
       results << { name: 'Réponse Sirène illisible' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER }
     rescue StandardError => e
       Rails.logger.error e.message
+      if first_try
+        generate_token
+        return get_suggestions(query: query, first_try: false)
+      end
       results << { name: 'Erreur inconnue Sirène' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER }
     end
     results
