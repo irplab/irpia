@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Box, Button, CircularProgress, Divider, Grid, Icon, Typography, useTheme} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import {green} from '@mui/material/colors';
@@ -18,6 +18,8 @@ import JsPDF from 'jspdf';
 import FileSaver from "file-saver";
 import Image from "mui-image";
 import {apiV1} from "../../api/api";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export function End() {
     const theme = useTheme();
@@ -29,6 +31,33 @@ export function End() {
     const [success, setSuccess] = React.useState(false);
     const [base64Image, setBase64Image] = React.useState(null);
     const [base64Type, setBase64Type] = React.useState(false);
+
+    const [width, setWidth] = useState(0)
+    const [height, setHeight] = useState(0)
+    const useResize = (myRef) => {
+
+        const handleResize = useCallback(() => {
+            setWidth(myRef.current.offsetWidth)
+            setHeight(myRef.current.offsetHeight)
+        }, [myRef])
+
+        useEffect(() => {
+            window.addEventListener('load', handleResize)
+            window.addEventListener('resize', handleResize)
+            handleResize();
+
+            return () => {
+                window.removeEventListener('load', handleResize)
+                window.removeEventListener('resize', handleResize)
+            }
+        }, [myRef, handleResize])
+
+    }
+
+    const componentRef = useRef()
+    useResize(componentRef)
+
+
     const buttonSx = {
         ...(success && {
             bgcolor: green[500],
@@ -107,15 +136,17 @@ export function End() {
                                 startIcon={<DownloadIcon/>}
                                 disabled={pending}
                                 onClick={async () => {
-                                    const report = new JsPDF('portrait', 'pt', 'a4');
-                                    const margins = {
-                                        top: 40,
-                                        bottom: 60,
-                                        left: 40,
-                                        width: 522
-                                    }
-                                    report.html(document.querySelector('#notice-display'), {margin: [10, 10, 10, 40]}).then(() => {
-                                        report.save('report.pdf');
+                                    // const report = new JsPDF('portrait', 'pt', 'a4');
+                                    // report.html(document.querySelector('#notice-display'), {margin: [10, 10, 10, 40]}).then(() => {
+                                    //     report.save('report.pdf');
+                                    // });
+                                    const quality = 1 // Higher the better but larger
+                                    console.log(width, height)
+                                    html2canvas(document.querySelector('#notice-display')
+                                    ).then(canvas => {
+                                        const pdf = new jsPDF('p', 'mm', 'a4');
+                                        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 200, 298 * 200 / width);
+                                        pdf.save('report.pdf');
                                     });
                                 }}
                             >
@@ -127,7 +158,7 @@ export function End() {
                 </Grid>
             </Grid>
             <Divider sx={{paddingX: 0, marginBottom: 2}} color={"black"}/>
-            <Grid container direction="column" spacing={2} id="notice-display">
+            <Grid container direction="column" spacing={2} id="notice-display" ref={componentRef}>
                 <Grid item>
                     <Grid container direction="row" spacing={2}>
                         <Grid item md={3}><Image showLoading={false}
