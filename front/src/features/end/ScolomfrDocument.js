@@ -59,7 +59,7 @@ const ScolomfrDocument = ({
 
     return (
         <Box component="div" id="print-wrapper"
-             sx={{overflowY: printMode ? 'scroll' : 'auto'}}>
+             sx={{overflowY: printMode ? 'scroll' : 'initial'}}>
             <Grid container direction="column" spacing={2} id={printMode ? "notice-print" : "notice-display"}
                   sx={{
                       display: printMode ? "none" : "block",
@@ -76,8 +76,8 @@ const ScolomfrDocument = ({
                                     <Typography component="h3" mt={printMode ? 3 : 0}
                                                 variant="h6">{capitalizeFirstLetter(notice.educationalResourceTypeLabel.join(", "))}</Typography>
                                     <Typography component="h2" color="primary" variant="h4"
-                                                mt={printMode ? 3 : 0}>{notice.title}</Typography>
-                                    <Link underline="hover" target="_blank" href={notice.url}><Typography mt={printMode ? 3 : 0}>{notice.url}</Typography></Link>
+                                                mt={printMode ? 3 : 1}>{notice.title}</Typography>
+                                    <Link underline="hover" target="_blank" href={notice.url}><Typography mt={printMode ? 3 : 3} fontSize="large">{notice.url}</Typography></Link>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -103,7 +103,7 @@ const ScolomfrDocument = ({
                                 <Typography fullWidth component="p" sx={{
                                     p: theme.spacing(1),
                                     display: 'inline',
-                                    backgroundColor: theme.palette.secondary.light
+                                    backgroundColor: theme.palette.info.hyperlight
                                 }}>Type</Typography>
                             </Grid>
                             <Grid item component={Box} md={10} xs={12}>
@@ -120,7 +120,7 @@ const ScolomfrDocument = ({
                                 <Typography fullWidth component="p" sx={{
                                     p: theme.spacing(1),
                                     display: 'inline',
-                                    backgroundColor: theme.palette.secondary.light
+                                    backgroundColor: theme.palette.info.hyperlight
                                 }}>Contenu</Typography>
                             </Grid>
                             <Grid item component={Box} md={10} xs={12}>
