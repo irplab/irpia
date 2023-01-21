@@ -31,6 +31,7 @@ function App() {
             info: {
                 main: '#18ffff',
                 light: '#76ffff',
+                hyperlight: '#EAF2FE',
                 dark: '#00cbcc',
             },
         },
