@@ -77,7 +77,7 @@ const ScolomfrDocument = ({
                                                 variant="h6">{capitalizeFirstLetter(notice.educationalResourceTypeLabel.join(", "))}</Typography>
                                     <Typography component="h2" color="primary" variant="h4"
                                                 mt={printMode ? 3 : 0}>{notice.title}</Typography>
-                                    <Typography mt={printMode ? 3 : 0}>{notice.url}</Typography>
+                                    <Link underline="hover" target="_blank" href={notice.url}><Typography mt={printMode ? 3 : 0}>{notice.url}</Typography></Link>
                                 </Grid>
                             </Grid>
                         </Grid>

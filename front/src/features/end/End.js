@@ -17,10 +17,8 @@ import {useConfirm} from "material-ui-confirm";
 
 import FileSaver from "file-saver";
 import {apiV1} from "../../api/api";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import ScolomfrDocument from "./ScolomfrDocument";
-import ReactToPrint, {useReactToPrint} from 'react-to-print';
+import {useReactToPrint} from 'react-to-print';
 
 export function End() {
     const theme = useTheme();
@@ -93,7 +91,7 @@ export function End() {
                     ma notice ScoLomfr</Typography></Grid>
             <Grid item sx={{justifyContent: "center", display: "flex"}} mt={theme.spacing(1)}>
                 <Grid container direction="row">
-                    <Grid item md={4}>
+                    <Grid item md={5}>
                         <Box sx={{m: 1, mr: 4, position: 'relative'}} textAlign="right">
                             <Button
                                 variant="contained"
@@ -131,32 +129,7 @@ export function End() {
                             )}
                         </Box>
                     </Grid>
-                    <Grid item md={4}
-                          alignItems="center">
-                        <Box sx={{m: 1, ml: 4, position: 'relative'}}>
-                            <Button
-                                variant="contained"
-                                sx={buttonSx}
-                                startIcon={<PictureAsPdfIcon/>}
-                                disabled={pending}
-                                onClick={async () => {
-                                    printNoticeRef.current.style.display = "block"
-                                    const w = printNoticeRef.current.offsetWidth
-                                    const h = printNoticeRef.current.offsetHeight
-                                    console.log(w, h, 200, h * 200 / w)
-                                    html2canvas(document.querySelector('#notice-print')).then(canvas => {
-                                        const pdf = new jsPDF('p', 'mm', 'a4');
-                                        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 210, h * 210 / w);
-                                        pdf.save('report.pdf');
-                                        printNoticeRef.current.style.display = "none"
-                                    });
-                                }}
-                            >
-                                Mon résumé en PDF (test)
-                            </Button>
-                        </Box>
-                    </Grid>
-                    <Grid item md={4}
+                    <Grid item md={7}
                           alignItems="center">
                         <Box sx={{m: 1, ml: 4, position: 'relative'}}>
                             <Button
