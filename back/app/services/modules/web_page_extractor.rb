@@ -45,17 +45,24 @@ class Modules::WebPageExtractor
   def mapping(inspection, url)
     { url_hash: key(url),
       url: url,
-      title: inspection.title,
-      best_title: inspection.best_title,
-      h1: inspection.h1,
-      h2: inspection.h2,
-      description: inspection.description,
+      title: normalize_spaces(inspection.title),
+      best_title: normalize_spaces(inspection.best_title),
+      h1: normalize_spaces(inspection.h1),
+      h2: normalize_spaces(inspection.h2),
+      description: normalize_spaces(inspection.description),
       images: format_images(inspection.images.with_size)
     }
   end
 
   def key(url)
     Digest::SHA256.hexdigest(url)
+  end
+
+  private
+
+  def normalize_spaces(string)
+    return string unless string.respond_to?(:gsub)
+    string.gsub(/\s+/, " ")
   end
 end
 
