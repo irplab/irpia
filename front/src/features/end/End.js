@@ -25,7 +25,7 @@ export function End() {
     const dispatch = useDispatch();
     const confirm = useConfirm();
     const notice = useSelector((state) => state.notice.value)
-    const contributors = useSelector(state => selectContributors(state))
+    const contributors = useSelector(state => selectContributors(state)?.list)
     const {pending} = useSelector((state) => state.notice);
     const [success, setSuccess] = React.useState(false);
     const [base64Image, setBase64Image] = React.useState(null);
@@ -33,18 +33,22 @@ export function End() {
     const [levelValues, setLevelValues] = React.useState([]);
     const [domainValues, setDomainValues] = React.useState([]);
 
+
+
     const printNoticeRef = useRef()
     const handlePrint = useReactToPrint({
         content: () => printNoticeRef.current,
     });
 
     const webScolomFrDocument = useMemo(() => <ScolomfrDocument notice={notice}
+                                                                contributors={contributors}
                                                                 base64Image={base64Image}
                                                                 base64Type={base64Type}
                                                                 levelValues={levelValues}
                                                                 domainValues={domainValues}/>, [notice, base64Type, base64Image, levelValues, domainValues])
 
     const printScolomfrDocument = useMemo(() => <ScolomfrDocument printMode notice={notice}
+                                                                  contributors={contributors}
                                                                   base64Image={base64Image}
                                                                   base64Type={base64Type}
                                                                   levelValues={levelValues}
