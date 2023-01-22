@@ -1,5 +1,5 @@
-import React, {useMemo, useState} from "react";
-import {Box, Breadcrumbs, Grid, Link, List, ListItem, Typography, useTheme} from "@mui/material";
+import React, {useEffect, useMemo, useState} from "react";
+import {Box, Breadcrumbs, Grid, Link, List, ListItem, Stack, styled, Typography, useTheme} from "@mui/material";
 import Image from "mui-image";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {capitalizeFirstLetter} from "../../commons/utils";
@@ -7,6 +7,7 @@ import {capitalizeFirstLetter} from "../../commons/utils";
 const ScolomfrDocument = ({
                               printMode,
                               notice,
+                              contributors,
                               reference,
                               base64Type,
                               base64Image,
@@ -15,12 +16,30 @@ const ScolomfrDocument = ({
                           }) => {
     const theme = useTheme();
     const [hoveredKey, setHoveredKey] = useState(undefined)
+    const [contributorsByRole, setContributorsByRole] = useState({})
+    const [roleLabels, setRoleLabels] = useState({})
+
+    useEffect(() => {
+        let rl = {};
+        let cr = {};
+        for (const index in contributors) {
+            const contributor = contributors[index];
+            const roleKey = contributor['contributorRole'];
+            const roleLabel = contributor['contributorRoleLabel'];
+            const roleList = cr[roleKey] || [];
+            roleList.push(contributor)
+            cr = {...cr, [roleKey]: roleList}
+            rl = {...rl, [roleKey]: roleLabel}
+        }
+        setContributorsByRole(cr)
+        setRoleLabels(rl)
+    }, [contributors])
 
     function getBreadCrumbs(valuesList, valuesField) {
         return <List sx={{listStyle: 'none', pt: 0}}>{valuesList.map((values, index1) => {
             return <ListItem
                 sx={{'&::before': {content: '"•"', color: "black"}}}> < Breadcrumbs separator="›"
-                                                                                    maxItems={printMode ? 4 : 1}
+                                                                                    maxItems={printMode ? 4 : 2}
                                                                                     aria-label="breadcrumb">
                 {
                     values.map((value, index2) => {
@@ -29,7 +48,7 @@ const ScolomfrDocument = ({
                             pl={3}
                             onMouseEnter={() => setHoveredKey(entryKey)}
                             onMouseLeave={() => setHoveredKey(null)}
-                            component='p' fontSise={'small'}>{value.label}
+                            component='p'>{value.label}
                             <Link underline="hover" target="_blank"
                                   key={entryKey}
                                   href={value.uri}><OpenInNewIcon
@@ -57,6 +76,19 @@ const ScolomfrDocument = ({
         [levelValues, hoveredKey, getBreadCrumbs]
     )
 
+    const contributorTag = styled(Typography)(({theme}) => ({
+        fontSize: 'small',
+        lineHeight: printMode?1:2,
+        padding:  theme.spacing(0.5),
+        backgroundColor: theme.palette.info.hyperlight
+    }));
+
+    const contributorValue = styled(Typography)(({theme}) => ({
+        fontSize: 'small',
+        padding: theme.spacing(1),
+        ml: theme.spacing(1),
+    }));
+
     return (
         <Box component="div" id="print-wrapper"
              sx={{overflowY: printMode ? 'scroll' : 'initial'}}>
@@ -77,7 +109,8 @@ const ScolomfrDocument = ({
                                                 variant="h6">{capitalizeFirstLetter(notice.educationalResourceTypeLabel.join(", "))}</Typography>
                                     <Typography component="h2" color="primary" variant="h4"
                                                 mt={printMode ? 3 : 1}>{notice.title}</Typography>
-                                    <Link underline="hover" target="_blank" href={notice.url}><Typography mt={printMode ? 3 : 3} fontSize="large">{notice.url}</Typography></Link>
+                                    <Link underline="hover" target="_blank" href={notice.url}><Typography
+                                        mt={printMode ? 3 : 3} fontSize="large">{notice.url}</Typography></Link>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -182,7 +215,66 @@ const ScolomfrDocument = ({
                         </Grid>
                     </Grid>
                 }
-            </Grid></Box>
+                <Grid component={Box} item className="no-break">
+                    <Grid component={Box} item width="100%" pt={theme.spacing(1)} mt={theme.spacing(2)}
+                          pb={theme.spacing(1)}
+                          sx={{
+                              paddingX: theme.spacing(1),
+                              backgroundColor: theme.palette.primary.main,
+                              color: theme.palette.primary.contrastText
+                          }}><Typography component="h3"
+                                         variant="h5">Contributions</Typography></Grid>
+                    {contributors && <Stack spacing={2}>
+                        {Object.keys(roleLabels).map((index) => {
+                            return <><Box className="no-break"><Typography component="h4" py={0}
+                                                                           mt={2}
+                                                                           sx={{
+                                                                               padding: 0,
+                                                                               color: theme.palette.secondary.light
+                                                                           }}
+                                                                           variant="h6">{capitalizeFirstLetter(roleLabels[index])}</Typography></Box>
+                                {(contributorsByRole[index] || []).map((contributor) => {
+                                    return <Grid container direction='row' gap={printMode ? null : "10px 0px"}>
+                                        <Grid item
+                                              component={contributorValue}
+                                              sx={{fontWeight: 'bold'}}> {contributor.contributorName}</Grid>
+
+                                        {(contributor.editorialBrand && contributor.editorialBrand !== contributor.contributorName) &&
+                                            <div style={{display: "flex", marginRight: theme.spacing(1)}}>
+                                                <Grid item component={contributorTag}>Marque éditoriale</Grid>
+                                                <Grid item
+                                                      component={contributorValue}>{contributor.editorialBrand}</Grid>
+
+                                            </div>}
+                                        {(contributor.selectedIsniInfo?.identifier || contributor.customIsni) &&
+                                            <div style={{display: "flex", marginRight: theme.spacing(1)}}>
+                                                <Grid item component={contributorTag}>ISNI</Grid><Grid item
+                                                                                                       component={contributorValue}>{contributor.selectedIsniInfo?.identifier || contributor.customIsni}</Grid>
+
+                                            </div>}
+                                        {(contributor.selectedSirenInfo?.identifier || contributor.customSiren) &&
+                                            <div style={{display: "flex", marginRight: theme.spacing(1)}}>
+                                                <Grid item component={contributorTag}>SIREN</Grid><Grid item
+                                                                                                        component={contributorValue}>{contributor.selectedSirenInfo?.identifier || contributor.customSiren}</Grid>
+
+                                            </div>}
+                                        {(contributor.contributorPhoneNumber) &&
+                                            <div style={{display: "flex", marginRight: theme.spacing(1)}}>
+                                                <Grid item component={contributorTag}>Téléphone</Grid><Grid item
+                                                                                                            component={contributorValue}>{contributor.contributorPhoneNumber}</Grid>
+
+                                            </div>}
+                                    </Grid>
+                                })
+                                }
+                            </>
+
+                        })}
+                    </Stack>}
+                </Grid>
+            </Grid>
+
+        </Box>
     )
 };
 

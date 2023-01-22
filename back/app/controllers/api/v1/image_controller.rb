@@ -13,6 +13,7 @@ class Api::V1::ImageController < ApplicationController
 
   def base_64_convert
     url = permitted_params['url']
+    return unless url
     require 'httparty'
     response = HTTParty.get(url)
     success = response.code == 200 && response.headers['Content-Type'].start_with?('image')
