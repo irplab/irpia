@@ -204,7 +204,7 @@ const ScolomfrDocument = ({
                                                                               color: theme.palette.secondary.light
                                                                           }}><Typography component="h4" py={0}
                                                                                          variant="h6">Niveau(x)
-                        éducatif(x)</Typography></Grid>
+                        éducatif(s)</Typography></Grid>
                         <Grid component={"div"} item width="100%" m={0} py={0} mt={2}
                               sx={{
                                   mt: 0,
