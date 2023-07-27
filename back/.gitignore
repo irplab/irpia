@@ -41,3 +41,6 @@
 scripts.sh
 
 celery_client/venv
+
+/public
+!/public/robots.txt

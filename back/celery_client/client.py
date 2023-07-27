@@ -3,16 +3,17 @@ import sys
 
 from celery import Celery
 
-def celery_client():
+def celery_client(broker_url, backend_url):
     return Celery('tasks',
-                            broker=os.getenv("REDIS_BROKER", "redis://localhost:6379/0"),
-                            backend=os.getenv("REDIS_BACKEND", "redis://localhost:6379/1"))
+                            broker=broker_url,
+                            backend=backend_url)
 
-def schedule_task(task, title, description):
-    return celery_client().send_task(f"tasks.{task}", [title, description]).get()
+def schedule_task(celery_client, task, title, description):
+    return celery_client.send_task(f"tasks.{task}", [title, description]).get()
 
 if __name__ == '__main__':
     try:
-        print(schedule_task(sys.argv[1],sys.argv[2],sys.argv[3]))
+        client=celery_client(sys.argv[1],sys.argv[2])
+        print(schedule_task(client, sys.argv[3],sys.argv[4],sys.argv[5]))
     except Exception as exc:
         raise exc

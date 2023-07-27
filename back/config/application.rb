@@ -24,7 +24,7 @@ module Back
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     config.modules = config_for(:modules)
-    config.sirene = config_for(:sirene)
+    config.sirene = config_for(:sirene) || { key: ENV['SIRENE_KEY'], secret: ENV['SIRENE_SECRET'] }
 
     config.batch_modules_dir = "~/irpia_scripts/"
 
@@ -33,7 +33,7 @@ module Back
     config.middleware.use ActionDispatch::Session::CookieStore
 
     require "ohm"
-    Ohm.redis = Redic.new("redis://127.0.0.1:6379")
+    Ohm.redis = Redic.new(ENV['REDIS_URL']) if ENV['REDIS_URL']
 
     config.sparql = config_for(:sparql)
   end

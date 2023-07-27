@@ -1,8 +1,8 @@
 development:
-  uri: http://localhost:3030/scolomfr8
+  uri: http://localhost:3030/scolomfr
 
 test:
-  uri: http://localhost:3030/scolomfr8
+  uri: http://localhost:3030/scolomfr
 
 production:
-  uri: http://localhost:3030/scolomfr8
+  uri: http://irpia-fuseki-0:3030/scolomfr

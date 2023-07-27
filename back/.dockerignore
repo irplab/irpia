@@ -1,0 +1,17 @@
+.dockerignore
+.env*
+.idea
+.gitattributes
+.gitignore
+.rspec
+Capfile
+Dockerfile
+/config/deploy
+/config/sirene.yml
+/config/credentials.yml.enc
+/config/deploy.rb
+/log/*
+/spec
+/storage
+/test
+/tmp/*
