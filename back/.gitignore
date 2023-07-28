@@ -44,3 +44,4 @@ celery_client/venv
 
 /public
 !/public/robots.txt
+docker-compose.yml

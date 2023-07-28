@@ -1,24 +1,89 @@
-# README
+# IRPIA
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+"Indexation de ressources pédagogiques intelligente et assistée"
+"Smart assisted indexing of educational resources"
 
-Things you may want to cover:
+## Installation
 
-* Ruby version
+### Docker (recommended)
 
-* System dependencies
+#### Structure
 
-* Configuration
+Irpia uses 5 docker containers :
 
-* Database creation
+- irpia-redis, a raw redis server
+- irpia-fuseki, a fuseki server preloaded with scolomfr vocabularies
+- irpia-algos, a set of ML tasks under providing smart suggestions
+- irpia-jobs, the async job runner of Irpia web app
+- Irpia web, the React+Rails web app
 
-* Database initialization
+Only the last one has to be built locally, the others are available on Docker Hub.
 
-* How to run the test suite
+#### Steps
 
-* Services (job queues, cache servers, search engines, etc.)
+1. Clone this repository
 
-* Deployment instructions
+```bash
+git clone -b dockerize https://github.com/irplab/irpia.git
+```
 
-* ...
+2. Customize and build the front-end application
+
+```bash
+cd irpia/front 
+```
+
+Adapt the API_HOST constant in `front/docker-build.sh` to your needs, then build the front-end application.
+If you only want to test the application on localhost, you can leave the file as is.
+
+If you don't have the javascript node/npm/yarn environment installed, use the following commands or follow another
+approach (nvm, ...)
+
+```bash
+apt update
+apt install -y git curl
+curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh
+chmod +x nodesource_setup.sh && ./nodesource_setup.sh
+apt-get install -y nodejs
+npm install --global yarn
+./docker-build.sh
+```
+
+Then, build the front-end application :
+
+```bash
+./docker-build.sh
+```
+
+You know have the `irpia/back/public` folder filled with the static files of the front-end application.
+
+3. Build the irpia-web image
+
+From irpia/back folder, build the irpia-web image :
+
+```bash
+ docker image build --tag irpia-web:v0 .
+```
+
+4. Run the docker-compose file
+
+All the other images are available on Docker Hub. So you can directly run the docker-compose file after customizing some
+environment variables.
+
+```yaml
+# customize !
+- CORS_HOST='localhost:3000'
+- SECRET_KEY_BASE=your-secret-key-base
+- SIRENE_KEY=your-sirene-api-key
+- SIRENE_SECRET=your-sirene-api-secret
+```
+
+Fill CORS_HOST with the host of your application accordingly to what you did at step 2.
+To obtain a Rails secret key base, you can use the following command : `openssl rand -hex 64`
+To apply for a Sirene API key and secret, go to https://api.insee.fr, declare your application and follow the instructions.
+
+Then, you are done ! You can run the docker-compose file :
+
+```bash
+docker-compose up -d
+```

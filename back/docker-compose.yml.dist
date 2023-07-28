@@ -1,0 +1,57 @@
+version: '3.4'
+
+services:
+  irpia-redis:
+    image: redis
+    container_name: irpia-redis
+    networks:
+      - irpia-net-1
+  irpia-fuseki:
+    image: joadorn/irpia-fuseki
+    container_name: irpia-fuseki
+    command: "--file /staging/scoLomFr_XL.rdf /scolomfr"
+    networks:
+      - irpia-net-1
+  irpia-algos:
+    image: joadorn/irpia-algos
+    environment:
+      - CELERY_BROKER=redis://irpia-redis:6379/0
+      - CELERY_BACKEND=redis://irpia-redis:6379/1
+    networks:
+      - irpia-net-1
+    depends_on:
+      - irpia-redis
+  irpia-jobs:
+    image: joadorn/irpia-jobs
+    environment:
+      - SECRET_KEY_BASE=anything-allowed-here
+      - REDIS_URL=redis://irpia-redis:6379/2
+      - RAILS_ENV=production
+      - CELERY_BROKER='redis://irpia-redis:6379/0'
+      - CELERY_BACKEND='redis://irpia-redis:6379/1'
+    networks:
+      - irpia-net-1
+    depends_on:
+      - irpia-redis
+      - irpia-algos
+  irpia-web:
+    image: irpia-web:v0
+    ports:
+      - "3000:3000"
+    environment:
+      - REDIS_URL=redis://irpia-redis:6379/2
+      - RAILS_ENV=production
+      - RAILS_SERVE_STATIC_FILES=1
+      # customize !
+      - CORS_HOST='localhost:3000'
+      - SECRET_KEY_BASE=your-secret-key-base
+      - SIRENE_KEY=your-sirene-api-key
+      - SIRENE_SECRET=your-sirene-api-secret
+    networks:
+      - irpia-net-1
+    depends_on:
+      - irpia-fuseki
+      - irpia-jobs
+networks:
+  irpia-net-1:
+    driver: bridge

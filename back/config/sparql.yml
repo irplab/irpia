@@ -5,4 +5,4 @@ test:
   uri: http://localhost:3030/scolomfr
 
 production:
-  uri: http://irpia-fuseki-0:3030/scolomfr
+  uri: http://irpia-fuseki:3030/scolomfr
