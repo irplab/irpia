@@ -13,17 +13,11 @@ default: &default
 #        - 'main2.py'
 #      exec: 'bin/python'
     domain-predict:
-      type: 'cli'
-      dir: 'domain-predict'
-      args:
-        - 'domain-predict-title.py'
-      exec: 'bin/python'
+      type: 'cel'
+      task: 'predict_domain'
     level-predict:
-      type: 'cli'
-      dir: 'domain-predict'
-      args:
-        - 'level-predict-title.py'
-      exec: 'bin/python'
+      type: 'cel'
+      task: 'predict_level'
     webpage-extract:
       type: 'emb'
       service: 'Modules::WebPageExtractor'

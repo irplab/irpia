@@ -1,0 +1,26 @@
+FROM ruby:3.1.4-bookworm
+
+ENV BUNDLER_VERSION=2.3.3
+
+WORKDIR /app
+
+COPY Gemfile Gemfile.lock ./
+
+RUN bundle install
+
+COPY . .
+
+RUN mv config/sirene.docker.yml config/sirene.yml
+
+RUN  apt update \
+    && apt install -y python3 python3-venv
+
+WORKDIR celery_client
+
+COPY celery_client/requirements.txt .
+
+RUN /usr/bin/python3 -m venv /opt/venv
+RUN /opt/venv/bin/pip install -r requirements.txt
+
+WORKDIR /app
+CMD ["bundle", "exec", "sidekiq"]

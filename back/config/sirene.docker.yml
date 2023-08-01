@@ -1,0 +1,5 @@
+default: &default
+  key: my_key
+  secret: my_secret
+
+

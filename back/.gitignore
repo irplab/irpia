@@ -39,3 +39,9 @@
 /etc/voc/Scolomfr-v7-0/
 /etc/voc/scolomfr-v-8-p1/
 scripts.sh
+
+celery_client/venv
+
+/public
+!/public/robots.txt
+docker-compose.yml

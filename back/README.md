@@ -1,24 +1,129 @@
-# README
+# IRPIA
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+"Indexation de ressources pédagogiques intelligente et assistée"
+"Smart assisted indexing of educational resources"
 
-Things you may want to cover:
+## Installation
 
-* Ruby version
+### Docker (recommended)
 
-* System dependencies
+#### Structure
 
-* Configuration
+Irpia uses 5 docker containers :
 
-* Database creation
+- irpia-redis, a raw redis server
+- irpia-fuseki, a fuseki server preloaded with scolomfr vocabularies
+- irpia-algos, a set of ML tasks under providing smart suggestions
+- irpia-jobs, the async job runner of Irpia web app
+- Irpia web, the React+Rails web app
 
-* Database initialization
+Only the last one has to be built locally, the others are available on Docker Hub.
 
-* How to run the test suite
+#### Steps
 
-* Services (job queues, cache servers, search engines, etc.)
+**Prerequisites :**
 
-* Deployment instructions
+We assume that you have a debian/ubuntu server with git, curl, docker and docker-compose installed. If not done, add
+your user to the docker group :
 
-* ...
+```bash
+sudo usermod -aG docker $USER
+```
+
+1. Clone this repository
+
+```bash
+git clone -b dockerize https://github.com/irplab/irpia.git
+```
+
+2. Customize and build the front-end application
+
+```bash
+cd irpia/front 
+```
+
+Adapt the API_HOST constant in `front/docker-build.sh` to your needs, then build the front-end application.
+If you only want to test the application on localhost, you can leave the file as is.
+
+If you don't have the javascript node/npm/yarn environment installed, use the following commands or follow another
+approach (nvm, ...). All the lines require root privileges.
+
+```bash
+apt update
+curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh
+chmod +x nodesource_setup.sh && ./nodesource_setup.sh
+apt-get install -y nodejs
+npm install --global yarn
+```
+
+Then, build the front-end application :
+
+```bash
+./docker-build.sh
+```
+
+You know have the `irpia/back/public` folder filled with the static files of the front-end application.
+
+3. Build the irpia-web image
+
+From irpia/back folder, build the irpia-web image :
+
+```bash
+ docker image build --tag irpia-web:v0 .
+```
+
+4. Run the docker-compose file
+
+All the other images are available on Docker Hub. So you can directly run the docker-compose file after customizing some
+environment variables.
+
+```yaml
+# customize !
+- CORS_HOST='localhost:3000'
+- SECRET_KEY_BASE=your-secret-key-base
+- SIRENE_KEY=your-sirene-api-key
+- SIRENE_SECRET=your-sirene-api-secret
+```
+
+Fill CORS_HOST with the host of your application accordingly to what you did at step 2.
+
+To obtain a Rails secret key base, you can use the following command : `openssl rand -hex 64`
+
+To apply for a Sirene API key and secret, go to https://api.insee.fr, declare your application and follow the
+instructions.
+
+Then, you are done ! You can run the docker-compose file :
+
+```bash
+docker-compose up -d
+#or
+docker compose up -d
+```
+
+### Outside Docker
+
+Setup and run Redis and Fuseki containing the ScoLOMfr vocabularies.
+
+Launch Sidekiq and Rails Server with all the environment variables listed in the docker-compose file.
+
+```bash
+RAILS_ENV=development   SECRET_KEY_BASE=xxxxx  CELERY_BROKER='redis://localhost:6379/0' CELERY_BACKEND='redis://localhost:6379/1' REDIS_URL=redis://localhost:6379/2 PYTHON_EXECUTABLE=venv/bin/python3 bundle exec sidekiq
+```
+
+```bash
+RAILS_ENV=development   REDIS_URL=redis://localhost:6379/2    SECRET_KEY_BASE=xxxx  RAILS_SERVE_STATIC_FILES=1    CORS_HOST='localhost:8080'    SIRENE_KEY=your-sirene-key    SIRENE_SECRET=your-sirene-secret bundle exec rails server
+```
+
+Clone and launch Irpia-algos
+
+```bash
+CELERY_BROCKER=redis://localhost:6379/0 CELERY_BACKEND=redis://localhost:6379/1 celery -A tasks worker --concurrency=1 --loglevel=INFO
+```
+
+Launch React front-end (from irpia/front directory)
+
+```bash
+yarn start
+# or
+npm start
+```

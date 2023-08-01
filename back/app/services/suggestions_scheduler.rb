@@ -9,6 +9,8 @@ class SuggestionsScheduler
 
   def suggestion_thread(key:, config:, data:, suggestion:)
     job_class = case config[:type]
+                when 'cel'
+                  CeleryModuleJob
                 when 'cli'
                   CommandLineModuleJob
                 when 'emb'
