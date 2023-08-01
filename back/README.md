@@ -23,7 +23,8 @@ Only the last one has to be built locally, the others are available on Docker Hu
 
 **Prerequisites :**
 
-We assume that you have a debian/ubuntu server with git, curl, docker and docker-compose installed. If not done, add your user to the docker group :
+We assume that you have a debian/ubuntu server with git, curl, docker and docker-compose installed. If not done, add
+your user to the docker group :
 
 ```bash
 sudo usermod -aG docker $USER
@@ -88,7 +89,8 @@ Fill CORS_HOST with the host of your application accordingly to what you did at 
 
 To obtain a Rails secret key base, you can use the following command : `openssl rand -hex 64`
 
-To apply for a Sirene API key and secret, go to https://api.insee.fr, declare your application and follow the instructions.
+To apply for a Sirene API key and secret, go to https://api.insee.fr, declare your application and follow the
+instructions.
 
 Then, you are done ! You can run the docker-compose file :
 
@@ -96,4 +98,32 @@ Then, you are done ! You can run the docker-compose file :
 docker-compose up -d
 #or
 docker compose up -d
+```
+
+### Outside Docker
+
+Setup and run Redis and Fuseki containing the ScoLOMfr vocabularies.
+
+Launch Sidekiq and Rails Server with all the environment variables listed in the docker-compose file.
+
+```bash
+RAILS_ENV=development   SECRET_KEY_BASE=xxxxx  CELERY_BROKER='redis://localhost:6379/0' CELERY_BACKEND='redis://localhost:6379/1' REDIS_URL=redis://localhost:6379/2 PYTHON_EXECUTABLE=venv/bin/python3 bundle exec sidekiq
+```
+
+```bash
+RAILS_ENV=development   REDIS_URL=redis://localhost:6379/2    SECRET_KEY_BASE=xxxx  RAILS_SERVE_STATIC_FILES=1    CORS_HOST='localhost:8080'    SIRENE_KEY=your-sirene-key    SIRENE_SECRET=your-sirene-secret bundle exec rails server
+```
+
+Clone and launch Irpia-algos
+
+```bash
+CELERY_BROCKER=redis://localhost:6379/0 CELERY_BACKEND=redis://localhost:6379/1 celery -A tasks worker --concurrency=1 --loglevel=INFO
+```
+
+Launch React front-end (from irpia/front directory)
+
+```bash
+yarn start
+# or
+npm start
 ```

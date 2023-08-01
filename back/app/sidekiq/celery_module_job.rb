@@ -4,7 +4,7 @@ class CeleryModuleJob
   require 'open3'
 
   def perform(config, data)
-    command = "cd #{Rails.root.join('celery_client')}; /opt/venv/bin/python3 client.py #{ENV['CELERY_BROKER']} #{ENV['CELERY_BACKEND']} #{config['task']} #{Shellwords.escape(data['title'] || ' ')} #{Shellwords.escape(data['description'] || ' ')}"
+    command = "cd #{Rails.root.join('celery_client')}; #{ENV['PYTHON_EXECUTABLE']} client.py #{ENV['CELERY_BROKER']} #{ENV['CELERY_BACKEND']} #{config['task']} #{Shellwords.escape(data['title'] || ' ')} #{Shellwords.escape(data['description'] || ' ')}"
     stdout, stderr, status = Open3.capture3("bash -c #{Shellwords.escape(command)}")
     Rails.logger.info(command)
     thread = SuggestionsThread.find({ job_id: @jid }).first
