@@ -70,6 +70,7 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
+    bcrypt (3.1.19)
     bcrypt_pbkdf (1.1.0)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
@@ -102,6 +103,12 @@ GEM
     debug (1.8.0)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
+    devise (4.9.2)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
     diff-lcs (1.5.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
@@ -203,6 +210,7 @@ GEM
       stal
     ohm-contrib (3.0.0)
       ohm (~> 3.0)
+    orm_adapter (0.5.0)
     parallel (1.23.0)
     public_suffix (5.0.3)
     puma (5.6.6)
@@ -257,6 +265,9 @@ GEM
     redis (4.8.1)
     reline (0.3.7)
       io-console (~> 0.5)
+    responders (3.1.0)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
     rexml (3.2.6)
     rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
@@ -300,6 +311,8 @@ GEM
       unf_ext
     unf_ext (0.0.8.2)
     vcardigan (0.0.9)
+    warden (1.2.9)
+      rack (>= 2.0.9)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -310,6 +323,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bcrypt (~> 3.1, >= 3.1.19)
   bcrypt_pbkdf (>= 1.0, < 2.0)
   bootsnap
   capistrano (~> 3.16)
@@ -319,6 +333,7 @@ DEPENDENCIES
   capistrano-rbenv (~> 2.2)
   cld (~> 0.11.0)
   debug
+  devise (~> 4.9, >= 4.9.2)
   ed25519 (>= 1.2, < 2.0)
   factory_bot_rails
   faker

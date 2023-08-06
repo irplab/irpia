@@ -1,17 +1,29 @@
 import React from "react";
 import {AppBar, Box, Container, Grid, IconButton, Menu, MenuItem, Toolbar, useTheme} from "@mui/material";
-import {MenuOutlined} from "@mui/icons-material";
+import {LockOpenOutlined, LockOutlined, MenuOutlined} from "@mui/icons-material";
 import {NavLink} from "react-router-dom";
 import {SiteBanner} from "./SiteBanner";
+import {AuthDialog} from "./AuthDialog";
+import {useDispatch, useSelector} from "react-redux";
+import {login, logout, logoutRequest} from "./authSlice";
+import {unwrapResult} from "@reduxjs/toolkit";
 
 export const Navigation = () => {
     const theme = useTheme();
+    const dispatch = useDispatch();
     const pages = {
         'home': {path: '', label: 'Accueil'},
         'form': {path: 'wizard', label: 'Assistant'},
         'about': {path: 'about', label: 'À propos'},
     };
     const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [authDialogOpen, setAuthDialogOpen] = React.useState(false);
+
+    const loggedIn = useSelector((state) => state.auth.value.loggedIn);
+
+    const handleClose = () => {
+        setAuthDialogOpen(false);
+    };
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -23,6 +35,7 @@ export const Navigation = () => {
 
     return (
         <>
+            <AuthDialog open={authDialogOpen} handleClose={handleClose}/>
             <SiteBanner theme={theme}/>
             <AppBar elevation={0} position='sticky' color='primary' sx={{
                 marginBottom: 0,
@@ -47,7 +60,33 @@ export const Navigation = () => {
                                              }}
                                              to={`/${pages[page].path}`}>{pages[page].label}</NavLink>
                                 </Grid>
-                            ))}
+                            ))} <Grid item
+                                      flexGrow={0.2}
+                                      textAlign='center'
+                                      key={`auth-xs`}>
+                            <IconButton
+                                sx={{py: 0}}
+                                aria-label="déverrouiller"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={() => {
+                                    if (!loggedIn) {
+                                        setAuthDialogOpen(true);
+                                    } else {
+                                        dispatch(logoutRequest()).then(unwrapResult).then((data) => {
+                                            dispatch(logout())
+                                        }).catch((error) => {
+                                            console.log(error)
+                                        });
+                                    }
+
+                                }}
+                                color='inherit'
+                            >
+                                {loggedIn ? <LockOpenOutlined/> : <LockOutlined/>}
+                            </IconButton>
+                        </Grid>
+
                         </Grid>
                         <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
                             <IconButton
