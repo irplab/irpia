@@ -1,12 +1,16 @@
 import React from "react";
 import {AppBar, Box, Container, Grid, IconButton, Menu, MenuItem, Toolbar, useTheme} from "@mui/material";
-import {Key, MenuOutlined} from "@mui/icons-material";
+import {LockOpenOutlined, LockOutlined, MenuOutlined} from "@mui/icons-material";
 import {NavLink} from "react-router-dom";
 import {SiteBanner} from "./SiteBanner";
 import {AuthDialog} from "./AuthDialog";
+import {useDispatch, useSelector} from "react-redux";
+import {login, logout, logoutRequest} from "./authSlice";
+import {unwrapResult} from "@reduxjs/toolkit";
 
 export const Navigation = () => {
     const theme = useTheme();
+    const dispatch = useDispatch();
     const pages = {
         'home': {path: '', label: 'Accueil'},
         'form': {path: 'wizard', label: 'Assistant'},
@@ -14,6 +18,8 @@ export const Navigation = () => {
     };
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [authDialogOpen, setAuthDialogOpen] = React.useState(false);
+
+    const loggedIn = useSelector((state) => state.auth.value.loggedIn);
 
     const handleClose = () => {
         setAuthDialogOpen(false);
@@ -63,10 +69,21 @@ export const Navigation = () => {
                                 aria-label="déverrouiller"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
-                                onClick={() => setAuthDialogOpen(true)}
-                                color="inherit"
+                                onClick={() => {
+                                    if (!loggedIn) {
+                                        setAuthDialogOpen(true);
+                                    } else {
+                                        dispatch(logoutRequest()).then(unwrapResult).then((data) => {
+                                            dispatch(logout())
+                                        }).catch((error) => {
+                                            console.log(error)
+                                        });
+                                    }
+
+                                }}
+                                color='inherit'
                             >
-                                <Key/>
+                                {loggedIn ? <LockOpenOutlined/> : <LockOutlined/>}
                             </IconButton>
                         </Grid>
 

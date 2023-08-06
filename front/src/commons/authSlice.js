@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {sendAuth} from "./authAPI";
+import {sendAuth, sendLogout} from "./authAPI";
 
 
 export const submitAuth = createAsyncThunk(
@@ -13,20 +13,29 @@ export const submitAuth = createAsyncThunk(
         }
     },
 );
+export const logoutRequest = createAsyncThunk(
+    'auth/logoutRequest',
+    async (_, {rejectWithValue}) => {
+        try {
+            const response = await sendLogout();
+            return response.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data);
+        }
+    },
+);
 
 export const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        value: {login: "", password: "", token: ""}
+        value: {loggedIn: false}
     },
     reducers: {
-        setAuth: (state, action) => {
-            state.value = {...state.value, ...action.payload}
+        login: (state) => {
+            state.value = {loggedIn: true}
         },
-        resetAuth: () => {
-            return {
-                value: {login: "", password: "", token: ""}
-            }
+        logout: (state) => {
+            state.value = {loggedIn: false}
         },
     },
 
@@ -45,6 +54,6 @@ export const authSlice = createSlice({
 })
 
 
-export const {setAuth, resetAuth} = authSlice.actions
+export const {login, logout} = authSlice.actions
 
 export default authSlice.reducer

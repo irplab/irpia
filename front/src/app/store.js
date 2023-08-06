@@ -4,6 +4,7 @@ import vocabulariesReducer from '../features/notice/vocabulariesSlice';
 import contributorsReducer from '../features/contribution/contributorsSlice';
 import noticeReducer from '../features/notice/noticeSlice';
 import displayedNoticeReducer from '../features/notice/displayedNoticeSlice';
+import authReducer from '../commons/authSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
         contributors: contributorsReducer,
         notice: noticeReducer,
         displayedNotice: displayedNoticeReducer,
+        auth: authReducer,
     },
 });
