@@ -1,5 +1,5 @@
-export DEPLOY_HOST= 1.2.3.4 # remote hoost IP
-export DEPLOY_USER= irpia_user # remote hoost user
+export DEPLOY_HOST= 1.2.3.4 # remote host IP
+export DEPLOY_USER= irpia_user # remote host user
 export LOCAL_SCRIPTS_HOME="/path/to/irpia_scripts"
 export REMOTE_SCRIPTS_HOME="irpia_scripts"
 
