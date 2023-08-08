@@ -24,8 +24,7 @@ class User < Ohm::Model
   end
 
   def password=(new_password)
-    @password = Password.create(new_password)
-    self.encrypted_password = @password
+    self.encrypted_password = Password.create(new_password)
   end
 
   index :email
@@ -41,12 +40,30 @@ class User < Ohm::Model
     User[user_ids.first]
   end
 
-  def self.with_mail_and_password(email, password)
+  def self.with_mail_and_password(email, password = nil)
     raise "Invalid email address" unless EmailAddress.valid?(email)
     u = User.create
     u.update email: email
+    password = random_password if password.blank?
+    p password
     u.password = password
     u.save
+  end
+
+  def renew_password()
+    random_password = User.random_password
+    p random_password
+    self.password = random_password
+    print self.encrypted_password
+    save
+  end
+
+  private
+
+  PASSWORD_LENGTH = 10
+
+  def self.random_password
+    ::Password.pronounceable(PASSWORD_LENGTH)
   end
 
 end
