@@ -41,4 +41,12 @@ class User < Ohm::Model
     User[user_ids.first]
   end
 
+  def self.with_mail_and_password(email, password)
+    raise "Invalid email address" unless EmailAddress.valid?(email)
+    u = User.create
+    u.update email: email
+    u.password = password
+    u.save
+  end
+
 end
