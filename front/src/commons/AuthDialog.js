@@ -7,14 +7,14 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    TextField, Typography,
+    TextField,
     useTheme
 } from "@mui/material";
 import {useDispatch} from "react-redux";
 import {unwrapResult} from "@reduxjs/toolkit";
-import {submitAuth, login} from "./authSlice";
+import {login, submitAuth} from "./authSlice";
 
-export const AuthDialog = ({open, handleClose}) => {
+export const AuthDialog = ({open, handleClose, handleSuccess}) => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const [email, setEmail] = React.useState("");
@@ -25,7 +25,8 @@ export const AuthDialog = ({open, handleClose}) => {
             <DialogTitle>Déverrouiller les fonctionnalités avancées</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Pour activer certaines fonctionnalités en accès restreint (GPT), veuillez entrer un identifiant et un mot
+                    Pour activer certaines fonctionnalités en accès restreint (GPT), veuillez entrer un identifiant et
+                    un mot
                     de passe .
                 </DialogContentText>
                 <TextField
@@ -63,10 +64,11 @@ export const AuthDialog = ({open, handleClose}) => {
                     dispatch(submitAuth({
                         login: email,
                         password: password
-                    })).then(unwrapResult).then((data) => {
+                    })).then(unwrapResult).then(() => {
                         setError(false)
                         dispatch(login())
-                        handleClose()
+                        handleSuccess();
+                        handleClose();
                     }).catch((error) => {
                         setError(true)
                         console.log(error)

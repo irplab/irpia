@@ -1,5 +1,17 @@
-import React from "react";
-import {AppBar, Box, Container, Grid, IconButton, Menu, MenuItem, Toolbar, useTheme} from "@mui/material";
+import React, {useCallback} from "react";
+import {
+    Alert,
+    AppBar,
+    Box,
+    Container,
+    Grid,
+    IconButton,
+    Menu,
+    MenuItem,
+    Snackbar,
+    Toolbar,
+    useTheme
+} from "@mui/material";
 import {LockOpenOutlined, LockOutlined, MenuOutlined} from "@mui/icons-material";
 import {NavLink} from "react-router-dom";
 import {SiteBanner} from "./SiteBanner";
@@ -18,6 +30,8 @@ export const Navigation = () => {
     };
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [authDialogOpen, setAuthDialogOpen] = React.useState(false);
+    const [loginSuccess, setLoginSuccess] = React.useState(false);
+    const [logoutSuccess, setLogoutSuccess] = React.useState(false);
 
     const loggedIn = useSelector((state) => state.auth.value.loggedIn);
 
@@ -44,7 +58,8 @@ export const Navigation = () => {
                     setAuthDialogOpen(true);
                 } else {
                     dispatch(logoutRequest()).then(unwrapResult).then(() => {
-                        dispatch(logout())
+                        dispatch(logout());
+                        setLogoutSuccess(true);
                     }).catch((error) => {
                         console.log(error)
                     });
@@ -56,10 +71,26 @@ export const Navigation = () => {
         </IconButton>
     }
 
+    const loginSuccessSnackbar = useCallback(() => <Snackbar open={loginSuccess} autoHideDuration={3000}
+                                                             onClose={() => setLoginSuccess(false)}>
+        <Alert onClose={() => setLoginSuccess(false)} severity="success" sx={{width: '100%'}}>
+            Application déverrouillée. Vous avez accès aux fonctionnalités basées sur GPT.
+        </Alert>
+    </Snackbar>, [loginSuccess])
+
+    const logoutSuccessSnackbar = useCallback(() => <Snackbar open={logoutSuccess} autoHideDuration={3000}
+                                                              onClose={() => setLogoutSuccess(false)}>
+        <Alert onClose={() => setLogoutSuccess(false)} severity="warning" sx={{width: '100%'}}>
+            Application verrouillée. Vous n'avez plus accès fonctionnalités basées sur GPT.
+        </Alert>
+    </Snackbar>, [logoutSuccess])
+
     return (
         <>
-            <AuthDialog open={authDialogOpen} handleClose={handleClose}/>
+            <AuthDialog open={authDialogOpen} handleClose={handleClose} handleSuccess={() => setLoginSuccess(true)}/>
             <SiteBanner theme={theme}/>
+            {logoutSuccessSnackbar()}
+            {loginSuccessSnackbar()}
             <AppBar elevation={0} position='sticky' color='primary' sx={{
                 marginBottom: 0,
                 marginTop: {xs: 0, lg: theme.spacing(1)},
@@ -145,6 +176,8 @@ export const Navigation = () => {
                 </Container>
             </AppBar>
             <Toolbar/>
+
+
         </>
     )
         ;
