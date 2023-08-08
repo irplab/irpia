@@ -82,8 +82,6 @@ GEM
       sshkit (>= 1.9.0)
     capistrano-bundler (2.1.0)
       capistrano (~> 3.1)
-    capistrano-dotenv (0.0.5)
-      capistrano (>= 3.5.0, < 4.0.0)
     capistrano-passenger (0.2.1)
       capistrano (~> 3.0)
     capistrano-rails (1.6.3)
@@ -113,6 +111,8 @@ GEM
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     ed25519 (1.3.0)
+    email_address (0.2.4)
+      simpleidn
     erubi (1.12.0)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
@@ -294,6 +294,8 @@ GEM
     sidekiq-status (2.1.3)
       chronic_duration
       sidekiq (>= 5.0)
+    simpleidn (0.2.1)
+      unf (~> 0.1.4)
     sparql-client (3.2.2)
       net-http-persistent (~> 4.0, >= 4.0.2)
       rdf (~> 3.2, >= 3.2.11)
@@ -327,7 +329,6 @@ DEPENDENCIES
   bcrypt_pbkdf (>= 1.0, < 2.0)
   bootsnap
   capistrano (~> 3.16)
-  capistrano-dotenv (~> 0.0.5)
   capistrano-passenger (~> 0.2.1)
   capistrano-rails (~> 1.6, >= 1.6.1)
   capistrano-rbenv (~> 2.2)
@@ -335,6 +336,7 @@ DEPENDENCIES
   debug
   devise (~> 4.9, >= 4.9.2)
   ed25519 (>= 1.2, < 2.0)
+  email_address (~> 0.2.4)
   factory_bot_rails
   faker
   httparty (~> 0.21.0)

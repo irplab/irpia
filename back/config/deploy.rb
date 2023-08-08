@@ -33,7 +33,6 @@ Rake::Task['deploy:migrate'].clear_actions
 
 # Default value for :linked_files is []
 append :linked_files, "config/sirene.yml"
-append :linked_files, ".env"
 
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', '.bundle', 'public'
@@ -49,30 +48,8 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bund
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
-#
-set :env_file, '.env'
-set :ignored_env_vars, %w(
-BUNDLE_GEMFILE
-RAILS_MAX_THREADS
-USER
-RAILS_MASTER_KEY
-RAILS_SERVE_STATIC_FILES
-RAILS_LOG_TO_STDOUT
-CI
-RAILS_MIN_THREADS
-RAILS_ENV
-PORT
-PIDFILE
-WEB_CONCURRENCY
-SIRENE_KEY
-SIRENE_SECRET
-SHOW_BROWSER
-)
 
 namespace :deploy do
   before "deploy:check:linked_dirs", 'irpia:generate_sirene_yml'
-  after :finished, 'dotenv:read'
-  after :finished, 'dotenv:check'
-  after :finished, 'dotenv:setup'
 end
 

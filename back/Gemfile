@@ -40,7 +40,6 @@ gem 'capistrano', '~> 3.16'
 gem 'capistrano-rails', '~> 1.6', '>= 1.6.1'
 gem 'capistrano-passenger', '~> 0.2.1'
 gem 'capistrano-rbenv', '~> 2.2'
-gem 'capistrano-dotenv', '~> 0.0.5'
 
 gem 'net-ssh', '>=7.0.0'
 gem 'ed25519', '>= 1.2', '< 2.0'
@@ -70,7 +69,11 @@ gem 'httparty', '~> 0.21.0'
 
 gem 'devise', '~> 4.9', '>= 4.9.2'
 
+#crypt user passwords
 gem 'bcrypt', '~> 3.1', '>= 3.1.19'
+
+#validate emails outside active record
+gem 'email_address', '~> 0.2.4'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
