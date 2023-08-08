@@ -5,7 +5,7 @@ import {NavLink} from "react-router-dom";
 import {SiteBanner} from "./SiteBanner";
 import {AuthDialog} from "./AuthDialog";
 import {useDispatch, useSelector} from "react-redux";
-import {login, logout, logoutRequest} from "./authSlice";
+import {logout, logoutRequest} from "./authSlice";
 import {unwrapResult} from "@reduxjs/toolkit";
 
 export const Navigation = () => {
@@ -32,6 +32,29 @@ export const Navigation = () => {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
+
+    const loginLogoutControl = () => {
+        return <IconButton
+            sx={{py: 0, color: theme.palette.primary.contrastText}}
+            aria-label="déverrouiller"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={() => {
+                if (!loggedIn) {
+                    setAuthDialogOpen(true);
+                } else {
+                    dispatch(logoutRequest()).then(unwrapResult).then(() => {
+                        dispatch(logout())
+                    }).catch((error) => {
+                        console.log(error)
+                    });
+                }
+
+            }}
+        >
+            {loggedIn ? <LockOpenOutlined/> : <LockOutlined/>}
+        </IconButton>
+    }
 
     return (
         <>
@@ -64,27 +87,7 @@ export const Navigation = () => {
                                       flexGrow={0.2}
                                       textAlign='center'
                                       key={`auth-xs`}>
-                            <IconButton
-                                sx={{py: 0}}
-                                aria-label="déverrouiller"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={() => {
-                                    if (!loggedIn) {
-                                        setAuthDialogOpen(true);
-                                    } else {
-                                        dispatch(logoutRequest()).then(unwrapResult).then((data) => {
-                                            dispatch(logout())
-                                        }).catch((error) => {
-                                            console.log(error)
-                                        });
-                                    }
-
-                                }}
-                                color='inherit'
-                            >
-                                {loggedIn ? <LockOpenOutlined/> : <LockOutlined/>}
-                            </IconButton>
+                            {loginLogoutControl()}
                         </Grid>
 
                         </Grid>
@@ -132,6 +135,9 @@ export const Navigation = () => {
                                             }} to={`/${pages[page].path}`}>{pages[page].label}</NavLink>
                                         </MenuItem>
                                     ))}
+                                    <MenuItem key={`auth-xs`} onClick={handleCloseNavMenu}>
+                                        {loginLogoutControl()}
+                                    </MenuItem>
                                 </div>
                             </Menu>
                         </Box>
