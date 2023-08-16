@@ -11,6 +11,8 @@ class SuggestionsScheduler
     job_class = case config[:type]
                 when 'cel'
                   CeleryModuleJob
+                when 'api'
+                  ApiModuleJob
                 when 'cli'
                   CommandLineModuleJob
                 when 'emb'

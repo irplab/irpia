@@ -1,6 +1,7 @@
 export const emptyNotice = {
     title: '',
     description: '',
+    keywords: [],
     url: '',
     domain: [],
     level: [],

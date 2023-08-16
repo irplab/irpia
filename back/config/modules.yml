@@ -1,23 +1,26 @@
 default: &default
   modules:
-#    dummy_1:
-#      type: 'cli'
-#      dir: 'dummy'
-#      args:
-#        - 'main.py'
-#      exec: 'bin/python'
-#    dummy_2:
-#      type: 'cli'
-#      dir: 'dummy'
-#      args:
-#        - 'main2.py'
-#      exec: 'bin/python'
+    #    dummy_1:
+    #      type: 'cli'
+    #      dir: 'dummy'
+    #      args:
+    #        - 'main.py'
+    #      exec: 'bin/python'
+    #    dummy_2:
+    #      type: 'cli'
+    #      dir: 'dummy'
+    #      args:
+    #        - 'main2.py'
+    #      exec: 'bin/python'
     domain-predict:
       type: 'cel'
       task: 'predict_domain'
     level-predict:
       type: 'cel'
       task: 'predict_level'
+    keyword-predict:
+      type: 'api'
+      path: '/api/v1/suggest/keywords'
     webpage-extract:
       type: 'emb'
       service: 'Modules::WebPageExtractor'
@@ -25,21 +28,23 @@ default: &default
       type: 'emb'
       service: 'Modules::LevelDeducer'
   rules:
-#    title:
-#      - - dummy_1
-#        - dummy_2
-#      - - dummy_3
-#    description:
-#      - - dummy_2
-#    educational_resource_type:
-#      - - dummy_3
-#      - - dummy_1
+    #    title:
+    #      - - dummy_1
+    #        - dummy_2
+    #      - - dummy_3
+    #    description:
+    #      - - dummy_2
+    #    educational_resource_type:
+    #      - - dummy_3
+    #      - - dummy_1
     title:
       - - webpage-extract
     description:
       - - webpage-extract
     domain:
       - - domain-predict
+    keywords:
+      - - keyword-predict
     level:
       - - level-predict
         - level-deduce

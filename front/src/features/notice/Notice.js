@@ -18,6 +18,8 @@ import {updateField} from "./noticeSlice";
 import {updateDisplayedField} from "./displayedNoticeSlice";
 import BouncingDotsLoader from "../../commons/BouncingDotsLoader";
 import ClearIcon from "@mui/icons-material/Clear";
+import {TagInput} from "./TagInput";
+import {removeDuplicates} from "../../commons/utils";
 
 const DEBOUNCE_DELAY = 800;
 
@@ -236,7 +238,7 @@ export function Notice() {
 
     const sortmenuEntries = (a, b) => a.label.localeCompare(b.label);
 
-    return (<Grid container direction='column'>
+    return <Grid container direction='column'>
         {statusText}
         <Typography color="primary" variant="h4" marginBottom={theme.spacing(3)}>Description</Typography>
         <form onSubmit={e => {
@@ -253,12 +255,12 @@ export function Notice() {
                 value={displayedNotice.url}
                 onChange={(e) => handleUserInputChange({url: e.target.value})}
                 InputProps={{
-                    endAdornment: (<IconButton
+                    endAdornment: <IconButton
                         sx={{visibility: displayedNotice.url ? "visible" : "hidden"}}
                         onClick={() => handleUserInputChange({url: ''})}
                     >
                         <ClearIcon/>
-                    </IconButton>),
+                    </IconButton>,
                 }}
             />
             <TextField margin='normal' fullWidth id="grid-title"
@@ -269,12 +271,12 @@ export function Notice() {
                        placeholder="Titre de votre ressource"
                        onChange={(e) => handleUserInputChange({title: e.target.value})}
                        InputProps={{
-                           endAdornment: (<IconButton
+                           endAdornment: <IconButton
                                sx={{visibility: displayedNotice.title ? "visible" : "hidden"}}
                                onClick={() => handleUserInputChange({title: ''})}
                            >
                                <ClearIcon/>
-                           </IconButton>),
+                           </IconButton>,
                        }}/>
             {currentSuggestion && !displayedNotice.title && <SuggestionComponent
                 field='title'
@@ -288,18 +290,39 @@ export function Notice() {
                        value={displayedNotice.description}
                        onChange={(e) => handleUserInputChange({description: e.target.value})}
                        InputProps={{
-                           endAdornment: (<IconButton
+                           endAdornment: <IconButton
                                sx={{visibility: displayedNotice.description ? "visible" : "hidden"}}
                                onClick={() => handleUserInputChange({description: ''})}
                            >
                                <ClearIcon/>
-                           </IconButton>),
+                           </IconButton>,
                        }}/>
+
             {currentSuggestion && <SuggestionComponent
                 field='description'
                 suggestions={(currentSuggestion.suggestions?.description || []).filter((t) => t !== displayedNotice.description)}
                 acceptCallback={(value) => handleUserSelectionChange({description: value})}/>}
 
+            <FormControl fullWidth margin='normal'>
+                <OutlinedDiv label="Mots-clés">
+                    <Grid container direction='column' id='domain-controls-container'
+                          className="controls-container">
+                        <Grid item>
+                            <TagInput tags={displayedNotice.keywords}
+                                      onChange={(value) => handleUserInputChange({keywords: value})}/>
+                        </Grid><Grid item>
+                        {currentSuggestion && currentSuggestion.suggestions?.keywords && <MultiSuggestionComponent
+                            field='keywords'
+                            suggestions={currentSuggestion.suggestions?.keywords?.filter((x) => x !== displayedNotice.keywords && !isValueSelected('keywords', x))}
+                            titleProvider={() => false}
+                            rejectCallback={(value) => dispatchExcludedValues({field: 'keywords', value: value})}
+                            acceptCallback={(values) => {
+                                handleUserSelectionChange({keywords: removeDuplicates((displayedNotice.keywords || []).concat(values))});
+                            }}
+                        />}</Grid>
+                    </Grid>
+                </OutlinedDiv>
+            </FormControl>
             <FormControl fullWidth margin='normal'>
                 <OutlinedDiv label="Domaines d'enseignement">
                     <Grid container direction='column' id='domain-controls-container'
@@ -319,7 +342,6 @@ export function Notice() {
                     </Grid>
                 </OutlinedDiv>
             </FormControl>
-
             <FormControl fullWidth margin='normal'>
                 <OutlinedDiv label="Niveaux educatifs">
                     <Grid container direction='column' id='level-controls-container' className="controls-container">
@@ -411,5 +433,5 @@ export function Notice() {
             </FormControl>
 
         </form>
-    </Grid>);
+    </Grid>;
 }
