@@ -21,6 +21,7 @@ default: &default
     keyword-predict:
       type: 'api'
       path: '/api/v1/suggest/keywords'
+      auth: 1
     webpage-extract:
       type: 'emb'
       service: 'Modules::WebPageExtractor'

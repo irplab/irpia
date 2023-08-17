@@ -31,6 +31,7 @@ export function Notice() {
     const vocabularies = useSelector(selectVocabularies);
     const submittedNotice = useSelector((state) => state.notice.value);
     const displayedNotice = useSelector((state) => state.displayedNotice.value);
+    const loggedIn = useSelector((state) => state.auth.value.loggedIn);
     const dispatch = useDispatch();
     const [updatedFieldsForSuggestion, setUpdatedFieldsForSuggestion] = useState([]);
     const [suggestionId, setSuggestionId] = useState(undefined);
@@ -311,7 +312,7 @@ export function Notice() {
                             <TagInput tags={displayedNotice.keywords}
                                       onChange={(value) => handleUserInputChange({keywords: value})}/>
                         </Grid>
-                        <Grid item>
+                        {loggedIn && <Grid item>
                             {currentSuggestion && currentSuggestion.suggestions?.keywords && <MultiSuggestionComponent
                                 field='keywords'
                                 suggestions={currentSuggestion.suggestions?.keywords?.filter((x) => x !== displayedNotice.keywords && !isValueSelected('keywords', x))}
@@ -320,7 +321,7 @@ export function Notice() {
                                 acceptCallback={(values) => {
                                     handleUserSelectionChange({keywords: removeDuplicates((displayedNotice.keywords || []).concat(values))});
                                 }}
-                            />}</Grid>
+                            />}</Grid>}
                     </Grid>
                 </OutlinedDiv>
             </FormControl>
