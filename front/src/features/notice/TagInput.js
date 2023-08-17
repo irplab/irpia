@@ -15,7 +15,7 @@ export function TagInput({tags, onChange}) {
         onChange(newtags);
     };
 
-    const Tags = ({data, handleDelete, key}) => {
+    const Tag = ({data, handleDelete, key}) => {
         return (
             <Grid item key={key}>
                 <Chip
@@ -28,7 +28,7 @@ export function TagInput({tags, onChange}) {
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
-                        maxWidth: {xs: '16rem', sm: '20rem', md: '100%'},
+                        maxWidth: {xs: '16rem', sm: '20rem', md: '25rem'},
                         my: '0.1rem'
                     }}
                 />
@@ -39,10 +39,10 @@ export function TagInput({tags, onChange}) {
 
     return (<Box sx={{flexGrow: 1, width: '100%'}}>
         <Grid
-            width='100%'
-            direction='row' spacing={1}>
+            container
+            justify="space-between" spacing={1}>
             {tags.map((data, index) => {
-                return (<Tags data={data} handleDelete={handleDelete} key={`suggestion-tag-${index}`}/>);
+                return (<Tag data={data} handleDelete={handleDelete} key={`suggestion-tag-${index}`}/>);
             })}
         </Grid>
         <TextField

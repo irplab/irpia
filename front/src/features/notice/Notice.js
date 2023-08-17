@@ -310,16 +310,17 @@ export function Notice() {
                         <Grid item>
                             <TagInput tags={displayedNotice.keywords}
                                       onChange={(value) => handleUserInputChange({keywords: value})}/>
-                        </Grid><Grid item>
-                        {currentSuggestion && currentSuggestion.suggestions?.keywords && <MultiSuggestionComponent
-                            field='keywords'
-                            suggestions={currentSuggestion.suggestions?.keywords?.filter((x) => x !== displayedNotice.keywords && !isValueSelected('keywords', x))}
-                            titleProvider={() => false}
-                            rejectCallback={(value) => dispatchExcludedValues({field: 'keywords', value: value})}
-                            acceptCallback={(values) => {
-                                handleUserSelectionChange({keywords: removeDuplicates((displayedNotice.keywords || []).concat(values))});
-                            }}
-                        />}</Grid>
+                        </Grid>
+                        <Grid item>
+                            {currentSuggestion && currentSuggestion.suggestions?.keywords && <MultiSuggestionComponent
+                                field='keywords'
+                                suggestions={currentSuggestion.suggestions?.keywords?.filter((x) => x !== displayedNotice.keywords && !isValueSelected('keywords', x))}
+                                titleProvider={() => false}
+                                rejectCallback={(value) => dispatchExcludedValues({field: 'keywords', value: value})}
+                                acceptCallback={(values) => {
+                                    handleUserSelectionChange({keywords: removeDuplicates((displayedNotice.keywords || []).concat(values))});
+                                }}
+                            />}</Grid>
                     </Grid>
                 </OutlinedDiv>
             </FormControl>
