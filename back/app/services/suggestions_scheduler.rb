@@ -1,7 +1,10 @@
 class SuggestionsScheduler
-  def init(with_params:)
+  def init(with_params:, authenticated: false)
     suggestion = Suggestion.create
-    Rails.application.config.modules.modules.each { |key, config| suggestion.threads << suggestion_thread(key: key, config: config, data: with_params, suggestion: suggestion) }
+    Rails.application.config.modules.modules.each do |key, config|
+      next if config[:auth] && !authenticated
+      suggestion.threads << suggestion_thread(key: key, config: config, data: with_params, suggestion: suggestion)
+    end
     suggestion
   end
 
@@ -11,6 +14,8 @@ class SuggestionsScheduler
     job_class = case config[:type]
                 when 'cel'
                   CeleryModuleJob
+                when 'api'
+                  ApiModuleJob
                 when 'cli'
                   CommandLineModuleJob
                 when 'emb'
