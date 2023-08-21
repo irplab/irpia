@@ -309,7 +309,7 @@ export function Notice() {
                     <Grid container direction='column' id='domain-controls-container'
                           className="controls-container">
                         <Grid item>
-                            <TagInput tags={displayedNotice.keywords}
+                            <TagInput tags={displayedNotice.keywords} loggedIn={loggedIn}
                                       onChange={(value) => handleUserInputChange({keywords: value})}/>
                         </Grid>
                         {loggedIn && <Grid item>

@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import {Box, Chip, Grid, TextField} from "@mui/material";
 import {removeDuplicates} from "../../commons/utils";
 
-export function TagInput({tags, onChange}) {
+export function TagInput({tags, onChange, loggedIn}) {
     const tagRef = useRef();
     const handleOnSubmit = (e) => {
         e.preventDefault();
@@ -53,7 +53,7 @@ export function TagInput({tags, onChange}) {
             size='small'
             sx={{margin: "1rem 0"}}
             margin='none'
-            placeholder="Enter tags here"
+            placeholder={loggedIn ? "Saissez des mots clés ou acceptez des sugestions ci-dessous" : "Saisissez vos mots clés"}
             onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                     handleOnSubmit(e)
