@@ -12,6 +12,7 @@ class Serialization::Scolomfr
   def call
     fillTitle
     fillDescription
+    fillKeywords
     fillContributors
     fillTechnicalLocation
     fillDocumentType
@@ -42,6 +43,18 @@ class Serialization::Scolomfr
     description_elem.content = description_str
     language = detect_language(description_str)
     description_elem['language'] = language if language
+  end
+
+  def fillKeywords
+    general_node = @doc.at_xpath 'lom:lom/lom:general'
+    keyword_node_template = @doc.at_xpath 'lom:lom/lom:general/lom:keyword'
+    keyword_node_template.remove
+    (@notice['keywords'] || []).each do |keyword|
+      keyword_node = keyword_node_template.dup(1)
+      keyword_string_node = keyword_node.at_xpath 'lom:string'
+      keyword_string_node.content = keyword
+      general_node.add_child(keyword_node)
+    end
   end
 
   def fillTechnicalLocation

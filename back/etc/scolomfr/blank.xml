@@ -12,6 +12,9 @@
     <lom:description>
       <lom:string/>
     </lom:description>
+    <lom:keyword>
+      <lom:string></lom:string>
+    </lom:keyword>
     <lomfr:documentType>
       <lomfr:source uniqueElementName="source">SCOLOMFRv8.0</lomfr:source>
       <lomfr:value uniqueElementName="value"></lomfr:value>
@@ -61,7 +64,8 @@
   <lom:classification>
     <lom:purpose uniqueElementName="purpose">
       <lom:source uniqueElementName="source">SCOLOMFRv8.0</lom:source>
-      <lom:value uniqueElementName="value">http://data.education.fr/voc/scolomfr/concept/scolomfr-voc-028-num-003</lom:value>
+      <lom:value uniqueElementName="value">http://data.education.fr/voc/scolomfr/concept/scolomfr-voc-028-num-003
+      </lom:value>
       <lom:label>domaine d'enseignement</lom:label>
     </lom:purpose>
     <lom:taxonPath>
@@ -80,7 +84,7 @@
     <lom:purpose uniqueElementName="purpose">
       <lom:source uniqueElementName="source">SCOLOMFRv8.0</lom:source>
       <lom:value uniqueElementName="value">http://data.education.fr/voc/scolomfr/concept/educational_level</lom:value>
-      <lom:label>niveau éducatif détaillé </lom:label>
+      <lom:label>niveau éducatif détaillé</lom:label>
     </lom:purpose>
     <lom:taxonPath>
       <lom:source uniqueElementName="source">
