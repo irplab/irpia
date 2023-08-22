@@ -23,7 +23,7 @@ import {removeDuplicates} from "../../commons/utils";
 
 const DEBOUNCE_DELAY = 800;
 
-const FIELDS_TRIGGERING_SUGGESTIONS = ["url", "title", "domain"]
+const FIELDS_TRIGGERING_SUGGESTIONS = ["url", "title", "domain", "description"]
 
 export function Notice() {
     const theme = useTheme();
