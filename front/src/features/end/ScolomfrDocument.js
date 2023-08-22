@@ -78,8 +78,8 @@ const ScolomfrDocument = ({
 
     const contributorTag = styled(Typography)(({theme}) => ({
         fontSize: 'small',
-        lineHeight: printMode?1:2,
-        padding:  theme.spacing(0.5),
+        lineHeight: printMode ? 1 : 2,
+        padding: theme.spacing(0.5),
         backgroundColor: theme.palette.info.hyperlight
     }));
 
@@ -175,7 +175,19 @@ const ScolomfrDocument = ({
                         }}>{notice.description}</Typography>
 
                     </Grid>}
+                <Grid component={"div"} item width="100%" m={0} py={0} mt={2}
+                      sx={{
+                          padding: 0,
+                          color: theme.palette.secondary.light
+                      }}><Typography component="h4" py={0}
+                                     variant="h6">Mots clés</Typography></Grid>
+                {notice.keywords.length > 0 &&
+                    <Grid component={Box} item width="100%" m={0} p={theme.spacing(1)} pt={0} mt={0}>
+                        <Typography fullWidth component="p" sx={{
+                            p: theme.spacing(1),
+                        }}>{notice.keywords.join(', ')}</Typography>
 
+                    </Grid>}
                 {domainValues &&
                     <Grid component={Box} item className="no-break"><Grid component={"div"} item width="100%" m={0}
                                                                           py={0} mt={2}
