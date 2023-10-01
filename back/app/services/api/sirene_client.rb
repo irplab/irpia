@@ -32,6 +32,9 @@ class Api::SireneClient
     rescue JSON::ParserError => e
       Rails.logger.error e.message
       results << { name: 'Réponse Sirène illisible' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER }
+    rescue Faraday::Error => e
+      Rails.logger.error e.inspect
+      results << { name: 'Service Sirène en panne' + ' : ' + e.message, disabled: true, identifier: 0, source: SOURCE_IDENTIFIER }
     rescue StandardError => e
       Rails.logger.error e.message
       if first_try
